@@ -1,12 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import os
 import matplotlib.pylab as plt
 import numpy as np
 import pandas as pd
 from pandas_confusion import BinaryConfusionMatrix, Backend
 
 def main():
+    basepath = os.path.dirname(__file__)
+
     y_actu = pd.Series([ True,  True, False, False, False,  True, False,  True,  True,
            False,  True, False, False, False, False, False,  True, False,
             True,  True,  True,  True, False, False, False,  True, False,
@@ -43,13 +46,17 @@ def main():
         print("%s: %f" % (attrib, getattr(binary_confusion_matrix, attrib)))
 
     binary_confusion_matrix.plot()
+    filename = 'binary_confusion_matrix.png'
+    plt.savefig(os.path.join(basepath, '..','screenshots', filename))
     plt.show()
 
     binary_confusion_matrix.plot(normalized=True)
+    filename = 'binary_confusion_matrix_norm.png'
+    plt.savefig(os.path.join(basepath, '..','screenshots', filename))
     plt.show()
 
-    binary_confusion_matrix.plot(normalized=True, backend=Backend.Seaborn)
-    plt.show()
+    #binary_confusion_matrix.plot(normalized=True, backend=Backend.Seaborn)
+    #plt.show()
 
 if __name__ == "__main__":
     main()
