@@ -10,8 +10,8 @@ WORK IN PROGRESS - Use it a your own risk
 
 Let's define a (non binary) confusion matrix
 
-    y_actu = pd.Series(['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit'])
-    y_pred = pd.Series(['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit'])
+    y_actu = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
+    y_pred = ['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit']
 
     confusion_matrix = ConfusionMatrix(y_actu, y_pred)
     print("Confusion matrix:\n%s" % confusion_matrix)
@@ -43,7 +43,7 @@ You can see it
 
     from pandas_confusion import BinaryConfusionMatrix, Backend
 
-    y_actu = pd.Series([ True,  True, False, False, False,  True, False,  True,  True,
+    y_actu = [ True,  True, False, False, False,  True, False,  True,  True,
                False,  True, False, False, False, False, False,  True, False,
                 True,  True,  True,  True, False, False, False,  True, False,
                 True, False, False, False, False,  True,  True, False, False,
@@ -55,9 +55,9 @@ You can see it
                 True,  True,  True,  True, False, False,  True, False,  True,
                 True, False,  True, False,  True, False, False,  True,  True,
                False, False,  True,  True, False, False, False, False, False,
-               False,  True,  True, False])
+               False,  True,  True, False]
 
-    y_pred = pd.Series([False, False, False, False, False,  True, False, False,  True,
+    y_pred = [False, False, False, False, False,  True, False, False,  True,
            False,  True, False, False, False, False, False, False, False,
             True,  True,  True,  True, False, False, False, False, False,
            False, False, False, False, False,  True, False, False, False,
@@ -69,7 +69,7 @@ You can see it
            False,  True, False, False, False, False,  True, False,  True,
             True, False, False, False,  True, False, False,  True,  True,
            False, False,  True,  True, False, False, False, False, False,
-           False,  True, False, False])
+           False,  True, False, False]
 
     binary_confusion_matrix = BinaryConfusionMatrix(y_actu, y_pred)
     print("Binary confusion matrix:\n%s" % binary_confusion_matrix)

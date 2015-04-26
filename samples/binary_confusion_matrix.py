@@ -10,7 +10,7 @@ from pandas_confusion import BinaryConfusionMatrix, Backend
 def main():
     basepath = os.path.dirname(__file__)
 
-    y_actu = pd.Series([ True,  True, False, False, False,  True, False,  True,  True,
+    y_actu = [ True,  True, False, False, False,  True, False,  True,  True,
            False,  True, False, False, False, False, False,  True, False,
             True,  True,  True,  True, False, False, False,  True, False,
             True, False, False, False, False,  True,  True, False, False,
@@ -22,8 +22,9 @@ def main():
             True,  True,  True,  True, False, False,  True, False,  True,
             True, False,  True, False,  True, False, False,  True,  True,
            False, False,  True,  True, False, False, False, False, False,
-           False,  True,  True, False])
-    y_pred = pd.Series([False, False, False, False, False,  True, False, False,  True,
+           False,  True,  True, False]
+    
+    y_pred = [False, False, False, False, False,  True, False, False,  True,
            False,  True, False, False, False, False, False, False, False,
             True,  True,  True,  True, False, False, False, False, False,
            False, False, False, False, False,  True, False, False, False,
@@ -35,7 +36,7 @@ def main():
            False,  True, False, False, False, False,  True, False,  True,
             True, False, False, False,  True, False, False,  True,  True,
            False, False,  True,  True, False, False, False, False, False,
-           False,  True, False, False])
+           False,  True, False, False]
 
     binary_confusion_matrix = BinaryConfusionMatrix(y_actu, y_pred)
     print("Binary confusion matrix:\n%s" % binary_confusion_matrix)

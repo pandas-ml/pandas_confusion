@@ -35,7 +35,7 @@ class ConfusionMatrix(object):
         else:
             self.y_pred = pd.Series(y_pred)
         
-        self._df_confusion = pd.crosstab(y_actu, y_pred, rownames=['Actual'], colnames=['Predicted'])
+        self._df_confusion = pd.crosstab(self.y_actu, self.y_pred, rownames=['Actual'], colnames=['Predicted'])
         #self._df_confusion.index.name = 'Actual'
         #self._df_confusion.columns.name = 'Predicted'
 

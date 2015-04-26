@@ -10,10 +10,11 @@ from pandas_confusion import ConfusionMatrix, Backend
 def main():
     basepath = os.path.dirname(__file__)
 
-    #y_actu = pd.Series([2, 0, 2, 2, 0, 1, 1, 2, 2, 0, 1, 2])
-    #y_pred = pd.Series([0, 0, 2, 1, 0, 2, 1, 0, 2, 0, 2, 2])
-    y_actu = pd.Series(['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit'])
-    y_pred = pd.Series(['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit'])
+    #y_actu = [2, 0, 2, 2, 0, 1, 1, 2, 2, 0, 1, 2]
+    #y_pred = [0, 0, 2, 1, 0, 2, 1, 0, 2, 0, 2, 2]
+
+    y_actu = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
+    y_pred = ['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit']
 
     confusion_matrix = ConfusionMatrix(y_actu, y_pred)
     print("Confusion matrix:\n%s" % confusion_matrix)
