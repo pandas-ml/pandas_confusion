@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 """
-Confusion matrix
+A Python Pandas Confusion matrix
 """
 
 import math
@@ -40,7 +40,7 @@ class ConfusionMatrix(object):
         #self._df_confusion.index.name = 'Actual'
         #self._df_confusion.columns.name = 'Predicted'
 
-        self._df_conf_norm = self._df_confusion / self._df_confusion.sum(axis=1)
+        self._df_conf_norm = self._df_confusion / self._df_confusion.astype(np.float).sum(axis=1)
 
         self.backend = backend
         self.display_sum = display_sum
