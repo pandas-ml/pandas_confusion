@@ -2,17 +2,29 @@
 # -*- coding: utf8 -*-
 
 """
-Binary confusion matrix
+Confusion matrix
 """
 
 import math
+import numpy as np
 import pandas as pd
+from enum import Enum  # pip install enum34
+import matplotlib.pylab as plt
 
-class BinaryConfusionMatrix:
-    """Binary confusion matrix"""
+
+class Backend(Enum):
+    Matplotlib = 1
+    Seaborn = 2
+
+
+BACKEND_DEFAULT = Backend.Matplotlib
+
+
+class ConfusionMatrix(object):
+    """Confusion matrix"""
     
-    def __init__(self, y_actu, y_pred):
-        
+    def __init__(self, y_actu, y_pred, backend=BACKEND_DEFAULT):
+
         if isinstance(y_actu, pd.Series):
             self.y_actu = y_actu
         else:
@@ -28,6 +40,55 @@ class BinaryConfusionMatrix:
         #self.df_confusion.columns.name = 'Predicted'
 
         self.df_conf_norm = self.df_confusion / self.df_confusion.sum(axis=1)
+
+        self.backend = backend
+
+    def __repr__(self):
+        return(self.df_confusion.__repr__())
+
+    def __str__(self):
+        return(self.df_confusion.__str__())
+
+    def plot(self, normalized=False, backend=None, **kwargs):
+        if normalized:
+            df = self.df_conf_norm
+        else:
+            df = self.df_confusion
+
+        if 'cmap' not in kwargs.keys():
+            cmap = plt.cm.gray_r
+
+        if backend is None:
+            backend = self.backend
+
+        if backend == Backend.Matplotlib:
+            plt.matshow(df, cmap=cmap) # imshow
+            #plt.title(title)
+            plt.colorbar()
+            tick_marks = np.arange(len(df.columns))
+            plt.xticks(tick_marks, df.columns, rotation=45)
+            plt.yticks(tick_marks, df.index)
+            #plt.tight_layout()
+            plt.ylabel(df.index.name)
+            plt.xlabel(df.columns.name)
+
+
+        elif backend == Backend.Seaborn:
+            import seaborn as sns
+            sns.heatmap(df, **kwargs)
+            # You should test this yourself
+            # because I'm facing an issue with Seaborn under Mac OS X (2015-04-26)
+            # RuntimeError: Cannot get window extent w/o renderer
+
+        else:
+            raise(NotImplementedError)
+
+
+class BinaryConfusionMatrix(ConfusionMatrix):
+    """Binary confusion matrix"""
+    
+    def __init__(self, y_actu, y_pred):
+        super(BinaryConfusionMatrix, self).__init__(y_actu, y_pred)
 
     @property
     def P(self):
@@ -198,13 +259,3 @@ class BinaryConfusionMatrix:
         Markedness = Precision + NPV - 1
         """
         return(self.precision + self.NPV - 1.0)
-    
-    def __repr__(self):
-        return(self.df_confusion.__repr__())
-
-    def __str__(self):
-        return(self.df_confusion.__str__())
-
-    def plot(self, **kwargs):
-        import seaborn as sns
-        sns.heatmap(self.df_confusion, **kwargs)
