@@ -1,5 +1,5 @@
 # pandas_confusion
-
+ 
 A [Python]() [Pandas](http://pandas.pydata.org/) implementation of [confusion matrix](https://en.wikipedia.org/wiki/Confusion_matrix).
 
 WORK IN PROGRESS - Use it a your own risk
