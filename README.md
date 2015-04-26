@@ -30,7 +30,7 @@ You can see it
     confusion_matrix.plot()
     plt.show()
 
-![confusion_matrix](screenshots/binary_confusion_matrix.png)
+![confusion_matrix](screenshots/confusion_matrix.png)
 
 ### Matplotlib plot of a normalized confusion matrix
 
