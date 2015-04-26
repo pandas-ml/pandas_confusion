@@ -134,6 +134,12 @@ Here is a list of attributes you can get
 
 * Unit tests (nose)
 
+* Compare with results from Sklearn
+
+    from sklearn.metrics import f1_score, classification_report
+    f1_score(y_actu, y_pred)
+    print classification_report(y_actu, y_pred)
+    
 * Continuous integration (Travis)
 
 * Code metrics (landscape.io)
