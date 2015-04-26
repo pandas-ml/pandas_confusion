@@ -6,6 +6,41 @@ WORK IN PROGRESS - Use it a your own risk
 
 ## Usage
 
+## Confusion matrix
+
+Let's define a (non binary) confusion matrix
+
+    y_actu = pd.Series(['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit'])
+    y_pred = pd.Series(['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit'])
+
+    confusion_matrix = ConfusionMatrix(y_actu, y_pred)
+    print("Confusion matrix:\n%s" % confusion_matrix)
+
+You can see it
+
+    Predicted  cat  dog  rabbit
+    Actual
+    cat          3    0       0
+    dog          0    1       2
+    rabbit       2    1       3
+
+
+### Matplotlib plot of a confusion matrix
+
+    confusion_matrix.plot()
+    plt.show()
+
+![confusion_matrix](screenshots/binary_confusion_matrix.png)
+
+### Matplotlib plot of a normalized confusion matrix
+
+    confusion_matrix.plot(normalized=True)
+    plt.show()
+
+![confusion_matrix_norm](screenshots/confusion_matrix_norm.png)
+
+### Binary confusion matrix
+
     from pandas_confusion import BinaryConfusionMatrix, Backend
 
     y_actu = pd.Series([ True,  True, False, False, False,  True, False,  True,  True,
@@ -40,27 +75,52 @@ WORK IN PROGRESS - Use it a your own risk
     print("Binary confusion matrix:\n%s" % binary_confusion_matrix)
 
 
+It display as a nicely labeled Pandas DataFrame
+
+    Binary confusion matrix:
+    Predicted  False  True
+    Actual
+    False         67      0
+    True          21     24
+
 You can get useful attributes such as True Positive (TP), True Negative (TN) ...
 
-
     print binary_confusion_matrix.TP
-    
 
-## Matplotlib plot of a binary confusion matrix
+Here is a list of attributes you can get
+
+    TP: 24.000000
+    TN: 67.000000
+    FP: 0.000000
+    FN: 21.000000
+    TPR: 0.533333
+    TNR: 1.000000
+    PPV: 1.000000
+    NPV: 0.761364
+    FPR: 0.000000
+    FDR: 0.000000
+    FNR: 0.466667
+    ACC: 0.812500
+    F1_score: 0.695652
+    MCC: 0.637229
+    informedness: 0.533333
+    markedness: 0.761364
+
+### Matplotlib plot of a binary confusion matrix
 
     binary_confusion_matrix.plot()
     plt.show()
 
 ![binary_confusion_matrix](screenshots/binary_confusion_matrix.png)
 
-## Matplotlib plot of a normalized binary confusion matrix
+### Matplotlib plot of a normalized binary confusion matrix
 
     binary_confusion_matrix.plot(normalized=True)
     plt.show()
 
 ![binary_confusion_matrix_norm](screenshots/binary_confusion_matrix_norm.png)
 
-## Seaborn plot of a binary confusion matrix (ToDo)
+### Seaborn plot of a binary confusion matrix (ToDo)
 
     binary_confusion_matrix.plot(backend=Backend.Seaborn)
 

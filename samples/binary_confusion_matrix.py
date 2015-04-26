@@ -40,6 +40,8 @@ def main():
     binary_confusion_matrix = BinaryConfusionMatrix(y_actu, y_pred)
     print("Binary confusion matrix:\n%s" % binary_confusion_matrix)
 
+    print("")
+
     attributes = ['TP', 'TN', 'FP', 'FN', 'TPR', 'TNR', 'PPV', 'NPV', 'FPR', 'FDR',
         'FNR', 'ACC', 'F1_score', 'MCC', 'informedness', 'markedness']
     for attrib in attributes:
