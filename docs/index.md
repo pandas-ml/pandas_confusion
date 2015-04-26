@@ -143,3 +143,23 @@ Here is a list of attributes you can get
 * Continuous integration (Travis)
 
 * Code metrics (landscape.io)
+
+* Create fake truth, prediction from confusion matrix
+(can be useful for unit test)
+
+https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sensitivity_of_a_66_confusion_matrix
+
+labels = ['N', 'L', 'R', 'A', 'P', 'V']
+df = pd.DataFrame([
+    [1971, 19, 1, 8, 0, 1],
+    [16, 1940, 2, 23, 9, 10],
+    [8, 3, 181, 87, 0, 11],
+    [2, 25, 159, 1786, 16, 12],
+    [0, 24, 4, 8, 1958, 6],
+    [11, 12, 29, 11, 11, 1926] ], columns=labels, index=labels)
+
+
+#calculate sum (column / index name = 'all')
+df['all'] = df.sum(axis=1)
+#df = pd.concat([df, pd.DataFrame(df.sum(axis=1), columns=['all'])], axis=1)
+df = pd.concat([df, pd.DataFrame(df.sum(axis=0), columns=['all']).T])

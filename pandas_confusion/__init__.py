@@ -18,12 +18,13 @@ class Backend(Enum):
 
 
 BACKEND_DEFAULT = Backend.Matplotlib
-
+SUM_LABEL_DEFAULT = '__all__'
+DISPLAY_SUM_DEFAULT = True
 
 class ConfusionMatrix(object):
     """Confusion matrix"""
     
-    def __init__(self, y_actu, y_pred, backend=BACKEND_DEFAULT):
+    def __init__(self, y_actu, y_pred, display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT):
 
         if isinstance(y_actu, pd.Series):
             self.y_actu = y_actu
@@ -42,26 +43,29 @@ class ConfusionMatrix(object):
         self._df_conf_norm = self._df_confusion / self._df_confusion.sum(axis=1)
 
         self.backend = backend
+        self.display_sum = display_sum
 
     def __repr__(self):
-        return(self._df_confusion.__repr__())
+        return(self.dataframe(sum=self.display_sum).__repr__())
 
     def __str__(self):
-        return(self._df_confusion.__str__())
+        return(self.dataframe(sum=self.display_sum).__str__())
 
-    @property
-    def dataframe(self, normalized=False):
+    def dataframe(self, normalized=False, sum=False, sum_label=SUM_LABEL_DEFAULT):
         if normalized:
-            return(self._df_conf_norm)
+            df = self._df_conf_norm
         else:
-            return(self._df_confusion)
+            df = self._df_confusion
 
-    @property
-    def array(self, normalized=False):
-        if normalized:
-            return(self._df_conf_norm.values)
-        else:
-            return(self._df_confusion.values)
+        if sum:
+            df[sum_label] = df.sum(axis=1)
+            #df = pd.concat([df, pd.DataFrame(df.sum(axis=1), columns=[sum_label])], axis=1)
+            df = pd.concat([df, pd.DataFrame(df.sum(axis=0), columns=[sum_label]).T])
+        
+        return(df)
+
+    def array(self, normalized=False, sum=False, sum_label=SUM_LABEL_DEFAULT):
+        return(self.dataframe(normalized, sum, sum_label).values)
 
     def plot(self, normalized=False, backend=None, **kwargs):
         """
