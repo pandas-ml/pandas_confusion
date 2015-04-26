@@ -58,6 +58,7 @@ class ConfusionMatrix(object):
             df = self._df_confusion
 
         if sum:
+            df = df.copy()
             df[sum_label] = df.sum(axis=1)
             #df = pd.concat([df, pd.DataFrame(df.sum(axis=1), columns=[sum_label])], axis=1)
             df = pd.concat([df, pd.DataFrame(df.sum(axis=0), columns=[sum_label]).T])
