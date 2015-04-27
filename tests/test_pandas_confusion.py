@@ -12,9 +12,9 @@ def test_pandas_confusion_confusion_matrix():
 
     confusion_matrix = ConfusionMatrix(y_actu, y_pred)
 
-    assert isinstance(confusion_matrix.dataframe, pd.DataFrame)
+    assert isinstance(confusion_matrix.to_dataframe(), pd.DataFrame)
 
-    assert isinstance(confusion_matrix.array, np.ndarray)
+    assert isinstance(confusion_matrix.to_array(), np.ndarray)
 
 
 def test_pandas_confusion_binary_confusion_matrix():
@@ -49,6 +49,6 @@ def test_pandas_confusion_binary_confusion_matrix():
     binary_confusion_matrix = BinaryConfusionMatrix(y_actu, y_pred)
     print("Binary confusion matrix:\n%s" % binary_confusion_matrix)
 
-    assert isinstance(binary_confusion_matrix.dataframe, pd.DataFrame)
+    assert isinstance(binary_confusion_matrix.to_dataframe(), pd.DataFrame)
 
-    assert isinstance(binary_confusion_matrix.array, np.ndarray)
+    assert isinstance(binary_confusion_matrix.to_array(), np.ndarray)

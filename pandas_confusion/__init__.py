@@ -46,12 +46,12 @@ class ConfusionMatrix(object):
         self.display_sum = display_sum
 
     def __repr__(self):
-        return(self.dataframe(sum=self.display_sum).__repr__())
+        return(self.to_dataframe(sum=self.display_sum).__repr__())
 
     def __str__(self):
-        return(self.dataframe(sum=self.display_sum).__str__())
+        return(self.to_dataframe(sum=self.display_sum).__str__())
 
-    def dataframe(self, normalized=False, sum=False, sum_label=SUM_LABEL_DEFAULT):
+    def to_dataframe(self, normalized=False, sum=False, sum_label=SUM_LABEL_DEFAULT):
         if normalized:
             df = self._df_conf_norm
         else:
@@ -65,8 +65,8 @@ class ConfusionMatrix(object):
         
         return(df)
 
-    def array(self, normalized=False, sum=False, sum_label=SUM_LABEL_DEFAULT):
-        return(self.dataframe(normalized, sum, sum_label).values)
+    def to_array(self, normalized=False, sum=False, sum_label=SUM_LABEL_DEFAULT):
+        return(self.to_dataframe(normalized, sum, sum_label).values)
 
     def plot(self, normalized=False, backend=None, **kwargs):
         """
