@@ -38,6 +38,22 @@ def fake_convolution_matrix():
 
     return(df)
 
+def create_arrays_vect(df):
+    N_all = df.sum().sum()
+    sum_true = df.sum(axis=1).shift(1).fillna(0)
+    sum_predicted = df.sum(axis=0).shift(1).fillna(0)
+
+    index = np.arange(N_all)
+    s_true = pd.Series(index=index)
+
+    s_true[sum_true] = sum_true.index
+    s_true = s_true.fillna(method='ffill')
+    y_true = s_true.values
+
+    y_predicted = None  # ToDo
+
+    return y_true, y_predicted
+
 def create_arrays(df):
     """
     Create y_true and y_predicted arrays from confusion matrix
