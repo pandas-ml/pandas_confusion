@@ -57,10 +57,11 @@ class ConfusionMatrix(object):
         #self._df_confusion.columns.name = PREDICTED_NAME_DEFAULT
 
         #df = pd.crosstab(self._y_true, self._y_pred, rownames=[TRUE_NAME_DEFAULT], colnames=[PREDICTED_NAME_DEFAULT])
+        #df = pd.crosstab(self._y_true, self._y_pred, rownames=TRUE_NAME_DEFAULT, colnames=PREDICTED_NAME_DEFAULT)
         df = pd.crosstab(self._y_true, self._y_pred)
         idx = df.columns | df.index
-        df = df.loc[idx, idx].fillna(0) # if some column or row are missing
-        self._df_confusion = df.copy()
+        df = df.loc[idx, idx.copy()].fillna(0) # if some column or row are missing
+        self._df_confusion = df
         self._df_confusion.index.name = TRUE_NAME_DEFAULT
         self._df_confusion.columns.name = PREDICTED_NAME_DEFAULT
 
@@ -125,7 +126,7 @@ class ConfusionMatrix(object):
         Returns sum of a confusion matrix.
         It should be the number of elements of either y_true or y_pred
         """
-        return(self.to_dataframe().sum(axis=0).sum(axis=1))
+        return(self.to_dataframe().sum().sum())
 
 
     def y_true(self):

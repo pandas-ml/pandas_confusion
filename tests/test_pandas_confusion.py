@@ -15,10 +15,13 @@ def asserts(y_true, y_pred, cm):
     df = cm.to_dataframe()
     a = cm.to_array()
 
+    df_with_sum = cm.to_dataframe(sum=True)
+
     assert len(y_true) == len(y_pred)
 
     assert isinstance(df, pd.DataFrame)
     assert isinstance(a, np.ndarray)
+    assert isinstance(df_with_sum, pd.DataFrame)
 
     N = len(df.index)
     assert N == len(df.columns)
@@ -27,9 +30,12 @@ def asserts(y_true, y_pred, cm):
     assert df.index.name == TRUE_NAME_DEFAULT, "%r != %r" % (df.index.name, TRUE_NAME_DEFAULT)
     assert df.columns.name == PREDICTED_NAME_DEFAULT, "%r != %r" % (df.columns.name, PREDICTED_NAME_DEFAULT)
 
+    assert df_with_sum.index.name == TRUE_NAME_DEFAULT, "%r != %r" % (df_with_sum.index.name, TRUE_NAME_DEFAULT)
+    assert df_with_sum.columns.name == PREDICTED_NAME_DEFAULT, "%r != %r" % (df_with_sum.columns.name, PREDICTED_NAME_DEFAULT)
+
     np.testing.assert_array_equal(confusion_matrix(y_true, y_pred), cm.toarray())
 
-    #assert cm.sum() == len(y_true)
+    assert cm.sum() == len(y_true)
 
 # =========================================================================
 
@@ -93,7 +99,7 @@ def test_pandas_confusion_binary_cm():
 
     asserts(y_true, y_pred, binary_cm)
 
-def test_pandas_confusion_cm_missing_column():
+def test_pandas_confusion_cm_empty_column():
     y_true = [2, 0, 2, 2, 0, 1]
     y_pred = [0, 0, 2, 2, 0, 2]
     ##cm = ConfusionMatrix(y_true, y_pred)
@@ -105,7 +111,7 @@ def test_pandas_confusion_cm_missing_column():
     asserts(y_true, y_pred, cm)
 
 
-def test_pandas_confusion_cm_missing_row():
+def test_pandas_confusion_cm_empty_row():
     y_true = [2, 0, 2, 2, 0, 0]
     y_pred = [0, 0, 2, 2, 1, 2]
     ##cm = ConfusionMatrix(y_true, y_pred)
