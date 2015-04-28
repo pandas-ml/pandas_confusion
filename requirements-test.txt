@@ -1,5 +1,0 @@
-pytest
-nose
-click
-scipy
-scikit-learn
