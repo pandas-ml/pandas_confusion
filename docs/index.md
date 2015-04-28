@@ -1,3 +1,12 @@
+[![Latest Version](https://pypip.in/version/pandas_confusion/badge.svg)](https://pypi.python.org/pypi/pandas_confusion/)
+[![Supported Python versions](https://pypip.in/py_versions/pandas_confusion/badge.svg)](https://pypi.python.org/pypi/pandas_confusion/)
+[![Download format](https://pypip.in/format/pandas_confusion/badge.svg)](https://pypi.python.org/pypi/pandas_confusion/)
+[![License](https://pypip.in/license/pandas_confusion/badge.svg)](https://pypi.python.org/pypi/pandas_confusion/)
+[![Development Status](https://pypip.in/status/pandas_confusion/badge.svg)](https://pypi.python.org/pypi/pandas_confusion/)
+[![Downloads](https://pypip.in/download/pandas_confusion/badge.svg)](https://pypi.python.org/pypi/pandas_confusion/)
+[![Code Health](https://landscape.io/github/scls19fr/pandas_confusion/master/landscape.svg?style=flat)](https://landscape.io/github/scls19fr/pandas_confusion/master)
+[![Build Status](https://travis-ci.org/scls19fr/pandas_confusion.svg)](https://travis-ci.org/scls19fr/pandas_confusion)
+
 # pandas_confusion
  
 A [Python]() [Pandas](http://pandas.pydata.org/) implementation of [confusion matrix](https://en.wikipedia.org/wiki/Confusion_matrix).
