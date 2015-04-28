@@ -102,6 +102,18 @@ class ConfusionMatrix(object):
         
         return(df)
 
+    @property
+    def true(self):
+        s = self.to_dataframe().sum(axis=1)
+        s.name = TRUE_NAME_DEFAULT
+        return(s)
+
+    @property
+    def pred(self):
+        s = self.to_dataframe().sum(axis=0)
+        s.name = PREDICTED_NAME_DEFAULT
+        return(s)
+
     def to_array(self, normalized=False, sum=False, sum_label=SUM_NAME_DEFAULT):
         """
         Returns a Numpy Array

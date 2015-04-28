@@ -37,6 +37,9 @@ def asserts(y_true, y_pred, cm):
 
     assert cm.sum() == len(y_true)
 
+    assert cm.true.name == TRUE_NAME_DEFAULT, "%r != %r" % (cm.true.name, TRUE_NAME_DEFAULT)
+    assert cm.pred.name == PREDICTED_NAME_DEFAULT, "%r != %r" % (cm.pred.name, PREDICTED_NAME_DEFAULT)
+
 # =========================================================================
 
 
@@ -121,3 +124,18 @@ def test_pandas_confusion_cm_empty_row():
     print("Confusion matrix:\n%s" % cm)
 
     asserts(y_true, y_pred, cm)
+
+def test_pandas_confusion_cm_binarize():
+    y_true = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
+    y_pred = ['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit']
+
+    cm = ConfusionMatrix(y_true, y_pred)
+    print("Confusion matrix:\n%s" % cm)
+
+    select = ['cat', 'dog']
+    print("Binarize with %s" % select)
+    binary_cm = cm.binarize(select)
+
+    print("Binary confusion matrix:\n%s" % binary_cm)
+    
+    assert cm.sum() == binary_cm.sum()
