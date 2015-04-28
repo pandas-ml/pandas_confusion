@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from enum import Enum  # pip install enum34
 import matplotlib.pylab as plt
-
+from sklearn.metrics import confusion_matrix
 
 class Backend(Enum):
     Matplotlib = 1
@@ -20,30 +20,60 @@ class Backend(Enum):
 BACKEND_DEFAULT = Backend.Matplotlib
 SUM_LABEL_DEFAULT = '__all__'
 DISPLAY_SUM_DEFAULT = True
+TRUE_NAME_DEFAULT = 'Actual'
+PREDICTED_NAME_DEFAULT = 'Predicted'
+
+
+
 
 class ConfusionMatrix(object):
     """Confusion matrix"""
     
-    def __init__(self, y_actu, y_pred, display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT):
+    def __init__(self, y_true, y_pred, labels=None, display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT):
 
-        if isinstance(y_actu, pd.Series):
-            self.y_actu = y_actu
+        if isinstance(y_true, pd.Series):
+            self.y_true = y_true
         else:
-            self.y_actu = pd.Series(y_actu)
+            self.y_true = pd.Series(y_true, name=TRUE_NAME_DEFAULT)
+
+        self.y_true.name = TRUE_NAME_DEFAULT
             
         if isinstance(y_pred, pd.Series):
             self.y_pred = y_pred
         else:
-            self.y_pred = pd.Series(y_pred)
+            self.y_pred = pd.Series(y_pred, name=PREDICTED_NAME_DEFAULT)
+
+        self.y_pred.name = PREDICTED_NAME_DEFAULT
+
+        if labels is not None:
+            self.y_true = self.y_true.map(lambda i: self._label(i, labels))
+            self.y_pred = self.y_pred.map(lambda i: self._label(i, labels))
         
-        self._df_confusion = pd.crosstab(self.y_actu, self.y_pred, rownames=['Actual'], colnames=['Predicted'])
-        #self._df_confusion.index.name = 'Actual'
-        #self._df_confusion.columns.name = 'Predicted'
+        N_true = len(y_true)
+        N_pred = len(y_pred)
+        assert N_true == N_pred, "y_true must have same size - %d != %d" % (N_true, N_pred)
+
+        #a = confusion_matrix(y_true, y_pred, labels=labels)
+        #print(a)
+        #self._df_confusion = pd.DataFrame(a, index=labels, columns=labels)
+        #self._df_confusion.index.name = TRUE_NAME_DEFAULT
+        #self._df_confusion.columns.name = PREDICTED_NAME_DEFAULT
+
+        self._df_confusion = pd.crosstab(self.y_true, self.y_pred, rownames=['Actual'], colnames=['Predicted'])
 
         self._df_conf_norm = self._df_confusion / self._df_confusion.astype(np.float).sum(axis=1)
 
         self.backend = backend
         self.display_sum = display_sum
+
+    def _label(self, i, labels):
+        try:
+            return(labels[i])
+        except:
+            return(i)
+
+    #def label(self, y_true, y_pred):
+    #    return(y_true.unique()
 
     def __repr__(self):
         return(self.to_dataframe(sum=self.display_sum).__repr__())
@@ -65,6 +95,7 @@ class ConfusionMatrix(object):
             df[sum_label] = df.sum(axis=1)
             #df = pd.concat([df, pd.DataFrame(df.sum(axis=1), columns=[sum_label])], axis=1)
             df = pd.concat([df, pd.DataFrame(df.sum(axis=0), columns=[sum_label]).T])
+            df.index.name = TRUE_NAME_DEFAULT
         
         return(df)
 
@@ -122,8 +153,8 @@ class ConfusionMatrix(object):
 class BinaryConfusionMatrix(ConfusionMatrix):
     """Binary confusion matrix"""
     
-    def __init__(self, y_actu, y_pred):
-        super(BinaryConfusionMatrix, self).__init__(y_actu, y_pred)
+    def __init__(self, y_true, y_pred):
+        super(BinaryConfusionMatrix, self).__init__(y_true, y_pred)
 
     @property
     def P(self):

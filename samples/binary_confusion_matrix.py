@@ -10,7 +10,7 @@ from pandas_confusion import BinaryConfusionMatrix, Backend
 def main():
     basepath = os.path.dirname(__file__)
 
-    y_actu = [ True,  True, False, False, False,  True, False,  True,  True,
+    y_true = [ True,  True, False, False, False,  True, False,  True,  True,
            False,  True, False, False, False, False, False,  True, False,
             True,  True,  True,  True, False, False, False,  True, False,
             True, False, False, False, False,  True,  True, False, False,
@@ -38,7 +38,7 @@ def main():
            False, False,  True,  True, False, False, False, False, False,
            False,  True, False, False]
 
-    binary_confusion_matrix = BinaryConfusionMatrix(y_actu, y_pred)
+    binary_confusion_matrix = BinaryConfusionMatrix(y_true, y_pred)
     print("Binary confusion matrix:\n%s" % binary_confusion_matrix)
 
     print("")

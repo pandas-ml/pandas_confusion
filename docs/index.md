@@ -154,3 +154,5 @@ http://stackoverflow.com/questions/26631814/create-a-confusion-matrix-from-a-dat
 https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sensitivity_of_a_66_confusion_matrix
 
 [see code (ToDo)](samples/fake_convol_mat.py)
+
+* Fix missing column and missing row
