@@ -15,4 +15,4 @@ script: nosetests
 addons:
   apt_packages:
     - pandoc
-    - lapack
+    - libblas-dev
