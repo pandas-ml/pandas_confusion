@@ -18,8 +18,8 @@ def asserts(confusion_matrix):
     assert isinstance(a, np.ndarray)
 
     assert len(df.index) == len(df.columns)
-    assert df.index.name == TRUE_NAME_DEFAULT
-    assert df.columns.name == PREDICTED_NAME_DEFAULT
+    #assert df.index.name == TRUE_NAME_DEFAULT
+    #assert df.columns.name == PREDICTED_NAME_DEFAULT
 
 
 # =========================================================================
@@ -40,10 +40,13 @@ def test_pandas_confusion_confusion_matrix_int():
     y_pred = [0, 0, 2, 1, 0, 2, 1, 0, 2, 0, 2, 2]
 
 
-    confusion_matrix = ConfusionMatrix(y_true, y_pred, labels=["ant", "bird", "cat"])
+    labels = ["ant", "bird", "cat"]
+    confusion_matrix = ConfusionMatrix(y_true, y_pred, labels=labels)
     print("Confusion matrix:\n%s" % confusion_matrix)
 
     asserts(confusion_matrix)
+
+    assert confusion_matrix.len() == len(labels)
 
 
 def test_pandas_confusion_binary_confusion_matrix():
@@ -80,7 +83,6 @@ def test_pandas_confusion_binary_confusion_matrix():
 
     asserts(binary_confusion_matrix)
 
-"""
 def test_pandas_confusion_confusion_matrix_missing_column():
     y_true = [2, 0, 2, 2, 0, 1]
     y_pred = [0, 0, 2, 2, 0, 2]
@@ -103,4 +105,3 @@ def test_pandas_confusion_confusion_matrix_missing_row():
     print("Confusion matrix:\n%s" % confusion_matrix)
 
     asserts(confusion_matrix)
-"""

@@ -59,7 +59,15 @@ class ConfusionMatrix(object):
         #self._df_confusion.index.name = TRUE_NAME_DEFAULT
         #self._df_confusion.columns.name = PREDICTED_NAME_DEFAULT
 
-        self._df_confusion = pd.crosstab(self.y_true, self.y_pred, rownames=['Actual'], colnames=['Predicted'])
+        df = pd.crosstab(self.y_true, self.y_pred, rownames=['Actual'], colnames=['Predicted'])
+        idx = df.columns | df.index
+        df = df.loc[idx, idx].fillna(0) # if some column or row are missing
+        df.index.name = TRUE_NAME_DEFAULT
+        df.columns.name = PREDICTED_NAME_DEFAULT
+
+        self._len = len(idx)
+
+        self._df_confusion = df
 
         self._df_conf_norm = self._df_confusion / self._df_confusion.astype(np.float).sum(axis=1)
 
@@ -110,6 +118,13 @@ class ConfusionMatrix(object):
         see to_array
         """
         return(self.to_array(*args, **kwargs))
+
+    def len(self):
+        """
+        Returns len of a confusion matrix.
+        For example: 3 means that this is a 3x3 (3 rows, 3 columns) matrix
+        """
+        return(self._len)
 
     def plot(self, normalized=False, backend=None, **kwargs):
         """
