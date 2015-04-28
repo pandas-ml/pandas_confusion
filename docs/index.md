@@ -155,4 +155,6 @@ https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sens
 
 [see code (ToDo)](samples/fake_convol_mat.py)
 
+## Done
+
 * Fix missing column and missing row

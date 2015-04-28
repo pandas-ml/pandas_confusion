@@ -15,14 +15,14 @@ def main():
     ##cm = ConfusionMatrix(y_true, y_pred)
     #cm = ConfusionMatrix(y_true, y_pred, labels=["ant", "bird", "cat"])
 
-    y_true = [2, 0, 2, 2, 0, 1]
-    y_pred = [0, 0, 2, 2, 0, 2]
+    #y_true = [2, 0, 2, 2, 0, 1]
+    #y_pred = [0, 0, 2, 2, 0, 2]
     ##cm = ConfusionMatrix(y_true, y_pred)
-    cm = ConfusionMatrix(y_true, y_pred, labels=["ant", "bird", "cat"])
+    #cm = ConfusionMatrix(y_true, y_pred, labels=["ant", "bird", "cat"])
 
-    #y_true = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
-    #y_pred = ['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit']
-
+    y_true = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
+    y_pred = ['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit']
+    cm = ConfusionMatrix(y_true, y_pred)
 
     #y_true = ["cat", "ant", "cat", "cat", "ant", "bird"]
     #y_pred = ["ant", "ant", "cat", "cat", "ant", "cat"]
@@ -30,24 +30,22 @@ def main():
     #array([[2, 0, 0],
     #       [0, 0, 1],
     #       [1, 0, 2]])
-
     #cm = ConfusionMatrix(y_true, y_pred)
+
     print("Confusion matrix:\n%s" % cm)
 
-    """
     cm.plot()
     filename = 'cm.png'
-    plt.savefig(os.path.join(basepath, '..','screenshots', filename))
-    plt.show()
+    #plt.savefig(os.path.join(basepath, '..','screenshots', filename))
+    #plt.show()
 
     cm.plot(normalized=True)
     filename = 'cm_norm.png'
-    plt.savefig(os.path.join(basepath, '..','screenshots', filename))
-    plt.show()
+    #plt.savefig(os.path.join(basepath, '..','screenshots', filename))
+    #plt.show()
 
     #cm.plot(normalized=True, backend=Backend.Seaborn)
     #plt.show()
-    """
 
 if __name__ == "__main__":
     main()

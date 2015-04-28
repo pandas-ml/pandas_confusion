@@ -18,12 +18,10 @@ class Backend(Enum):
 
 
 BACKEND_DEFAULT = Backend.Matplotlib
-SUM_LABEL_DEFAULT = '__all__'
+SUM_NAME_DEFAULT = '__all__'
 DISPLAY_SUM_DEFAULT = True
 TRUE_NAME_DEFAULT = 'Actual'
 PREDICTED_NAME_DEFAULT = 'Predicted'
-
-
 
 
 class ConfusionMatrix(object):
@@ -33,17 +31,16 @@ class ConfusionMatrix(object):
 
         if isinstance(y_true, pd.Series):
             self.y_true = y_true
+            self.y_true.name = TRUE_NAME_DEFAULT
         else:
             self.y_true = pd.Series(y_true, name=TRUE_NAME_DEFAULT)
-
-        self.y_true.name = TRUE_NAME_DEFAULT
-            
+        
         if isinstance(y_pred, pd.Series):
             self.y_pred = y_pred
+            self.y_pred.name = PREDICTED_NAME_DEFAULT
         else:
             self.y_pred = pd.Series(y_pred, name=PREDICTED_NAME_DEFAULT)
 
-        self.y_pred.name = PREDICTED_NAME_DEFAULT
 
         if labels is not None:
             self.y_true = self.y_true.map(lambda i: self._label(i, labels))
@@ -59,15 +56,15 @@ class ConfusionMatrix(object):
         #self._df_confusion.index.name = TRUE_NAME_DEFAULT
         #self._df_confusion.columns.name = PREDICTED_NAME_DEFAULT
 
-        df = pd.crosstab(self.y_true, self.y_pred, rownames=['Actual'], colnames=['Predicted'])
+        #df = pd.crosstab(self.y_true, self.y_pred, rownames=[TRUE_NAME_DEFAULT], colnames=[PREDICTED_NAME_DEFAULT])
+        df = pd.crosstab(self.y_true, self.y_pred)
         idx = df.columns | df.index
         df = df.loc[idx, idx].fillna(0) # if some column or row are missing
-        df.index.name = TRUE_NAME_DEFAULT
-        df.columns.name = PREDICTED_NAME_DEFAULT
+        self._df_confusion = df.copy()
+        self._df_confusion.index.name = TRUE_NAME_DEFAULT
+        self._df_confusion.columns.name = PREDICTED_NAME_DEFAULT
 
         self._len = len(idx)
-
-        self._df_confusion = df
 
         self._df_conf_norm = self._df_confusion / self._df_confusion.astype(np.float).sum(axis=1)
 
@@ -80,16 +77,13 @@ class ConfusionMatrix(object):
         except:
             return(i)
 
-    #def label(self, y_true, y_pred):
-    #    return(y_true.unique()
-
     def __repr__(self):
         return(self.to_dataframe(sum=self.display_sum).__repr__())
 
     def __str__(self):
         return(self.to_dataframe(sum=self.display_sum).__str__())
 
-    def to_dataframe(self, normalized=False, sum=False, sum_label=SUM_LABEL_DEFAULT):
+    def to_dataframe(self, normalized=False, sum=False, sum_label=SUM_NAME_DEFAULT):
         """
         Returns a Pandas DataFrame
         """
@@ -107,7 +101,7 @@ class ConfusionMatrix(object):
         
         return(df)
 
-    def to_array(self, normalized=False, sum=False, sum_label=SUM_LABEL_DEFAULT):
+    def to_array(self, normalized=False, sum=False, sum_label=SUM_NAME_DEFAULT):
         """
         Returns a Numpy Array
         """

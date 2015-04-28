@@ -19,8 +19,9 @@ def asserts(y_true, y_pred, cm):
     assert isinstance(a, np.ndarray)
 
     assert len(df.index) == len(df.columns)
-    #assert df.index.name == TRUE_NAME_DEFAULT
-    #assert df.columns.name == PREDICTED_NAME_DEFAULT
+    
+    assert df.index.name == TRUE_NAME_DEFAULT, "%r != %r" % (df.index.name, TRUE_NAME_DEFAULT)
+    assert df.columns.name == PREDICTED_NAME_DEFAULT, "%r != %r" % (df.columns.name, PREDICTED_NAME_DEFAULT)
 
     np.testing.assert_array_equal(confusion_matrix(y_true, y_pred), cm.toarray())
 
