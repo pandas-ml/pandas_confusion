@@ -81,14 +81,14 @@ setup(
     # project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/technical.html#install-requires-vs-requirements-files
-    install_requires=['pandas', 'matplotlib', 'enum34'],
+    install_requires=['pandas', 'matplotlib', 'enum34', 'scipy', 'scikit-learn'],
 
     # List additional groups of dependencies here (e.g. development dependencies).
     # You can install these using the following syntax, for example:
     # $ pip install -e .[dev,test]
     extras_require = {
         'dev': ['check-manifest', 'nose'],
-        'test': ['coverage', 'nose', 'scikit-learn'],
+        'test': ['coverage', 'nose'],
     },
 
     # If there are data files included in your packages that need to be
