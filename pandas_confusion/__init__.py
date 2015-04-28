@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from enum import Enum  # pip install enum34
 import matplotlib.pylab as plt
-from sklearn.metrics import confusion_matrix
+
 
 class Backend(Enum):
     Matplotlib = 1
@@ -53,7 +53,7 @@ class ConfusionMatrix(object):
         N_pred = len(y_pred)
         assert N_true == N_pred, "y_true must have same size - %d != %d" % (N_true, N_pred)
 
-        #a = confusion_matrix(y_true, y_pred, labels=labels)
+        #a = confusion_matrix(y_true, y_pred, labels=labels) # from sklearn.metrics import confusion_matrix
         #print(a)
         #self._df_confusion = pd.DataFrame(a, index=labels, columns=labels)
         #self._df_confusion.index.name = TRUE_NAME_DEFAULT

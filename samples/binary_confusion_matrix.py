@@ -38,27 +38,27 @@ def main():
            False, False,  True,  True, False, False, False, False, False,
            False,  True, False, False]
 
-    binary_confusion_matrix = BinaryConfusionMatrix(y_true, y_pred)
-    print("Binary confusion matrix:\n%s" % binary_confusion_matrix)
+    binary_cm = BinaryConfusionMatrix(y_true, y_pred)
+    print("Binary confusion matrix:\n%s" % binary_cm)
 
     print("")
 
     attributes = ['TP', 'TN', 'FP', 'FN', 'TPR', 'TNR', 'PPV', 'NPV', 'FPR', 'FDR',
         'FNR', 'ACC', 'F1_score', 'MCC', 'informedness', 'markedness']
     for attrib in attributes:
-        print("%s: %f" % (attrib, getattr(binary_confusion_matrix, attrib)))
+        print("%s: %f" % (attrib, getattr(binary_cm, attrib)))
 
-    binary_confusion_matrix.plot()
-    filename = 'binary_confusion_matrix.png'
+    binary_cm.plot()
+    filename = 'binary_cm.png'
     plt.savefig(os.path.join(basepath, '..','screenshots', filename))
     plt.show()
 
-    binary_confusion_matrix.plot(normalized=True)
-    filename = 'binary_confusion_matrix_norm.png'
+    binary_cm.plot(normalized=True)
+    filename = 'binary_cm_norm.png'
     plt.savefig(os.path.join(basepath, '..','screenshots', filename))
     plt.show()
 
-    #binary_confusion_matrix.plot(normalized=True, backend=Backend.Seaborn)
+    #binary_cm.plot(normalized=True, backend=Backend.Seaborn)
     #plt.show()
 
 if __name__ == "__main__":
