@@ -30,21 +30,21 @@ class ConfusionMatrix(object):
     def __init__(self, y_true, y_pred, labels=None, display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT):
 
         if isinstance(y_true, pd.Series):
-            self.y_true = y_true
-            self.y_true.name = TRUE_NAME_DEFAULT
+            self._y_true = y_true
+            self._y_true.name = TRUE_NAME_DEFAULT
         else:
-            self.y_true = pd.Series(y_true, name=TRUE_NAME_DEFAULT)
+            self._y_true = pd.Series(y_true, name=TRUE_NAME_DEFAULT)
         
         if isinstance(y_pred, pd.Series):
-            self.y_pred = y_pred
-            self.y_pred.name = PREDICTED_NAME_DEFAULT
+            self._y_pred = y_pred
+            self._y_pred.name = PREDICTED_NAME_DEFAULT
         else:
-            self.y_pred = pd.Series(y_pred, name=PREDICTED_NAME_DEFAULT)
+            self._y_pred = pd.Series(y_pred, name=PREDICTED_NAME_DEFAULT)
 
 
         if labels is not None:
-            self.y_true = self.y_true.map(lambda i: self._label(i, labels))
-            self.y_pred = self.y_pred.map(lambda i: self._label(i, labels))
+            self._y_true = self._y_true.map(lambda i: self._label(i, labels))
+            self._y_pred = self._y_pred.map(lambda i: self._label(i, labels))
         
         N_true = len(y_true)
         N_pred = len(y_pred)
@@ -56,8 +56,8 @@ class ConfusionMatrix(object):
         #self._df_confusion.index.name = TRUE_NAME_DEFAULT
         #self._df_confusion.columns.name = PREDICTED_NAME_DEFAULT
 
-        #df = pd.crosstab(self.y_true, self.y_pred, rownames=[TRUE_NAME_DEFAULT], colnames=[PREDICTED_NAME_DEFAULT])
-        df = pd.crosstab(self.y_true, self.y_pred)
+        #df = pd.crosstab(self._y_true, self._y_pred, rownames=[TRUE_NAME_DEFAULT], colnames=[PREDICTED_NAME_DEFAULT])
+        df = pd.crosstab(self._y_true, self._y_pred)
         idx = df.columns | df.index
         df = df.loc[idx, idx].fillna(0) # if some column or row are missing
         self._df_confusion = df.copy()
@@ -119,6 +119,20 @@ class ConfusionMatrix(object):
         For example: 3 means that this is a 3x3 (3 rows, 3 columns) matrix
         """
         return(self._len)
+
+    def sum(self):
+        """
+        Returns sum of a confusion matrix.
+        It should be the number of elements of either y_true or y_pred
+        """
+        return(self.to_dataframe().sum(axis=0).sum(axis=1))
+
+
+    def y_true(self):
+        return(self._y_true)
+
+    def y_pred(self):
+        return(self._y_pred)
 
     def plot(self, normalized=False, backend=None, **kwargs):
         """
