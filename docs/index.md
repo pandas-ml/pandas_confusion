@@ -126,13 +126,7 @@ Here is a list of attributes you can get
 
 ## ToDo list
 
-* Convert a confusion matrix to a binary confusion matrix
-
 * Display numbers inside cells like http://stackoverflow.com/questions/5821125/how-to-plot-confusion-matrix-with-string-axis-rather-than-integer-in-python
-
-* Python package
-
-* Unit tests (nose)
 
 * Compare with results from Sklearn
 
@@ -143,8 +137,6 @@ Here is a list of attributes you can get
 * Compare with R "caret" package
 
 http://stackoverflow.com/questions/26631814/create-a-confusion-matrix-from-a-dataframe
-    
-* Continuous integration (Travis)
 
 * Code metrics (landscape.io)
 
@@ -156,5 +148,13 @@ https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sens
 [see code (ToDo)](samples/fake_convol_mat.py)
 
 ## Done
+
+* Continuous integration (Travis)
+
+* Convert a confusion matrix to a binary confusion matrix
+
+* Python package
+
+* Unit tests (nose)
 
 * Fix missing column and missing row
