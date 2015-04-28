@@ -47,5 +47,14 @@ def main():
     #cm.plot(normalized=True, backend=Backend.Seaborn)
     #plt.show()
 
+    # Binarize a confusion matrix
+    y_true = ["cat", "ant", "cat", "cat", "ant", "bird"]
+    y_pred = ["ant", "ant", "cat", "cat", "ant", "cat"]
+    cm = ConfusionMatrix(y_true, y_pred)
+    print(cm)
+    binary_cm = cm.binarize(['ant', 'cat'])
+    # A bird is not a "land_animal"
+    print(binary_cm)
+
 if __name__ == "__main__":
     main()

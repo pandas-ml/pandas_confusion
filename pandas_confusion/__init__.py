@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from enum import Enum  # pip install enum34
 import matplotlib.pylab as plt
-
+import collections
 
 class Backend(Enum):
     Matplotlib = 1
@@ -173,12 +173,25 @@ class ConfusionMatrix(object):
         else:
             raise(NotImplementedError)
 
+    def binarize(self, select):
+        if not isinstance(select, collections.Iterable):
+            select = np.array(select)
+
+        y_true_bin = self.y_true().map(lambda x: x in select)
+        y_pred_bin = self.y_pred().map(lambda x: x in select)
+
+        binary_cm = BinaryConfusionMatrix(y_true_bin, y_pred_bin)
+
+        return(binary_cm)
+
 
 class BinaryConfusionMatrix(ConfusionMatrix):
     """Binary confusion matrix"""
     
-    def __init__(self, y_true, y_pred):
-        super(BinaryConfusionMatrix, self).__init__(y_true, y_pred)
+    #def __init__(self, y_true, y_pred, labels=None, display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT):
+    def __init__(self, *args, **kwargs):
+        #super(BinaryConfusionMatrix, self).__init__(y_true, y_pred)
+        super(BinaryConfusionMatrix, self).__init__(*args, **kwargs)
 
     @property
     def P(self):
