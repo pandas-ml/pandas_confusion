@@ -30,14 +30,14 @@ You can see it
     confusion_matrix.plot()
     plt.show()
 
-![confusion_matrix](screenshots/confusion_matrix.png)
+![confusion_matrix](screenshots/cm.png)
 
 ### Matplotlib plot of a normalized confusion matrix
 
     confusion_matrix.plot(normalized=True)
     plt.show()
 
-![confusion_matrix_norm](screenshots/confusion_matrix_norm.png)
+![confusion_matrix_norm](screenshots/cm_norm.png)
 
 ### Binary confusion matrix
 
@@ -111,14 +111,14 @@ Here is a list of attributes you can get
     binary_confusion_matrix.plot()
     plt.show()
 
-![binary_confusion_matrix](screenshots/binary_confusion_matrix.png)
+![binary_confusion_matrix](screenshots/binary_cm.png)
 
 ### Matplotlib plot of a normalized binary confusion matrix
 
     binary_confusion_matrix.plot(normalized=True)
     plt.show()
 
-![binary_confusion_matrix_norm](screenshots/binary_confusion_matrix_norm.png)
+![binary_confusion_matrix_norm](screenshots/binary_cm_norm.png)
 
 ### Seaborn plot of a binary confusion matrix (ToDo)
 
