@@ -45,13 +45,16 @@ def main():
 
     attributes = ['TP', 'TN', 'FP', 'FN', 'TPR', 'TNR', 'PPV', 'NPV', 'FPR', 'FDR',
         'FNR', 'ACC', 'F1_score', 'MCC', 'informedness', 'markedness']
-    for attrib in attributes:
-        print("%s: %f" % (attrib, getattr(binary_cm, attrib)))
+    #binary_cm.print_stats(attributes)
+    binary_cm.print_stats()
+    #stats = binary_cm.stats(attributes)
+    #for key, val in stats.items():
+    #    print("%s: %f" % (key, val))
 
     binary_cm.plot()
     filename = 'binary_cm.png'
-    plt.savefig(os.path.join(basepath, '..','screenshots', filename))
-    plt.show()
+    #plt.savefig(os.path.join(basepath, '..','screenshots', filename))
+    #plt.show()
 
     binary_cm.plot(normalized=True)
     filename = 'binary_cm_norm.png'

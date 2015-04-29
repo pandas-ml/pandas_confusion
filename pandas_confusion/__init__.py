@@ -233,8 +233,7 @@ class ConfusionMatrix(object):
 
         return(df)
 
-    @property
-    def stats(self):
+    def stats(self, lst_stats=None):
         d_stats = collections.OrderedDict()
         d_stats['cm'] = self
         d_stats['overall'] = self.stats_overall
@@ -253,14 +252,14 @@ class ConfusionMatrix(object):
             s = s + "%s:%s%s" % (name, line_feed_key_val, val)
         return(s)   
 
-    def _str_stats(self):
+    def _str_stats(self, lst_stats=None):
         d_stats_name = {
             "cm": "Confusion Matrix",
             "overall": "Overall Statistics",
             "class": "Class Statistics",
         }
 
-        stats = self.stats
+        stats = self.stats(lst_stats)
 
         d_stats_str = collections.OrderedDict([
             ("cm", str(stats['cm'])),
@@ -271,9 +270,8 @@ class ConfusionMatrix(object):
         s = self._str_dict(d_stats_str, line_feed_key_val='\n\n', line_feed_stats='\n\n\n', d_name=d_stats_name)
         return(s)
 
-
-    def print_stats(self):
-        print(self._str_stats())
+    def print_stats(self, lst_stats=None):
+        print(self._str_stats(lst_stats))
 
 class BinaryConfusionMatrix(ConfusionMatrix):
     """Binary confusion matrix"""
@@ -471,4 +469,11 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         """
         Returns an  ordered dict of statistics
         """
-        return(dict())
+        if lst_stats is None:
+            lst_stats = ['TP', 'TN', 'FP', 'FN', 'TPR', 'TNR', 'PPV', 'NPV', 'FPR', 'FDR',
+        'FNR', 'ACC', 'F1_score', 'MCC', 'informedness', 'markedness']
+        d = map(lambda stat: (stat, getattr(self, stat)), lst_stats)
+        return(collections.OrderedDict(d))
+
+    def _str_stats(self, lst_stats):
+        return(self._str_dict(self.stats(lst_stats), line_feed_key_val=' ', line_feed_stats='\n', d_name=None))
