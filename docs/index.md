@@ -185,6 +185,16 @@ https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sens
 
 * Order confusion matrix easily
 
+* Create empty class easily
+
+    cm = ConfusionMatrix(y_true, y_pred, labels=range(100, 600+1, 100))
+
+    Class 300 and class 400 should be create
+
+    R like method ? conf_mat_tab <- table(lapply(df, factor, levels = seq(100, 600, 100)))
+
+    http://pandas.pydata.org/pandas-docs/stable/comparison_with_r.html
+
 ## Done
 
 * Continuous integration (Travis)
