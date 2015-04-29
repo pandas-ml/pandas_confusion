@@ -183,6 +183,8 @@ https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sens
 
 [see code (ToDo)](samples/fake_convol_mat.py)
 
+* Order confusion matrix easily
+
 ## Done
 
 * Continuous integration (Travis)
