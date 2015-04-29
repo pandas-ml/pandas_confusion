@@ -226,6 +226,22 @@ class ConfusionMatrix(object):
 
         return(binary_cm)
 
+    def enlarge(self, select):
+        """Enlarges confusion matrix with new classes
+        It should add empty rows and columns"""
+        if not isinstance(select, collections.Iterable):
+            idx_new_cls = pd.Index([select])
+        else:
+            idx_new_cls = pd.Index(select)
+        new_idx = self._df_confusion.index | idx_new_cls
+        new_idx.name = TRUE_NAME_DEFAULT
+        new_col = self._df_confusion.columns | idx_new_cls
+        new_col.name = PREDICTED_NAME_DEFAULT
+        print(new_col)
+        self._df_confusion = self._df_confusion.loc[:, new_col]
+        #self._df_confusion = self._df_confusion.loc[new_idx, new_col].fillna(0)
+        #ToFix: KeyError: 'the label [True] is not in the [index]'
+
     @property
     def stats_overall(self):
         d_stats = collections.OrderedDict()
@@ -243,10 +259,11 @@ class ConfusionMatrix(object):
         #df = pd.DataFrame(columns=self.classes, index=stats)
         df = pd.DataFrame(columns=self.classes)
 
+        # ToDo Avoid these for loops
+
         for cls in self.classes:
             binary_cm = self.binarize(cls)
             binary_cm_stats = binary_cm.stats()
-            print(cls, binary_cm_stats)
             for key, value in binary_cm_stats.items():
                 df.loc[key, cls] = value #binary_cm_stats
 

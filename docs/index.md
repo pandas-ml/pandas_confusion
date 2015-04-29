@@ -218,6 +218,16 @@ Python
 
 You can use `cm.to_dataframe().transpose()`
 
+
+  * Overall statistics: Accuracy, 95% CI, No Information Rate, P-Value [Acc > NIR], Kappa, Mcnemar's Test P-Value
+
+    * http://adorio-research.org/wordpress/?p=238 http://adorio-research.org/wordpress/?p=10815
+
+  * Class statistics
+
+    * see Caret code for Detection Rate, Detection Prevalence, Balanced Accuracy
+
+
 * Code metrics (landscape.io)
 
 * Create fake truth, prediction from confusion matrix
@@ -245,6 +255,8 @@ https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sens
     new_col = df.index | idx_new_cls
     new_col.name = 'Predicted'
     df = df.loc[new_idx, new_col].fillna(0)
+
+    see cm.enlarge(...)
 
 ## Done
 
