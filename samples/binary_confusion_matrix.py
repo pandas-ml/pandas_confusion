@@ -64,5 +64,7 @@ def main():
     #binary_cm.plot(normalized=True, backend=Backend.Seaborn)
     #plt.show()
 
+    print binary_cm.FP + binary_cm.TP # Positive
+
 if __name__ == "__main__":
     main()

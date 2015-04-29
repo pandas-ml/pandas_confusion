@@ -96,25 +96,6 @@ You can get useful attributes such as True Positive (TP), True Negative (TN) ...
 
     print binary_confusion_matrix.TP
 
-Here is a list of attributes you can get
-
-    TP: 24.000000
-    TN: 67.000000
-    FP: 0.000000
-    FN: 21.000000
-    TPR: 0.533333
-    TNR: 1.000000
-    PPV: 1.000000
-    NPV: 0.761364
-    FPR: 0.000000
-    FDR: 0.000000
-    FNR: 0.466667
-    ACC: 0.812500
-    F1_score: 0.695652
-    MCC: 0.637229
-    informedness: 0.533333
-    markedness: 0.761364
-
 ### Matplotlib plot of a binary confusion matrix
 
     binary_confusion_matrix.plot()
@@ -132,6 +113,69 @@ Here is a list of attributes you can get
 ### Seaborn plot of a binary confusion matrix (ToDo)
 
     binary_confusion_matrix.plot(backend=Backend.Seaborn)
+
+### Confusion matrix and class statistics
+
+Overall statistics and class statistics of confusion matrix can be easily displayed.
+
+    y_true = [600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200]
+    y_pred = [100, 200, 200, 100, 100, 200, 200, 200, 100, 200, 500, 100, 100, 100, 100, 100, 100, 100, 500, 200]
+    cm = ConfusionMatrix(y_true, y_pred)
+    cm.print_stats()
+
+You should get:
+
+    Confusion Matrix:
+
+    Classes  100  200  500  600  __all__
+    Actual
+    100        0    0    0    0        0
+    200        9    6    1    0       16
+    500        1    1    1    0        3
+    600        1    0    0    0        1
+    __all__   11    7    2    0       20
+
+
+    Overall Statistics:
+
+    Accuracy: ToDo
+    95% CI: ToDo
+    No Information Rate: ToDo
+    P-Value [Acc > NIR]: ToDo
+    Kappa: ToDo
+    Mcnemar's Test P-Value: ToDo
+
+
+    Class Statistics:
+
+    Classes                                 100         200         500   600
+    Population                               20          20          20    20
+    Condition positive                        0          16           3     1
+    Condition negative                       20           4          17    19
+    Test outcome positive                    11           7           2     0
+    Test outcome negative                     9          13          18    20
+    TP: True Positive                         0           6           1     0
+    TN: True Negative                         9           3          16    19
+    FP: False Positive                       11           1           1     0
+    FN: False Negative                        0          10           2     1
+    TPR: Sensivity                          NaN       0.375   0.3333333     0
+    TNR=SPC: Specificity                   0.45        0.75   0.9411765     1
+    PPV: Pos Pred Value = Precision           0   0.8571429         0.5   NaN
+    NPV: Neg Pred Value                       1   0.2307692   0.8888889  0.95
+    FPR: False-out                         0.55        0.25  0.05882353     0
+    FDR: False Discovery Rate                 1   0.1428571         0.5   NaN
+    FNR: Miss Rate                          NaN       0.625   0.6666667     1
+    ACC: Accuracy                          0.45        0.45        0.85  0.95
+    F1 score                                  0   0.5217391         0.4     0
+    MCC: Matthews correlation coefficient   NaN   0.1048285    0.326732   NaN
+    Informedness                            NaN       0.125   0.2745098     0
+    Markedness                                0  0.08791209   0.3888889   NaN
+    Prevalence                                0         0.8        0.15  0.05
+    LR+: Positive likelihood ratio          NaN         1.5    5.666667   NaN
+    LR-: Negative likelihood ratio          NaN   0.8333333   0.7083333     1
+    DOR: Diagnostic odds ratio              NaN         1.8           8   NaN
+    FOR: False omission rate                  0   0.7692308   0.1111111  0.05
+
 
 ## ToDo list
 

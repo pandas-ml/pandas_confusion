@@ -148,6 +148,7 @@ class ConfusionMatrix(object):
         """
         return(self.to_array(*args, **kwargs))
 
+    #@property
     def len(self):
         """
         Returns len of a confusion matrix.
@@ -155,18 +156,28 @@ class ConfusionMatrix(object):
         """
         return(self._len)
 
+    #@property
     def sum(self):
         """
         Returns sum of a confusion matrix.
+        Also called "population"
         It should be the number of elements of either y_true or y_pred
         """
         return(self.to_dataframe().sum().sum())
 
+    @property
+    def population(self):
+        """
+        see also sum
+        """
+        return(self.sum())
 
-    def y_true(self):
+    #@property
+    def y_true(self): # Not a property (because we will add parameter)
         return(self._y_true)
 
-    def y_pred(self):
+    #@property
+    def y_pred(self): # Not a property (because we will add parameter)
         return(self._y_pred)
 
     def plot(self, normalized=False, backend=None, **kwargs):
@@ -240,6 +251,11 @@ class ConfusionMatrix(object):
                 df.loc[key, cls] = value #binary_cm_stats
 
         d_name = {
+            'population': 'Population',
+            'P': 'Condition positive',
+            'N': 'Condition negative',
+            'PositiveTest': 'Test outcome positive',
+            'NegativeTest': 'Test outcome negative',
             'TP': 'TP: True Positive',
             'TN': 'TN: True Negative',
             'FP': 'FP: False Positive',
@@ -248,7 +264,7 @@ class ConfusionMatrix(object):
             'TNR': 'TNR=SPC: Specificity',
             'PPV': 'PPV: Pos Pred Value = Precision',
             'NPV': 'NPV: Neg Pred Value',
-            #'xxx': 'xxx: Prevalence',
+            'prevalence': 'Prevalence',
             #'xxx': 'xxx: Detection Rate',
             #'xxx': 'xxx: Detection Prevalence',
             #'xxx': 'xxx: Balanced Accuracy',
@@ -260,6 +276,10 @@ class ConfusionMatrix(object):
             'MCC': 'MCC: Matthews correlation coefficient',
             'informedness': 'Informedness',
             'markedness': 'Markedness',
+            'LRP': 'LR+: Positive likelihood ratio',
+            'LRN': 'LR-: Negative likelihood ratio',
+            'DOR': 'DOR: Diagnostic odds ratio',
+            'FOR': 'FOR: False omission rate',
         }
         df.index = df.index.map(lambda id: self._name_from_dict(id, d_name))
 
@@ -338,12 +358,12 @@ class BinaryConfusionMatrix(ConfusionMatrix):
 
     @property
     def P(self):
-        """Positive"""
+        """Condition positive"""
         return(self._df_confusion.loc[True, :].sum())
     
     @property
     def N(self):
-        """Negative"""
+        """Condition negative"""
         return(self._df_confusion.loc[False, :].sum())
     
     @property
@@ -366,7 +386,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
     def FN(self):
         """
         false negative (FN)
-        eqv. with miss, Type II error
+        eqv. with miss, Type II error / Type 2 error
         """
         return(self._df_confusion.loc[True, False])
     
@@ -374,15 +394,31 @@ class BinaryConfusionMatrix(ConfusionMatrix):
     def FP(self):
         """
         false positive (FP)
-        eqv. with false alarm, Type I error
+        eqv. with false alarm, Type I error / Type 1 error
         """
         return(self._df_confusion.loc[False, True])
+
+    @property
+    def PositiveTest(self):
+        """
+        test outcome positive
+        TP} + FP}
+        """
+        return(self.TP + self.FP)
+
+    @property
+    def NegativeTest(self):
+        """
+        test outcome negative
+        TN + FN
+        """
+        return(self.TN + self.FN)
     
     @property
     def FPR(self):
         """
         fall-out or false positive rate (FPR)
-        \mathit{FPR} = \mathit{FP} / N = \mathit{FP} / (\mathit{FP} + \mathit{TN})
+        FPR = FP / N = FP / (FP + TN)
         """
         #return(float(self.FP)/(self.FP + self.TN))
         return(float(self.FP) / self.N)
@@ -392,7 +428,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         """
         sensitivity or true positive rate (TPR)
         eqv. with hit rate, recall
-        \mathit{TPR} = \mathit{TP} / P = \mathit{TP} / (\mathit{TP}+\mathit{FN})
+        TPR = TP / P = TP / (TP+FN)
         """
         #return(float(self.TP) / (self.TP + self.FN))
         return(float(self.TP) / self.P)
@@ -409,7 +445,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
     def TNR(self):
         """
         specificity (SPC) or true negative rate (TNR)
-        \mathit{SPC} = \mathit{TN} / N = \mathit{TN} / (\mathit{FP} + \mathit{TN}) 
+        SPC = TN / N = TN / (FP + TN)
         """
         return(float(self.TN) / self.N)
 
@@ -431,9 +467,9 @@ class BinaryConfusionMatrix(ConfusionMatrix):
     def PPV(self):
         """
         precision or positive predictive value (PPV)
-        \mathit{PPV} = \mathit{TP} / (\mathit{TP} + \mathit{FP})
+        PPV = TP / (TP + FP) = TP / PositiveTest
         """
-        return(float(self.TP) / (self.TP + self.FP))
+        return(float(self.TP) / self.PositiveTest)
 
     @property
     def precision(self):
@@ -443,26 +479,36 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         return(self.PPV)
 
     @property
+    def FOR(self):
+        """
+        false omission rate (FOR)
+        FOR = FN / NegativeTest
+        """
+        return(float(self.FN) / self.NegativeTest)
+
+
+    @property
     def NPV(self):
         """
         negative predictive value (NPV)
-        \mathit{NPV} = \mathit{TN} / (\mathit{TN} + \mathit{FN})
+        NPV = TN / (TN + FN)
         """
-        return(float(self.TN) / (self.TN + self.FN))
+        return(float(self.TN) / self.NegativeTest)
     
     @property
     def FDR(self):
         """
         false discovery rate (FDR)
-        \mathit{FDR} = \mathit{FP} / (\mathit{FP} + \mathit{TP}) = 1 - \mathit{PPV} 
+        FDR = FP / (FP + TP) = 1 - PPV
         """
-        return(1 - self.PPV)
+        return(float(self.FP) / self.PositiveTest)
+        #return(1 - self.PPV)
     
     @property
     def FNR(self):
         """
         Miss Rate or False Negative Rate (FNR)
-        \mathit{FNR} = \mathit{FN} / P = \mathit{FN} / (\mathit{FN} + \mathit{TP}) 
+        FNR = FN / P = FN / (FN + TP)
         """
         return(float(self.FN) / self.P)
     
@@ -470,15 +516,15 @@ class BinaryConfusionMatrix(ConfusionMatrix):
     def ACC(self):
         """
         accuracy (ACC)
-        \mathit{ACC} = (\mathit{TP} + \mathit{TN}) / (P + N)
+        ACC} = (TP + TN) / (P + N) = (TP + TN) / TotalPopulation
         """
-        return(float(self.TP + self.TN) / (self.P + self.N))
+        return(float(self.TP + self.TN) / self.population)
     
     @property
     def F1_score(self):
         """
         F1 score is the harmonic mean of precision and sensitivity
-        \mathit{F1} = 2 \mathit{TP} / (2 \mathit{TP} + \mathit{FP} + \mathit{FN})
+        F1 = 2 TP / (2 TP + FP + FN)
         """
         return(2 * float(self.TP)/(2 * self.TP + self.FP + self.FN))
     
@@ -486,7 +532,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
     def MCC(self):
         """
         Matthews correlation coefficient (MCC)
-        \frac{ TP \times TN - FP \times FN } {\sqrt{ (TP+FP) ( TP + FN ) ( TN + FP ) ( TN + FN ) } }
+        \frac{ TP \times TN - FP \times FN } {\sqrt{ (TP+FP) ( TP + FN ) ( TN + FP ) ( TN + FN ) }
         """
         return((self.TP * self.TN - self.FP * self.FN) \
             / math.sqrt((self.TP + self.FP) * ( self.TP + self.FN ) *\
@@ -506,13 +552,41 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         """
         return(self.precision + self.NPV - 1.0)
 
+    @property
+    def prevalence(self):
+        """
+        Prevalence = P / TotalPopulation
+        """
+        return(float(self.P) / self.population)
+
+    @property
+    def LRP(self):
+        """
+        Positive likelihood ratio (LR+) = TPR / FPR
+        """
+        return(float(self.TPR) / self.FPR)
+
+    @property
+    def LRN(self):
+        """
+        Negative likelihood ratio (LR-) = FNR / TNR
+        """
+        return(float(self.FNR) / self.TNR)
+
+    @property
+    def DOR(self):
+        """
+        Diagnostic odds ratio (DOR) = LR+ / LR−
+        """
+        return(float(self.LRP) / self.LRN)
+
     def stats(self, lst_stats=None):
         """
         Returns an  ordered dict of statistics
         """
         if lst_stats is None:
-            lst_stats = ['TP', 'TN', 'FP', 'FN', 'TPR', 'TNR', 'PPV', 'NPV', 'FPR', 'FDR',
-        'FNR', 'ACC', 'F1_score', 'MCC', 'informedness', 'markedness']
+            lst_stats = ['population', 'P', 'N', 'PositiveTest', 'NegativeTest', 'TP', 'TN', 'FP', 'FN', 'TPR', 'TNR', 'PPV', 'NPV', 'FPR', 'FDR',
+        'FNR', 'ACC', 'F1_score', 'MCC', 'informedness', 'markedness', 'prevalence', 'LRP', 'LRN', 'DOR', 'FOR']
         d = map(lambda stat: (stat, getattr(self, stat)), lst_stats)
         return(collections.OrderedDict(d))
 
