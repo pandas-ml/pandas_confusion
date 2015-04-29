@@ -22,6 +22,7 @@ SUM_NAME_DEFAULT = '__all__'
 DISPLAY_SUM_DEFAULT = True
 TRUE_NAME_DEFAULT = 'Actual'
 PREDICTED_NAME_DEFAULT = 'Predicted'
+CLASSES_NAME_DEFAULT = 'Classes'
 
 
 class ConfusionMatrix(object):
@@ -59,8 +60,8 @@ class ConfusionMatrix(object):
         #df = pd.crosstab(self._y_true, self._y_pred, rownames=[TRUE_NAME_DEFAULT], colnames=[PREDICTED_NAME_DEFAULT])
         #df = pd.crosstab(self._y_true, self._y_pred, rownames=TRUE_NAME_DEFAULT, colnames=PREDICTED_NAME_DEFAULT)
         df = pd.crosstab(self._y_true, self._y_pred)
-        idx = df.columns | df.index
-        df = df.loc[idx, idx.copy()].fillna(0) # if some column or row are missing
+        idx = self._classes(df)
+        df = df.loc[idx, idx.copy()].fillna(0) # if some columns or rows are missing
         self._df_confusion = df
         self._df_confusion.index.name = TRUE_NAME_DEFAULT
         self._df_confusion.columns.name = PREDICTED_NAME_DEFAULT
@@ -82,6 +83,23 @@ class ConfusionMatrix(object):
     def __str__(self):
         return(self.to_dataframe(sum=self.display_sum).__str__())
 
+    @property
+    def classes(self):
+        """
+        Returns classes (property)
+        """
+        return(self._classes())
+
+    def _classes(self, df=None):
+        """
+        Returns classes (method)
+        """
+        if df is None:
+            df = self.to_dataframe()
+        idx_classes = df.columns | df.index
+        idx_classes.name = CLASSES_NAME_DEFAULT
+        return(idx_classes)        
+
     def to_dataframe(self, normalized=False, sum=False, sum_label=SUM_NAME_DEFAULT):
         """
         Returns a Pandas DataFrame
@@ -102,12 +120,18 @@ class ConfusionMatrix(object):
 
     @property
     def true(self):
+        """
+        Returns sum of actual (true) values for each class
+        """
         s = self.to_dataframe().sum(axis=1)
         s.name = TRUE_NAME_DEFAULT
         return(s)
 
     @property
     def pred(self):
+        """
+        Returns sum of predicted values for each class
+        """
         s = self.to_dataframe().sum(axis=0)
         s.name = PREDICTED_NAME_DEFAULT
         return(s)
@@ -191,6 +215,65 @@ class ConfusionMatrix(object):
 
         return(binary_cm)
 
+    @property
+    def stats_overall(self):
+        d_stats = collections.OrderedDict()
+        d_stats['Accuracy'] = 'ToDo'  #0.35            
+        d_stats['95% CI'] = 'ToDo'  #(0.1539, 0.5922)
+        d_stats['No Information Rate'] = 'ToDo'  #0.8             
+        d_stats['P-Value [Acc > NIR]'] = 'ToDo'  #1
+        d_stats['Kappa'] = 'ToDo'  #0.078
+        d_stats['Mcnemar\'s Test P-Value'] = 'ToDo'  #np.nan 
+        return(d_stats)
+
+    @property
+    def stats_class(self):
+        stats = ['TN', 'FP', 'FN', 'TP']
+        df = pd.DataFrame(columns=self.classes, index=stats)
+
+        return(df)
+
+    @property
+    def stats(self):
+        d_stats = collections.OrderedDict()
+        d_stats['cm'] = self
+        d_stats['overall'] = self.stats_overall
+        d_stats['class'] = self.stats_class
+        return(d_stats)
+
+    def _str_dict(self, d, line_feed_key_val='\n', line_feed_stats='\n\n', d_name=None):
+        s = ""
+        for i, (key, val) in enumerate(d.items()):
+            try:
+                name = d_name[key]
+            except:
+                name = key
+            if i != 0:
+                s = s + line_feed_stats
+            s = s + "%s:%s%s" % (name, line_feed_key_val, val)
+        return(s)   
+
+    def _str_stats(self):
+        d_stats_name = {
+            "cm": "Confusion Matrix",
+            "overall": "Overall Statistics",
+            "class": "Class Statistics",
+        }
+
+        stats = self.stats
+
+        d_stats_str = collections.OrderedDict([
+            ("cm", str(stats['cm'])),
+            ("overall", self._str_dict(stats['overall'], line_feed_key_val=' ', line_feed_stats='\n')),
+            ("class", str(stats['class'])),
+        ])
+
+        s = self._str_dict(d_stats_str, line_feed_key_val='\n\n', line_feed_stats='\n\n\n', d_name=d_stats_name)
+        return(s)
+
+
+    def print_stats(self):
+        print(self._str_stats())
 
 class BinaryConfusionMatrix(ConfusionMatrix):
     """Binary confusion matrix"""
@@ -383,3 +466,9 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         Markedness = Precision + NPV - 1
         """
         return(self.precision + self.NPV - 1.0)
+
+    def stats(self, lst_stats):
+        """
+        Returns an  ordered dict of statistics
+        """
+        return(dict())
