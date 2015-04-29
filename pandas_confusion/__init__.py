@@ -181,6 +181,7 @@ class ConfusionMatrix(object):
             # You should test this yourself
             # because I'm facing an issue with Seaborn under Mac OS X (2015-04-26)
             # RuntimeError: Cannot get window extent w/o renderer
+            #sns.plt.show()
 
         else:
             raise(NotImplementedError)

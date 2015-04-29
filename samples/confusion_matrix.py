@@ -2,6 +2,7 @@
 # -*- coding: utf8 -*-
 
 import os
+#import seaborn as sns
 import matplotlib.pylab as plt
 import numpy as np
 import pandas as pd
@@ -44,8 +45,8 @@ def main():
     #plt.savefig(os.path.join(basepath, '..','screenshots', filename))
     #plt.show()
 
-    #cm.plot(normalized=True, backend=Backend.Seaborn)
-    #plt.show()
+    cm.plot(normalized=True, backend=Backend.Seaborn)
+    sns.plt.show()
 
     # Binarize a confusion matrix
     y_true = ["cat", "ant", "cat", "cat", "ant", "bird"]

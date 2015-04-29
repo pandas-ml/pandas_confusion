@@ -147,6 +147,33 @@ Here is a list of attributes you can get
 
 http://stackoverflow.com/questions/26631814/create-a-confusion-matrix-from-a-dataframe
 
+R
+
+    Actual <- c(600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200)
+    Predicted <- c(100, 200, 200, 100, 100, 200, 200, 200, 100, 200, 500, 100, 100, 100, 100, 100, 100, 100, 500, 200)
+    df <- data.frame(Actual, Predicted)
+    table(lapply(df, factor, levels=seq(100, 600, 100)))
+    table(lapply(df, factor, levels=c(100, 200, 500, 600)))
+
+Python
+
+    >>> from pandas_confusion import ConfusionMatrix
+    >>> y_true = [600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200]
+    >>> y_pred = [100, 200, 200, 100, 100, 200, 200, 200, 100, 200, 500, 100, 100, 100, 100, 100, 100, 100, 500, 200]
+    >>> cm = ConfusionMatrix(y_true, y_pred)
+    >>> cm
+    Predicted  100  200  500  600  __all__
+    Actual
+    100          0    0    0    0        0
+    200          9    6    1    0       16
+    500          1    1    1    0        3
+    600          1    0    0    0        1
+    __all__     11    7    2    0       20
+
+`cm(i, j)` in Python is `conf_mat(j, i)` in R
+
+You can use `cm.to_dataframe().transpose()`
+
 * Code metrics (landscape.io)
 
 * Create fake truth, prediction from confusion matrix
