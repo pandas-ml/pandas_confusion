@@ -67,8 +67,6 @@ class ConfusionMatrix(object):
 
         self._len = len(idx)
 
-        self._df_conf_norm = self._df_confusion / self._df_confusion.astype(np.float).sum(axis=1)
-
         self.backend = backend
         self.display_sum = display_sum
 
@@ -89,7 +87,7 @@ class ConfusionMatrix(object):
         Returns a Pandas DataFrame
         """
         if normalized:
-            df = self._df_conf_norm
+            df = self._df_confusion / self._df_confusion.astype(np.float).sum(axis=1)
         else:
             df = self._df_confusion
 
@@ -151,11 +149,7 @@ class ConfusionMatrix(object):
         """
         plot confusion matrix
         """
-
-        if normalized:
-            df = self._df_conf_norm
-        else:
-            df = self._df_confusion
+        df = self.to_dataframe(normalized)
 
         if 'cmap' not in kwargs.keys():
             cmap = plt.cm.gray_r
@@ -205,6 +199,20 @@ class BinaryConfusionMatrix(ConfusionMatrix):
     def __init__(self, *args, **kwargs):
         #super(BinaryConfusionMatrix, self).__init__(y_true, y_pred)
         super(BinaryConfusionMatrix, self).__init__(*args, **kwargs)
+
+    @classmethod
+    def help(cls):
+        """
+        Returns a DataFrame reminder about terms
+        * TN: True Negative
+        * FP: False Positive
+        * FN: False Negative
+        * TP: True Positive
+        """
+        df = pd.DataFrame([["TN", "FP"],["FN", "TP"]], columns=[False, True], index=[False, True])
+        df.index.name = TRUE_NAME_DEFAULT
+        df.columns.name = PREDICTED_NAME_DEFAULT
+        return(df)
 
     @property
     def P(self):
