@@ -195,6 +195,13 @@ https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sens
 
     http://pandas.pydata.org/pandas-docs/stable/comparison_with_r.html
 
+    idx_new_cls = pd.Index([300, 400])
+    new_idx = df.index | idx_new_cls
+    new_idx.name = 'Actual'
+    new_col = df.index | idx_new_cls
+    new_col.name = 'Predicted'
+    df = df.loc[new_idx, new_col].fillna(0)
+
 ## Done
 
 * Continuous integration (Travis)
