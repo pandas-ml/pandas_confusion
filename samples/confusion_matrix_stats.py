@@ -23,7 +23,7 @@ def main():
 
     print("")
 
-    cm.print_stats(None)
+    #cm.print_stats(None)
     cm.print_stats()
 
 

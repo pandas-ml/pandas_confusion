@@ -36,17 +36,18 @@ def main():
     print("Confusion matrix:\n%s" % cm)
 
     cm.plot()
-    filename = 'cm.png'
+    #filename = 'cm.png'
     #plt.savefig(os.path.join(basepath, '..','screenshots', filename))
     #plt.show()
 
     cm.plot(normalized=True)
-    filename = 'cm_norm.png'
+    #filename = 'cm_norm.png'
     #plt.savefig(os.path.join(basepath, '..','screenshots', filename))
     #plt.show()
 
-    cm.plot(normalized=True, backend=Backend.Seaborn)
-    sns.plt.show()
+    #import seaborn as sns
+    #cm.plot(normalized=True, backend=Backend.Seaborn)
+    #sns.plt.show()
 
     # Binarize a confusion matrix
     y_true = ["cat", "ant", "cat", "cat", "ant", "bird"]

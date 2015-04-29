@@ -228,25 +228,66 @@ class ConfusionMatrix(object):
 
     @property
     def stats_class(self):
-        stats = ['TN', 'FP', 'FN', 'TP']
-        df = pd.DataFrame(columns=self.classes, index=stats)
+        #stats = ['TN', 'FP', 'FN', 'TP']
+        #df = pd.DataFrame(columns=self.classes, index=stats)
+        df = pd.DataFrame(columns=self.classes)
+
+        for cls in self.classes:
+            binary_cm = self.binarize(cls)
+            binary_cm_stats = binary_cm.stats()
+            print(cls, binary_cm_stats)
+            for key, value in binary_cm_stats.items():
+                df.loc[key, cls] = value #binary_cm_stats
+
+        d_name = {
+            'TP': 'TP: True Positive',
+            'TN': 'TN: True Negative',
+            'FP': 'FP: False Positive',
+            'FN': 'FN: False Negative',
+            'TPR': 'TPR: Sensivity',
+            'TNR': 'TNR=SPC: Specificity',
+            'PPV': 'PPV: Pos Pred Value = Precision',
+            'NPV': 'NPV: Neg Pred Value',
+            #'xxx': 'xxx: Prevalence',
+            #'xxx': 'xxx: Detection Rate',
+            #'xxx': 'xxx: Detection Prevalence',
+            #'xxx': 'xxx: Balanced Accuracy',
+            'FPR': 'FPR: False-out',
+            'FDR': 'FDR: False Discovery Rate',
+            'FNR': 'FNR: Miss Rate',
+            'ACC': 'ACC: Accuracy',
+            'F1_score': 'F1 score',
+            'MCC': 'MCC: Matthews correlation coefficient',
+            'informedness': 'Informedness',
+            'markedness': 'Markedness',
+        }
+        df.index = df.index.map(lambda id: self._name_from_dict(id, d_name))
 
         return(df)
 
     def stats(self, lst_stats=None):
+        """
+        Return an OrderedDict with statistics
+        """
         d_stats = collections.OrderedDict()
         d_stats['cm'] = self
         d_stats['overall'] = self.stats_overall
         d_stats['class'] = self.stats_class
         return(d_stats)
 
+    def _name_from_dict(self, key, d_name):
+        """
+        Returns name (value in dict d_name or key if key doesn't exists in d_name)
+        """
+        try:
+            return(d_name[key])
+        except:
+            return(key)
+
     def _str_dict(self, d, line_feed_key_val='\n', line_feed_stats='\n\n', d_name=None):
         s = ""
         for i, (key, val) in enumerate(d.items()):
-            try:
-                name = d_name[key]
-            except:
-                name = key
+            name = self._name_from_dict(key, d_name)
             if i != 0:
                 s = s + line_feed_stats
             s = s + "%s:%s%s" % (name, line_feed_key_val, val)
@@ -465,7 +506,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         """
         return(self.precision + self.NPV - 1.0)
 
-    def stats(self, lst_stats):
+    def stats(self, lst_stats=None):
         """
         Returns an  ordered dict of statistics
         """
