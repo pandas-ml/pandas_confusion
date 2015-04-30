@@ -11,7 +11,7 @@ import pandas as pd
 from enum import Enum  # pip install enum34
 import matplotlib.pylab as plt
 import collections
-from stats import binom_interval, class_agreement
+from stats import binom_interval, class_agreement, prop_test
 
 
 class Backend(Enum):
@@ -23,7 +23,7 @@ BACKEND_DEFAULT = Backend.Matplotlib
 SUM_NAME_DEFAULT = '__all__'
 DISPLAY_SUM_DEFAULT = True
 TRUE_NAME_DEFAULT = 'Actual'
-PREDICTED_NAME_DEFAULT = 'Predicted'
+PRED_NAME_DEFAULT = 'Predicted'
 CLASSES_NAME_DEFAULT = 'Classes'
 
 
@@ -31,19 +31,23 @@ class ConfusionMatrix(object):
     """Confusion matrix"""
     
     def __init__(self, y_true, y_pred, labels=None,
-            display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT):
+            display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT,
+            true_name = TRUE_NAME_DEFAULT, pred_name = PRED_NAME_DEFAULT):
+
+        self.true_name = true_name
+        self.pred_name = pred_name
 
         if isinstance(y_true, pd.Series):
             self._y_true = y_true
-            self._y_true.name = TRUE_NAME_DEFAULT
+            self._y_true.name = self.true_name
         else:
-            self._y_true = pd.Series(y_true, name=TRUE_NAME_DEFAULT)
+            self._y_true = pd.Series(y_true, name=self.true_name)
         
         if isinstance(y_pred, pd.Series):
             self._y_pred = y_pred
-            self._y_pred.name = PREDICTED_NAME_DEFAULT
+            self._y_pred.name = self.pred_name
         else:
-            self._y_pred = pd.Series(y_pred, name=PREDICTED_NAME_DEFAULT)
+            self._y_pred = pd.Series(y_pred, name=self.pred_name)
 
 
         if labels is not None:
@@ -59,20 +63,20 @@ class ConfusionMatrix(object):
         #a = confusion_matrix(y_true, y_pred, labels=labels)
         #print(a)
         #self._df_confusion = pd.DataFrame(a, index=labels, columns=labels)
-        #self._df_confusion.index.name = TRUE_NAME_DEFAULT
-        #self._df_confusion.columns.name = PREDICTED_NAME_DEFAULT
+        #self._df_confusion.index.name = self.true_name
+        #self._df_confusion.columns.name = self.pred_name
 
         #df = pd.crosstab(self._y_true, self._y_pred,
-        #   rownames=[TRUE_NAME_DEFAULT], colnames=[PREDICTED_NAME_DEFAULT])
+        #   rownames=[self.true_name], colnames=[self.pred_name])
         #df = pd.crosstab(self._y_true, self._y_pred,
-        #    rownames=TRUE_NAME_DEFAULT, colnames=PREDICTED_NAME_DEFAULT)
+        #    rownames=self.true_name, colnames=self.pred_name)
         df = pd.crosstab(self._y_true, self._y_pred)
         idx = self._classes(df)
         df = df.loc[idx, idx.copy()].fillna(0) # if some columns or rows are missing
         self._df_confusion = df
-        self._df_confusion.index.name = TRUE_NAME_DEFAULT
-        self._df_confusion.columns.name = PREDICTED_NAME_DEFAULT
-        #self._df_confusion = self._df_confusion.astype(np.int64)
+        self._df_confusion.index.name = self.true_name
+        self._df_confusion.columns.name = self.pred_name
+        self._df_confusion = self._df_confusion.astype(np.int64)
 
         self._len = len(idx)
 
@@ -113,7 +117,7 @@ class ConfusionMatrix(object):
         Returns a Pandas DataFrame
         """
         if normalized:
-            df = self._df_confusion / self._df_confusion.astype(np.float).sum(axis=1)
+            df = self._df_confusion / self._df_confusion.astype(np.float64).sum(axis=1)
         else:
             df = self._df_confusion
 
@@ -122,7 +126,7 @@ class ConfusionMatrix(object):
             df[sum_label] = df.sum(axis=1)
             #df = pd.concat([df, pd.DataFrame(df.sum(axis=1), columns=[sum_label])], axis=1)
             df = pd.concat([df, pd.DataFrame(df.sum(axis=0), columns=[sum_label]).T])
-            df.index.name = TRUE_NAME_DEFAULT
+            df.index.name = self.true_name
         
         return(df)
 
@@ -132,7 +136,7 @@ class ConfusionMatrix(object):
         Returns sum of actual (true) values for each class
         """
         s = self.to_dataframe().sum(axis=1)
-        s.name = TRUE_NAME_DEFAULT
+        s.name = self.true_name
         return(s)
 
     @property
@@ -141,7 +145,7 @@ class ConfusionMatrix(object):
         Returns sum of predicted values for each class
         """
         s = self.to_dataframe().sum(axis=0)
-        s.name = PREDICTED_NAME_DEFAULT
+        s.name = self.pred_name
         return(s)
 
     def to_array(self, normalized=False, sum=False, sum_label=SUM_NAME_DEFAULT):
@@ -242,9 +246,9 @@ class ConfusionMatrix(object):
         else:
             idx_new_cls = pd.Index(select)
         new_idx = self._df_confusion.index | idx_new_cls
-        new_idx.name = TRUE_NAME_DEFAULT
+        new_idx.name = self.true_name
         new_col = self._df_confusion.columns | idx_new_cls
-        new_col.name = PREDICTED_NAME_DEFAULT
+        new_col.name = self.pred_name
         print(new_col)
         self._df_confusion = self._df_confusion.loc[:, new_col]
         #self._df_confusion = self._df_confusion.loc[new_idx, new_col].fillna(0)
@@ -255,11 +259,11 @@ class ConfusionMatrix(object):
         df = self._df_confusion
         d_stats = collections.OrderedDict()
 
-        d = class_agreement(df)
+        d_class_agreement = class_agreement(df)
 
         key = 'Accuracy'
         try:
-            d_stats[key] = d['diag']  #0.35
+            d_stats[key] = d_class_agreement['diag']  #0.35
         except:
             d_stats[key] = np.nan
 
@@ -268,12 +272,13 @@ class ConfusionMatrix(object):
             d_stats[key] = binom_interval(np.sum(np.diag(df)), df.sum().sum())  #(0.1539, 0.5922)
         except:
             d_stats[key] = np.nan
-            
+        
+        d_prop_test = prop_test(df)
         d_stats['No Information Rate'] = 'ToDo'  #0.8
 
-        d_stats['P-Value [Acc > NIR]'] = 'ToDo'  #1
+        d_stats['P-Value [Acc > NIR]'] = d_prop_test['p.value']  #1
 
-        d_stats['Kappa'] = d['kappa']  #0.078
+        d_stats['Kappa'] = d_class_agreement['kappa']  #0.078
 
         d_stats['Mcnemar\'s Test P-Value'] = 'ToDo'  #np.nan
 
@@ -399,8 +404,8 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         """
         df = pd.DataFrame([["TN", "FP"],["FN", "TP"]],
                 columns=[False, True], index=[False, True])
-        df.index.name = TRUE_NAME_DEFAULT
-        df.columns.name = PREDICTED_NAME_DEFAULT
+        df.index.name = self.true_name
+        df.columns.name = self.pred_name
         return(df)
 
     @property
@@ -467,8 +472,8 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         fall-out or false positive rate (FPR)
         FPR = FP / N = FP / (FP + TN)
         """
-        #return(float(self.FP)/(self.FP + self.TN))
-        return(float(self.FP) / self.N)
+        #return(np.float64(self.FP)/(self.FP + self.TN))
+        return(np.float64(self.FP) / self.N)
     
     @property
     def TPR(self):
@@ -477,8 +482,8 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         eqv. with hit rate, recall
         TPR = TP / P = TP / (TP+FN)
         """
-        #return(float(self.TP) / (self.TP + self.FN))
-        return(float(self.TP) / self.P)
+        #return(np.float64(self.TP) / (self.TP + self.FN))
+        return(np.float64(self.TP) / self.P)
 
     @property
     def sensitivity(self):
@@ -494,7 +499,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         specificity (SPC) or true negative rate (TNR)
         SPC = TN / N = TN / (FP + TN)
         """
-        return(float(self.TN) / self.N)
+        return(np.float64(self.TN) / self.N)
 
     @property
     def SPC(self):
@@ -516,7 +521,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         precision or positive predictive value (PPV)
         PPV = TP / (TP + FP) = TP / PositiveTest
         """
-        return(float(self.TP) / self.PositiveTest)
+        return(np.float64(self.TP) / self.PositiveTest)
 
     @property
     def precision(self):
@@ -531,7 +536,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         false omission rate (FOR)
         FOR = FN / NegativeTest
         """
-        return(float(self.FN) / self.NegativeTest)
+        return(np.float64(self.FN) / self.NegativeTest)
 
 
     @property
@@ -540,7 +545,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         negative predictive value (NPV)
         NPV = TN / (TN + FN)
         """
-        return(float(self.TN) / self.NegativeTest)
+        return(np.float64(self.TN) / self.NegativeTest)
     
     @property
     def FDR(self):
@@ -548,7 +553,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         false discovery rate (FDR)
         FDR = FP / (FP + TP) = 1 - PPV
         """
-        return(float(self.FP) / self.PositiveTest)
+        return(np.float64(self.FP) / self.PositiveTest)
         #return(1 - self.PPV)
     
     @property
@@ -557,7 +562,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         Miss Rate or False Negative Rate (FNR)
         FNR = FN / P = FN / (FN + TP)
         """
-        return(float(self.FN) / self.P)
+        return(np.float64(self.FN) / self.P)
     
     @property
     def ACC(self):
@@ -565,7 +570,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         accuracy (ACC)
         ACC} = (TP + TN) / (P + N) = (TP + TN) / TotalPopulation
         """
-        return(float(self.TP + self.TN) / self.population)
+        return(np.float64(self.TP + self.TN) / self.population)
     
     @property
     def F1_score(self):
@@ -573,7 +578,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         F1 score is the harmonic mean of precision and sensitivity
         F1 = 2 TP / (2 TP + FP + FN)
         """
-        return(2 * float(self.TP)/(2 * self.TP + self.FP + self.FN))
+        return(2 * np.float64(self.TP)/(2 * self.TP + self.FP + self.FN))
     
     @property
     def MCC(self):
@@ -605,28 +610,28 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         """
         Prevalence = P / TotalPopulation
         """
-        return(float(self.P) / self.population)
+        return(np.float64(self.P) / self.population)
 
     @property
     def LRP(self):
         """
         Positive likelihood ratio (LR+) = TPR / FPR
         """
-        return(float(self.TPR) / self.FPR)
+        return(np.float64(self.TPR) / self.FPR)
 
     @property
     def LRN(self):
         """
         Negative likelihood ratio (LR-) = FNR / TNR
         """
-        return(float(self.FNR) / self.TNR)
+        return(np.float64(self.FNR) / self.TNR)
 
     @property
     def DOR(self):
         """
         Diagnostic odds ratio (DOR) = LR+ / LR−
         """
-        return(float(self.LRP) / self.LRN)
+        return(np.float64(self.LRP) / self.LRN)
 
     def stats(self, lst_stats=None):
         """
