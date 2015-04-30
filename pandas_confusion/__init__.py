@@ -28,7 +28,8 @@ CLASSES_NAME_DEFAULT = 'Classes'
 class ConfusionMatrix(object):
     """Confusion matrix"""
     
-    def __init__(self, y_true, y_pred, labels=None, display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT):
+    def __init__(self, y_true, y_pred, labels=None,
+            display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT):
 
         if isinstance(y_true, pd.Series):
             self._y_true = y_true
@@ -49,16 +50,20 @@ class ConfusionMatrix(object):
         
         N_true = len(y_true)
         N_pred = len(y_pred)
-        assert N_true == N_pred, "y_true must have same size - %d != %d" % (N_true, N_pred)
+        assert N_true == N_pred,
+            "y_true must have same size - %d != %d" % (N_true, N_pred)
 
-        #a = confusion_matrix(y_true, y_pred, labels=labels) # from sklearn.metrics import confusion_matrix
+        #from sklearn.metrics import confusion_matrix
+        #a = confusion_matrix(y_true, y_pred, labels=labels)
         #print(a)
         #self._df_confusion = pd.DataFrame(a, index=labels, columns=labels)
         #self._df_confusion.index.name = TRUE_NAME_DEFAULT
         #self._df_confusion.columns.name = PREDICTED_NAME_DEFAULT
 
-        #df = pd.crosstab(self._y_true, self._y_pred, rownames=[TRUE_NAME_DEFAULT], colnames=[PREDICTED_NAME_DEFAULT])
-        #df = pd.crosstab(self._y_true, self._y_pred, rownames=TRUE_NAME_DEFAULT, colnames=PREDICTED_NAME_DEFAULT)
+        #df = pd.crosstab(self._y_true, self._y_pred,
+        #   rownames=[TRUE_NAME_DEFAULT], colnames=[PREDICTED_NAME_DEFAULT])
+        #df = pd.crosstab(self._y_true, self._y_pred,
+        #    rownames=TRUE_NAME_DEFAULT, colnames=PREDICTED_NAME_DEFAULT)
         df = pd.crosstab(self._y_true, self._y_pred)
         idx = self._classes(df)
         df = df.loc[idx, idx.copy()].fillna(0) # if some columns or rows are missing
@@ -314,14 +319,16 @@ class ConfusionMatrix(object):
 
     def _name_from_dict(self, key, d_name):
         """
-        Returns name (value in dict d_name or key if key doesn't exists in d_name)
+        Returns name (value in dict d_name
+        or key if key doesn't exists in d_name)
         """
         try:
             return(d_name[key])
         except:
             return(key)
 
-    def _str_dict(self, d, line_feed_key_val='\n', line_feed_stats='\n\n', d_name=None):
+    def _str_dict(self, d, line_feed_key_val='\n', 
+            line_feed_stats='\n\n', d_name=None):
         s = ""
         for i, (key, val) in enumerate(d.items()):
             name = self._name_from_dict(key, d_name)
@@ -341,11 +348,13 @@ class ConfusionMatrix(object):
 
         d_stats_str = collections.OrderedDict([
             ("cm", str(stats['cm'])),
-            ("overall", self._str_dict(stats['overall'], line_feed_key_val=' ', line_feed_stats='\n')),
+            ("overall", self._str_dict(stats['overall'],
+                line_feed_key_val=' ', line_feed_stats='\n')),
             ("class", str(stats['class'])),
         ])
 
-        s = self._str_dict(d_stats_str, line_feed_key_val='\n\n', line_feed_stats='\n\n\n', d_name=d_stats_name)
+        s = self._str_dict(d_stats_str, line_feed_key_val='\n\n',
+            line_feed_stats='\n\n\n', d_name=d_stats_name)
         return(s)
 
     def print_stats(self, lst_stats=None):
@@ -354,7 +363,6 @@ class ConfusionMatrix(object):
 class BinaryConfusionMatrix(ConfusionMatrix):
     """Binary confusion matrix"""
     
-    #def __init__(self, y_true, y_pred, labels=None, display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT):
     def __init__(self, *args, **kwargs):
         #super(BinaryConfusionMatrix, self).__init__(y_true, y_pred)
         super(BinaryConfusionMatrix, self).__init__(*args, **kwargs)
@@ -368,7 +376,8 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         * FN: False Negative
         * TP: True Positive
         """
-        df = pd.DataFrame([["TN", "FP"],["FN", "TP"]], columns=[False, True], index=[False, True])
+        df = pd.DataFrame([["TN", "FP"],["FN", "TP"]],
+                columns=[False, True], index=[False, True])
         df.index.name = TRUE_NAME_DEFAULT
         df.columns.name = PREDICTED_NAME_DEFAULT
         return(df)
@@ -549,7 +558,8 @@ class BinaryConfusionMatrix(ConfusionMatrix):
     def MCC(self):
         """
         Matthews correlation coefficient (MCC)
-        \frac{ TP \times TN - FP \times FN } {\sqrt{ (TP+FP) ( TP + FN ) ( TN + FP ) ( TN + FN ) }
+        \frac{ TP \times TN - FP \times FN }
+             {\sqrt{ (TP+FP) ( TP + FN ) ( TN + FP ) ( TN + FN ) }
         """
         return((self.TP * self.TN - self.FP * self.FN) \
             / math.sqrt((self.TP + self.FP) * ( self.TP + self.FN ) *\
@@ -602,10 +612,13 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         Returns an  ordered dict of statistics
         """
         if lst_stats is None:
-            lst_stats = ['population', 'P', 'N', 'PositiveTest', 'NegativeTest', 'TP', 'TN', 'FP', 'FN', 'TPR', 'TNR', 'PPV', 'NPV', 'FPR', 'FDR',
-        'FNR', 'ACC', 'F1_score', 'MCC', 'informedness', 'markedness', 'prevalence', 'LRP', 'LRN', 'DOR', 'FOR']
+            lst_stats = ['population', 'P', 'N', 'PositiveTest', 'NegativeTest',
+                'TP', 'TN', 'FP', 'FN', 'TPR', 'TNR', 'PPV', 'NPV', 'FPR', 'FDR',
+                'FNR', 'ACC', 'F1_score', 'MCC', 'informedness', 'markedness', 
+                'prevalence', 'LRP', 'LRN', 'DOR', 'FOR']
         d = map(lambda stat: (stat, getattr(self, stat)), lst_stats)
         return(collections.OrderedDict(d))
 
     def _str_stats(self, lst_stats):
-        return(self._str_dict(self.stats(lst_stats), line_feed_key_val=' ', line_feed_stats='\n', d_name=None))
+        return(self._str_dict(self.stats(lst_stats),
+            line_feed_key_val=' ', line_feed_stats='\n', d_name=None))
