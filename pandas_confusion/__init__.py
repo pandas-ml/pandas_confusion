@@ -72,6 +72,7 @@ class ConfusionMatrix(object):
         self._df_confusion = df
         self._df_confusion.index.name = TRUE_NAME_DEFAULT
         self._df_confusion.columns.name = PREDICTED_NAME_DEFAULT
+        #self._df_confusion = self._df_confusion.astype(np.int64)
 
         self._len = len(idx)
 
@@ -259,7 +260,7 @@ class ConfusionMatrix(object):
         key = 'Accuracy'
         try:
             d_stats[key] = d['diag']  #0.35
-        except
+        except:
             d_stats[key] = np.nan
 
         key = '95% CI'
@@ -294,8 +295,8 @@ class ConfusionMatrix(object):
 
         d_name = {
             'population': 'Population',
-            'P': 'Condition positive',
-            'N': 'Condition negative',
+            'P': 'P: Condition positive',
+            'N': 'N: Condition negative',
             'PositiveTest': 'Test outcome positive',
             'NegativeTest': 'Test outcome negative',
             'TP': 'TP: True Positive',
