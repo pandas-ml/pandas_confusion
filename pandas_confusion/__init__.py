@@ -11,6 +11,8 @@ import pandas as pd
 from enum import Enum  # pip install enum34
 import matplotlib.pylab as plt
 import collections
+from stats import binom_interval, class_agreement
+
 
 class Backend(Enum):
     Matplotlib = 1
@@ -249,13 +251,31 @@ class ConfusionMatrix(object):
 
     @property
     def stats_overall(self):
+        df = self._df_confusion
         d_stats = collections.OrderedDict()
-        d_stats['Accuracy'] = 'ToDo'  #0.35            
-        d_stats['95% CI'] = 'ToDo'  #(0.1539, 0.5922)
-        d_stats['No Information Rate'] = 'ToDo'  #0.8             
+
+        d = class_agreement(df)
+
+        key = 'Accuracy'
+        try:
+            d_stats[key] = d['diag']  #0.35
+        except
+            d_stats[key] = np.nan
+
+        key = '95% CI'
+        try:
+            d_stats[key] = binom_interval(np.sum(np.diag(df)), df.sum().sum())  #(0.1539, 0.5922)
+        except:
+            d_stats[key] = np.nan
+            
+        d_stats['No Information Rate'] = 'ToDo'  #0.8
+
         d_stats['P-Value [Acc > NIR]'] = 'ToDo'  #1
-        d_stats['Kappa'] = 'ToDo'  #0.078
-        d_stats['Mcnemar\'s Test P-Value'] = 'ToDo'  #np.nan 
+
+        d_stats['Kappa'] = d['kappa']  #0.078
+
+        d_stats['Mcnemar\'s Test P-Value'] = 'ToDo'  #np.nan
+
         return(d_stats)
 
     @property
