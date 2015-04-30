@@ -90,10 +90,10 @@ class ConfusionMatrix(object):
             return(i)
 
     def __repr__(self):
-        return(self.to_dataframe(sum=self.display_sum).__repr__())
+        return(self.to_dataframe(calc_sum=self.display_sum).__repr__())
 
     def __str__(self):
-        return(self.to_dataframe(sum=self.display_sum).__str__())
+        return(self.to_dataframe(calc_sum=self.display_sum).__str__())
 
     @property
     def classes(self):
@@ -112,7 +112,7 @@ class ConfusionMatrix(object):
         idx_classes.name = CLASSES_NAME_DEFAULT
         return(idx_classes)        
 
-    def to_dataframe(self, normalized=False, sum=False, sum_label=SUM_NAME_DEFAULT):
+    def to_dataframe(self, normalized=False, calc_sum=False, sum_label=SUM_NAME_DEFAULT):
         """
         Returns a Pandas DataFrame
         """
@@ -121,7 +121,7 @@ class ConfusionMatrix(object):
         else:
             df = self._df_confusion
 
-        if sum:
+        if calc_sum:
             df = df.copy()
             df[sum_label] = df.sum(axis=1)
             #df = pd.concat([df, pd.DataFrame(df.sum(axis=1), columns=[sum_label])], axis=1)
@@ -645,6 +645,6 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         d = map(lambda stat: (stat, getattr(self, stat)), lst_stats)
         return(collections.OrderedDict(d))
 
-    def _str_stats(self, lst_stats):
+    def _str_stats(self, lst_stats=None):
         return(self._str_dict(self.stats(lst_stats),
             line_feed_key_val=' ', line_feed_stats='\n', d_name=None))
