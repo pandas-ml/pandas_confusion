@@ -196,8 +196,11 @@ R
     Actual <- c(600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200)
     Predicted <- c(100, 200, 200, 100, 100, 200, 200, 200, 100, 200, 500, 100, 100, 100, 100, 100, 100, 100, 500, 200)
     df <- data.frame(Actual, Predicted)
-    table(lapply(df, factor, levels=seq(100, 600, 100)))
-    table(lapply(df, factor, levels=c(100, 200, 500, 600)))
+    #table(df)
+    col <- sort(union(df$Actual, df$Predicted))
+    df_conf <- table(lapply(df, factor, levels=col))
+    #table(lapply(df, factor, levels=seq(100, 600, 100)))
+    #table(lapply(df, factor, levels=c(100, 200, 500, 600)))
 
 Python
 

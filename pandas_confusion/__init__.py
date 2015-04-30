@@ -50,7 +50,7 @@ class ConfusionMatrix(object):
         
         N_true = len(y_true)
         N_pred = len(y_pred)
-        assert N_true == N_pred,
+        assert N_true == N_pred, \
             "y_true must have same size - %d != %d" % (N_true, N_pred)
 
         #from sklearn.metrics import confusion_matrix
