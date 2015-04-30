@@ -138,13 +138,12 @@ You should get:
 
     Overall Statistics:
 
-    Accuracy: ToDo
-    95% CI: ToDo
+    Accuracy: 0.35
+    95% CI: (0.1539092047845412, 0.59218853453282805)
     No Information Rate: ToDo
-    P-Value [Acc > NIR]: ToDo
-    Kappa: ToDo
+    P-Value [Acc > NIR]: 0.978585644357
+    Kappa: 0.0780141843972
     Mcnemar's Test P-Value: ToDo
-
 
     Class Statistics:
 
