@@ -221,10 +221,9 @@ Python
 
 You can use `cm.to_dataframe().transpose()`
 
+  * Overall statistics: No Information Rate, Mcnemar's Test P-Value
 
-  * Overall statistics: Accuracy, 95% CI, No Information Rate, P-Value [Acc > NIR], Kappa, Mcnemar's Test P-Value
-
-    * http://adorio-research.org/wordpress/?p=238 http://adorio-research.org/wordpress/?p=10815
+    see confusionMatrix.R and print.confusionMatrix.R (caret) and e1071 package
 
   * Class statistics
 
@@ -261,6 +260,36 @@ https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sens
 
     see cm.enlarge(...)
 
+* Calculate Mcnemar's Test P-Value with binary confusion matrix
+
+    Actual <- c(TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE,
+            FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE,
+            TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE,
+            TRUE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE,
+            FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE,
+            TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+            FALSE, TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE,
+            FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE,
+            FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE,
+            TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE,
+            TRUE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE,
+            FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE,
+            FALSE, TRUE, TRUE, FALSE)
+
+    Predicted <- c(FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE,
+          FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+          TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE,
+          FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE,
+          FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+          TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+          FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+          FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE,
+          FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE,
+          FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE,
+          TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE,
+          FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE,
+          FALSE, TRUE, FALSE, FALSE)
+
 ## Done
 
 * Continuous integration (Travis)
@@ -272,3 +301,5 @@ https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sens
 * Unit tests (nose)
 
 * Fix missing column and missing row
+
+* Overall statistics: Accuracy, 95% CI, P-Value [Acc > NIR], Kappa
