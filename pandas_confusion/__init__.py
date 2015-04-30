@@ -404,8 +404,8 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         """
         df = pd.DataFrame([["TN", "FP"],["FN", "TP"]],
                 columns=[False, True], index=[False, True])
-        df.index.name = self.true_name
-        df.columns.name = self.pred_name
+        df.index.name = TRUE_NAME_DEFAULT
+        df.columns.name = PRED_NAME_DEFAULT
         return(df)
 
     @property
