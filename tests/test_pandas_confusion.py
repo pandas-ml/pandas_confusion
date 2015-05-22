@@ -6,7 +6,7 @@ import numpy as np
 from pandas_confusion import ConfusionMatrix, BinaryConfusionMatrix, Backend, \
     TRUE_NAME_DEFAULT, PRED_NAME_DEFAULT
 from sklearn.metrics import confusion_matrix
-
+from collections import OrderedDict
 
 # =========================================================================
 
@@ -52,6 +52,8 @@ def test_pandas_confusion_cm_strings():
 
     asserts(y_true, y_pred, cm)
 
+    #cm.print_stats()
+
 def test_pandas_confusion_cm_int():
     y_true = [2, 0, 2, 2, 0, 1, 1, 2, 2, 0, 1, 2]
     y_pred = [0, 0, 2, 1, 0, 2, 1, 0, 2, 0, 2, 2]
@@ -67,6 +69,7 @@ def test_pandas_confusion_cm_int():
 
     np.testing.assert_array_equal(confusion_matrix(y_true, y_pred), cm.toarray())
 
+    #cm.print_stats()
 
 def test_pandas_confusion_binary_cm():
     y_true = [ True,  True, False, False, False,  True, False,  True,  True,
@@ -113,6 +116,8 @@ def test_pandas_confusion_cm_empty_column():
 
     asserts(y_true, y_pred, cm)
 
+    #cm.print_stats()
+
 
 def test_pandas_confusion_cm_empty_row():
     y_true = [2, 0, 2, 2, 0, 0]
@@ -124,6 +129,9 @@ def test_pandas_confusion_cm_empty_row():
     print("Confusion matrix:\n%s" % cm)
 
     asserts(y_true, y_pred, cm)
+
+    #cm.print_stats()
+
 
 def test_pandas_confusion_cm_binarize():
     y_true = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
@@ -150,3 +158,23 @@ def test_value_counts():
     cm = ConfusionMatrix(df["Size"], df["SizePred"])
     assert (cm.true - df.Size.value_counts()).sum() == 0
     assert (cm.pred - df.SizePred.value_counts()).sum() == 0
+
+def test_pandas_confusion_cm_stats_integers():
+    y_true = [600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200]
+    y_pred = [100, 200, 200, 100, 100, 200, 200, 200, 100, 200, 500, 100, 100, 100, 100, 100, 100, 100, 500, 200]
+    print("y_true: %s" % y_true)
+    print("y_pred: %s" % y_pred)
+    cm = ConfusionMatrix(y_true, y_pred)
+    assert isinstance(cm.stats(), OrderedDict)
+    cm.print_stats()
+
+def test_pandas_confusion_cm_stats_animals():
+    y_true = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
+    y_pred = ['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit']
+    print("y_true: %s" % y_true)
+    print("y_pred: %s" % y_pred)
+    cm = ConfusionMatrix(y_true, y_pred)
+    assert isinstance(cm.stats(), OrderedDict)
+    #cm.print_stats()
+    # ToFix
+    # TypeError: ('integer argument expected, got float', u'occurred at index cat')
