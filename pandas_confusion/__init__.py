@@ -196,7 +196,7 @@ class ConfusionMatrix(object):
     def y_pred(self): # Not a property (because we will add parameter)
         return(self._y_pred)
 
-    def plot(self, normalized=False, backend=None, **kwargs):
+    def plot(self, normalized=False, backend=None, ax=None, **kwargs):
         """
         plot confusion matrix
         """
@@ -211,7 +211,9 @@ class ConfusionMatrix(object):
             backend = self.backend
 
         if backend == Backend.Matplotlib:
-            ax = plt.matshow(df, cmap=cmap) # imshow
+            #if ax is None:
+            #    fig, ax = plt.subplots()
+            ax = plt.imshow(df, cmap=cmap, interpolation='nearest') # imshow / matshow
             #plt.title(title)
             plt.colorbar()
             tick_marks = np.arange(len(df.columns))
@@ -400,6 +402,13 @@ class ConfusionMatrix(object):
         if predicted is None:
             predicted = actual
         return(self.to_dataframe().loc[actual, predicted])
+
+    def max(self):
+        return(self.to_dataframe().max().max())
+
+    def min(self):
+        return(self.to_dataframe().min().min())
+
 
 class BinaryConfusionMatrix(ConfusionMatrix):
     """Binary confusion matrix"""

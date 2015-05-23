@@ -197,6 +197,15 @@ def test_pandas_confusion_get():
     assert cm.get("rabbit") == 3
     assert cm.get("dog", "rabbit") == 2
 
+def test_pandas_confusion_max_min():
+    y_true = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
+    y_pred = ['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit']
+    print("y_true: %s" % y_true)
+    print("y_pred: %s" % y_pred)
+    cm = ConfusionMatrix(y_true, y_pred)
+    assert cm.max() == 3
+    assert cm.min() == 0
+
 #def test_enlarge_confusion_matrix():
 #    #cm.enlarge(300)
 #    #cm.enlarge([300, 400])
