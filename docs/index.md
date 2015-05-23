@@ -17,14 +17,16 @@ WORK IN PROGRESS - Use it a your own risk
 
 ## Confusion matrix
 
-Import modules
+Import `ConfusionMatrix`
 
     from pandas_confusion import ConfusionMatrix
 
-Let's define a (non binary) confusion matrix
+Define actual values (`y_actu`) and predicted values (`y_pred`)
 
     y_actu = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
     y_pred = ['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit']
+
+Let's define a (non binary) confusion matrix
 
     confusion_matrix = ConfusionMatrix(y_actu, y_pred)
     print("Confusion matrix:\n%s" % confusion_matrix)
@@ -54,7 +56,11 @@ You can see it
 
 ### Binary confusion matrix
 
+Import `BinaryConfusionMatrix` and `Backend`
+
     from pandas_confusion import BinaryConfusionMatrix, Backend
+
+Define actual values (`y_actu`) and predicted values (`y_pred`)
 
     y_actu = [ True,  True, False, False, False,  True, False,  True,  True,
                False,  True, False, False, False, False, False,  True, False,
@@ -84,6 +90,8 @@ You can see it
            False, False,  True,  True, False, False, False, False, False,
            False,  True, False, False]
 
+Let's define a binary confusion matrix
+
     binary_confusion_matrix = BinaryConfusionMatrix(y_actu, y_pred)
     print("Binary confusion matrix:\n%s" % binary_confusion_matrix)
 
@@ -91,10 +99,11 @@ You can see it
 It display as a nicely labeled Pandas DataFrame
 
     Binary confusion matrix:
-    Predicted  False  True
+    Predicted  False  True  __all__
     Actual
-    False         67      0
-    True          21     24
+    False         67     0       67
+    True          21    24       45
+    __all__       88    24      112
 
 You can get useful attributes such as True Positive (TP), True Negative (TN) ...
 
@@ -181,6 +190,9 @@ You should get:
     DOR: Diagnostic odds ratio              NaN         1.8           8   NaN
     FOR: False omission rate                  0   0.7692308   0.1111111  0.05
 
+Statistics are also available as an OrderedDict using:
+
+    cm.stats()
 
 ## ToDo list
 
