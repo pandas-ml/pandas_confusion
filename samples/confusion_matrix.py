@@ -44,9 +44,9 @@ def main():
     plt.show()
 
     cm.plot(normalized=True)
-    #filename = 'cm_norm.png'
-    #plt.savefig(os.path.join(basepath, '..','screenshots', filename))
-    #plt.show()
+    filename = 'cm_norm.png'
+    plt.savefig(os.path.join(basepath, '..','screenshots', filename))
+    plt.show()
 
     #import seaborn as sns
     #cm.plot(normalized=True, backend=Backend.Seaborn)

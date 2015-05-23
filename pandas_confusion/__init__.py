@@ -219,7 +219,7 @@ class ConfusionMatrix(object):
 
         if backend == Backend.Matplotlib:
             #if ax is None:
-            #    fig, ax = plt.subplots()
+            fig, ax = plt.subplots()
             ax = plt.imshow(df, cmap=cmap, interpolation='nearest') # imshow / matshow
             #plt.title(title)
             plt.colorbar()

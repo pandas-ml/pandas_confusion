@@ -54,15 +54,16 @@ def main():
     binary_cm.plot()
     filename = 'binary_cm.png'
     plt.savefig(os.path.join(basepath, '..','screenshots', filename))
-    #plt.show()
+    plt.show()
 
     binary_cm.plot(normalized=True)
     filename = 'binary_cm_norm.png'
     plt.savefig(os.path.join(basepath, '..','screenshots', filename))
-    #plt.show()
+    plt.show()
 
+    #import seaborn as sns
     #binary_cm.plot(normalized=True, backend=Backend.Seaborn)
-    #plt.show()
+    #sns.plt.show()
 
     print binary_cm.FP + binary_cm.TP # Positive
 
