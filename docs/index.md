@@ -260,11 +260,11 @@ https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sens
 
     cm = ConfusionMatrix(y_true, y_pred, labels=range(100, 600+1, 100))
 
-    Class 300 and class 400 should be create
+Class 300 and class 400 should be create
 
-    R like method ? conf_mat_tab <- table(lapply(df, factor, levels = seq(100, 600, 100)))
+R like method ? `conf_mat_tab <- table(lapply(df, factor, levels = seq(100, 600, 100)))`
 
-    http://pandas.pydata.org/pandas-docs/stable/comparison_with_r.html
+http://pandas.pydata.org/pandas-docs/stable/comparison_with_r.html
 
     idx_new_cls = pd.Index([300, 400])
     new_idx = df.index | idx_new_cls
@@ -273,9 +273,11 @@ https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sens
     new_col.name = 'Predicted'
     df = df.loc[new_idx, new_col].fillna(0)
 
-    see cm.enlarge(...)
+
+see `cm.enlarge(...)`
 
 * Calculate Mcnemar's Test P-Value with binary confusion matrix
+
 
     Actual <- c(TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE,
             FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE,
