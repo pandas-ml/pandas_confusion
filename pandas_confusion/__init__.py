@@ -5,13 +5,13 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 """
-A Python Pandas Confusion matrix
+A Python Pandas Confusion matrix implementation
 """
 
 import math
 import numpy as np
 import pandas as pd
-from enum import Enum  # pip install enum34
+from enum import Enum, IntEnum  # pip install enum34
 import matplotlib.pylab as plt
 import collections
 
@@ -23,6 +23,11 @@ class Backend(Enum):
     Seaborn = 2
 
 
+class Axis(IntEnum):
+    Actual = 1
+    Predicted = 0
+
+
 BACKEND_DEFAULT = Backend.Matplotlib
 SUM_NAME_DEFAULT = '__all__'
 DISPLAY_SUM_DEFAULT = True
@@ -32,7 +37,9 @@ CLASSES_NAME_DEFAULT = 'Classes'
 
 
 class ConfusionMatrix(object):
-    """Confusion matrix"""
+    """
+    Confusion matrix class
+    """
     
     def __init__(self, y_true, y_pred, labels=None,
             display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT,
@@ -238,6 +245,8 @@ class ConfusionMatrix(object):
             raise(NotImplementedError("backend=%r not allowed" % backend))
 
     def binarize(self, select):
+        """Returns a binary confusion matrix from
+        a confusion matrix"""
         if not isinstance(select, collections.Iterable):
             select = np.array(select)
 
@@ -249,8 +258,10 @@ class ConfusionMatrix(object):
         return(binary_cm)
 
     def enlarge(self, select):
-        """Enlarges confusion matrix with new classes
-        It should add empty rows and columns"""
+        """
+        Enlarges confusion matrix with new classes
+        It should add empty rows and columns
+        """
         if not isinstance(select, collections.Iterable):
             idx_new_cls = pd.Index([select])
         else:
@@ -266,6 +277,9 @@ class ConfusionMatrix(object):
 
     @property
     def stats_overall(self):
+        """
+        Returns an OrderedDict with overall statistics
+        """
         df = self._df_confusion
         d_stats = collections.OrderedDict()
 
@@ -296,6 +310,9 @@ class ConfusionMatrix(object):
 
     @property
     def stats_class(self):
+        """
+        Returns a DataFrame with class statistics
+        """
         #stats = ['TN', 'FP', 'FN', 'TP']
         #df = pd.DataFrame(columns=self.classes, index=stats)
         df = pd.DataFrame(columns=self.classes)
@@ -365,6 +382,9 @@ class ConfusionMatrix(object):
 
     def _str_dict(self, d, line_feed_key_val='\n', 
             line_feed_stats='\n\n', d_name=None):
+        """
+        Return a string representation of a dictionary
+        """
         s = ""
         for i, (key, val) in enumerate(d.items()):
             name = self._name_from_dict(key, d_name)
@@ -374,6 +394,9 @@ class ConfusionMatrix(object):
         return(s)   
 
     def _str_stats(self, lst_stats=None):
+        """
+        Returns a string representation of statistics
+        """
         d_stats_name = {
             "cm": "Confusion Matrix",
             "overall": "Overall Statistics",
@@ -394,9 +417,19 @@ class ConfusionMatrix(object):
         return(s)
 
     def print_stats(self, lst_stats=None):
+        """
+        Prints statistics
+        """
         print(self._str_stats(lst_stats))
 
     def get(self, actual=None, predicted=None):
+        """
+        Get confusion matrix value for a given
+        actual class and a given predicted class
+
+        if only one parameter is given (actual or predicted)
+        we get confusion matrix value for actual=actual and predicted=actual
+        """
         if actual is None:
             actual = predicted
         if predicted is None:
@@ -404,14 +437,22 @@ class ConfusionMatrix(object):
         return(self.to_dataframe().loc[actual, predicted])
 
     def max(self):
+        """
+        Returns max value of confusion matrix
+        """
         return(self.to_dataframe().max().max())
 
     def min(self):
+        """
+        Returns min value of confusion matrix
+        """
         return(self.to_dataframe().min().min())
 
 
 class BinaryConfusionMatrix(ConfusionMatrix):
-    """Binary confusion matrix"""
+    """
+    Binary confusion matrix class
+    """
     
     def __init__(self, *args, **kwargs):
         #super(BinaryConfusionMatrix, self).__init__(y_true, y_pred)
@@ -659,7 +700,7 @@ class BinaryConfusionMatrix(ConfusionMatrix):
 
     def stats(self, lst_stats=None):
         """
-        Returns an  ordered dict of statistics
+        Returns an ordered dictionary of statistics
         """
         if lst_stats is None:
             lst_stats = ['population', 'P', 'N', 'PositiveTest', 'NegativeTest',
@@ -670,5 +711,8 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         return(collections.OrderedDict(d))
 
     def _str_stats(self, lst_stats=None):
+        """
+        Returns a string representation of statistics
+        """
         return(self._str_dict(self.stats(lst_stats),
             line_feed_key_val=' ', line_feed_stats='\n', d_name=None))
