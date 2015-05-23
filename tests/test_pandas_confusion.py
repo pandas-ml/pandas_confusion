@@ -158,6 +158,7 @@ def test_value_counts():
     cm = ConfusionMatrix(df["Size"], df["SizePred"])
     assert (cm.true - df.Size.value_counts()).sum() == 0
     assert (cm.pred - df.SizePred.value_counts()).sum() == 0
+    cm.print_stats()
 
 def test_pandas_confusion_cm_stats_integers():
     y_true = [600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200]
@@ -175,4 +176,34 @@ def test_pandas_confusion_cm_stats_animals():
     print("y_pred: %s" % y_pred)
     cm = ConfusionMatrix(y_true, y_pred)
     assert isinstance(cm.stats(), OrderedDict)
+    assert cm.population == len(y_true) #12
     cm.print_stats()
+    cm_stats = cm.stats()
+    assert cm.binarize("cat").TP == cm.get("cat") # cm.get("cat", "cat")
+    assert cm.binarize("cat").TP == 3
+    assert cm.binarize("dog").TP == cm.get("dog") # 1
+    assert cm.binarize("rabbit").TP == cm.get("rabbit")  # 3
+    #print cm.TP
+
+def test_pandas_confusion_get():
+    y_true = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
+    y_pred = ['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit']
+    print("y_true: %s" % y_true)
+    print("y_pred: %s" % y_pred)
+    cm = ConfusionMatrix(y_true, y_pred)
+    assert cm.get("cat") == cm.get("cat", "cat")
+    assert cm.get("cat") == 3
+    assert cm.get("dog") == 1
+    assert cm.get("rabbit") == 3
+    assert cm.get("dog", "rabbit") == 2
+
+#def test_enlarge_confusion_matrix():
+#    #cm.enlarge(300)
+#    #cm.enlarge([300, 400])
+
+#def test_pandas_confusion_binarize():
+#    y_true = [600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200]
+#    y_pred = [100, 200, 200, 100, 100, 200, 200, 200, 100, 200, 500, 100, 100, 100, 100, 100, 100, 100, 500, 200]
+#    cm = ConfusionMatrix(y_true, y_pred)
+#    binary_cm_100 = cm.binarize(100)
+#    print("\n%s" % binary_cm_100)

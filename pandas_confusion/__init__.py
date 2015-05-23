@@ -386,6 +386,13 @@ class ConfusionMatrix(object):
     def print_stats(self, lst_stats=None):
         print(self._str_stats(lst_stats))
 
+    def get(self, actual=None, predicted=None):
+        if actual is None:
+            actual = predicted
+        if predicted is None:
+            predicted = actual
+        return(self.to_dataframe().loc[actual, predicted])
+
 class BinaryConfusionMatrix(ConfusionMatrix):
     """Binary confusion matrix"""
     
