@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 """
 A Python Pandas Confusion matrix
 """
@@ -11,7 +14,8 @@ import pandas as pd
 from enum import Enum  # pip install enum34
 import matplotlib.pylab as plt
 import collections
-from stats import binom_interval, class_agreement, prop_test
+
+from .stats import binom_interval, class_agreement, prop_test
 
 
 class Backend(Enum):
