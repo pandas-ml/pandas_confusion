@@ -38,7 +38,7 @@ def main():
     cm.plot()
     #filename = 'cm.png'
     #plt.savefig(os.path.join(basepath, '..','screenshots', filename))
-    #plt.show()
+    plt.show()
 
     cm.plot(normalized=True)
     #filename = 'cm_norm.png'

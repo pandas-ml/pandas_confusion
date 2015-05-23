@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 from pandas_confusion import ConfusionMatrix, BinaryConfusionMatrix, Backend, \
     TRUE_NAME_DEFAULT, PRED_NAME_DEFAULT
-from sklearn.metrics import confusion_matrix
+#from sklearn.metrics import confusion_matrix
 from collections import OrderedDict
 
 # =========================================================================
@@ -33,7 +33,7 @@ def asserts(y_true, y_pred, cm):
     assert df_with_sum.index.name == TRUE_NAME_DEFAULT, "%r != %r" % (df_with_sum.index.name, TRUE_NAME_DEFAULT)
     assert df_with_sum.columns.name == PRED_NAME_DEFAULT, "%r != %r" % (df_with_sum.columns.name, PRED_NAME_DEFAULT)
 
-    np.testing.assert_array_equal(confusion_matrix(y_true, y_pred), cm.toarray())
+    #np.testing.assert_array_equal(confusion_matrix(y_true, y_pred), cm.toarray())
 
     assert cm.sum() == len(y_true)
 
@@ -67,7 +67,7 @@ def test_pandas_confusion_cm_int():
 
     assert cm.len() == len(labels)
 
-    np.testing.assert_array_equal(confusion_matrix(y_true, y_pred), cm.toarray())
+    #np.testing.assert_array_equal(confusion_matrix(y_true, y_pred), cm.toarray())
 
     #cm.print_stats()
 

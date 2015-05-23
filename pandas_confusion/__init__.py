@@ -198,14 +198,16 @@ class ConfusionMatrix(object):
         """
         df = self.to_dataframe(normalized)
 
-        if 'cmap' not in kwargs.keys():
+        try:
+            cmap = kwargs['cmap']
+        except:
             cmap = plt.cm.gray_r
 
         if backend is None:
             backend = self.backend
 
         if backend == Backend.Matplotlib:
-            plt.matshow(df, cmap=cmap) # imshow
+            ax = plt.matshow(df, cmap=cmap) # imshow
             #plt.title(title)
             plt.colorbar()
             tick_marks = np.arange(len(df.columns))
@@ -214,18 +216,20 @@ class ConfusionMatrix(object):
             #plt.tight_layout()
             plt.ylabel(df.index.name)
             plt.xlabel(df.columns.name)
+            return(ax)
 
 
         elif backend == Backend.Seaborn:
             import seaborn as sns
-            sns.heatmap(df, **kwargs)
+            ax = sns.heatmap(df, **kwargs)
+            return(ax)
             # You should test this yourself
             # because I'm facing an issue with Seaborn under Mac OS X (2015-04-26)
             # RuntimeError: Cannot get window extent w/o renderer
             #sns.plt.show()
 
         else:
-            raise(NotImplementedError)
+            raise(NotImplementedError("backend=%r not allowed" % backend))
 
     def binarize(self, select):
         if not isinstance(select, collections.Iterable):

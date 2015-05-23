@@ -15,5 +15,5 @@ script: nosetests
 addons:
   apt_packages:
     - pandoc
-    - libblas-dev
-    - python-dev
+#    - libblas-dev
+#    - python-dev
