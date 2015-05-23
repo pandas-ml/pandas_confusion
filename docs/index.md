@@ -179,7 +179,7 @@ You should get:
 
 ## ToDo list
 
-* Matplotlib discrete colorbar
+* Matplotlib discrete colorbar (not for normalized plot)
 
 see ColorbarBase
 
