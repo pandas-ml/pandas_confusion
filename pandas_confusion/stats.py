@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import traceback
+
 import numpy as np
 import scipy
 from scipy.stats import beta
@@ -21,10 +23,15 @@ def choose(n, k):
     if 0 <= k <= n:
         ntok = 1
         ktok = 1
-        for t in xrange(1, min(k, n - k) + 1):
-            ntok *= n
-            ktok *= t
-            n -= 1
+        try:
+            for t in xrange(1, min(k, n - k) + 1):
+                ntok *= n
+                ktok *= t
+                n -= 1
+        except:
+            print(traceback.format_exc())
+            print(n, k)
+            raise
         return ntok // ktok
     else:
         return 0
@@ -47,7 +54,7 @@ def class_agreement(df):
     nis2 = ni[ni>1].map(lambda x: choose(int(x), 2)).sum()
     njs2 = nj[nj>1].map(lambda x: choose(int(x), 2)).sum()
 
-    num = df[df>1].dropna(axis=[0,1], thresh=1).applymap(lambda n: choose(n, 2)).sum().sum() - np.float64(nis2 * njs2) / n2
+    num = df[df>1].dropna(axis=[0,1], thresh=1).applymap(lambda n: choose(np.int64(n), 2)).sum().sum() - np.float64(nis2 * njs2) / n2
     den = (np.float64(nis2 + njs2) / 2 - np.float64(nis2 * njs2) / n2)
     crand = num / den
 
