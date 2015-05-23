@@ -34,10 +34,13 @@ def main():
     #cm = ConfusionMatrix(y_true, y_pred)
 
     print("Confusion matrix:\n%s" % cm)
+    df = cm.to_dataframe()
+    print(df)
+    print(df.dtypes)
 
     cm.plot()
-    #filename = 'cm.png'
-    #plt.savefig(os.path.join(basepath, '..','screenshots', filename))
+    filename = 'cm.png'
+    plt.savefig(os.path.join(basepath, '..','screenshots', filename))
     plt.show()
 
     cm.plot(normalized=True)

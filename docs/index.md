@@ -9,7 +9,7 @@
 
 # pandas_confusion
  
-A [Python]() [Pandas](http://pandas.pydata.org/) implementation of [confusion matrix](https://en.wikipedia.org/wiki/Confusion_matrix).
+A [Python](https://www.python.org/) [Pandas](http://pandas.pydata.org/) implementation of [confusion matrix](https://en.wikipedia.org/wiki/Confusion_matrix).
 
 WORK IN PROGRESS - Use it a your own risk
 
@@ -179,6 +179,12 @@ You should get:
 
 ## ToDo list
 
+* Matplotlib discrete colorbar
+
+see ColorbarBase
+
+http://stackoverflow.com/questions/14777066/matplotlib-discrete-colorbar
+
 * Display numbers inside cells like http://stackoverflow.com/questions/5821125/how-to-plot-confusion-matrix-with-string-axis-rather-than-integer-in-python
 
 * Compare with results from Sklearn
@@ -289,6 +295,12 @@ https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sens
           TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, TRUE,
           FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE,
           FALSE, TRUE, FALSE, FALSE)
+
+## Install
+
+$ conda install pandas scikit-learn scipy
+
+$ pip install pandas_confusion
 
 ## Done
 
