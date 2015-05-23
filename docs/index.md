@@ -198,9 +198,12 @@ http://stackoverflow.com/questions/14777066/matplotlib-discrete-colorbar
 
 * Compare with results from Sklearn
 
+Example:
+
     from sklearn.metrics import f1_score, classification_report
     f1_score(y_actu, y_pred)
     print classification_report(y_actu, y_pred)
+
 
 * Compare with R "caret" package
 
@@ -278,6 +281,7 @@ see `cm.enlarge(...)`
 
 * Calculate Mcnemar's Test P-Value with binary confusion matrix
 
+R code
 
     Actual <- c(TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE,
             FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE,
@@ -309,9 +313,9 @@ see `cm.enlarge(...)`
 
 ## Install
 
-$ conda install pandas scikit-learn scipy
+    $ conda install pandas scikit-learn scipy
 
-$ pip install pandas_confusion
+    $ pip install pandas_confusion
 
 ## Done
 
