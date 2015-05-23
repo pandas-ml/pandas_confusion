@@ -1,8 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import traceback
-
 import numpy as np
 import scipy
 from scipy.stats import beta
@@ -23,15 +21,10 @@ def choose(n, k):
     if 0 <= k <= n:
         ntok = 1
         ktok = 1
-        try:
-            for t in xrange(1, min(k, n - k) + 1):
-                ntok *= n
-                ktok *= t
-                n -= 1
-        except:
-            print(traceback.format_exc())
-            print(n, k)
-            raise
+        for t in xrange(1, min(k, n - k) + 1):
+            ntok *= n
+            ktok *= t
+            n -= 1
         return ntok // ktok
     else:
         return 0
