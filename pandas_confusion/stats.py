@@ -4,7 +4,14 @@
 import numpy as np
 import scipy
 from scipy.stats import beta
- 
+
+
+try:
+    xrange
+except NameError:
+    xrange = range
+
+
 def binom_interval(success, total, confint=0.95):
     """
     Compute two-sided binomial confidence interval in Python. Based on R's binom.test.
