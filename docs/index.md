@@ -17,6 +17,10 @@ WORK IN PROGRESS - Use it a your own risk
 
 ## Confusion matrix
 
+Import modules
+
+    from pandas_confusion import ConfusionMatrix
+
 Let's define a (non binary) confusion matrix
 
     y_actu = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
@@ -27,12 +31,12 @@ Let's define a (non binary) confusion matrix
 
 You can see it
 
-    Predicted  cat  dog  rabbit
+    Predicted  cat  dog  rabbit  __all__
     Actual
-    cat          3    0       0
-    dog          0    1       2
-    rabbit       2    1       3
-
+    cat          3    0       0        3
+    dog          0    1       2        3
+    rabbit       2    1       3        6
+    __all__      5    2       5       12
 
 ### Matplotlib plot of a confusion matrix
 
@@ -112,6 +116,7 @@ You can get useful attributes such as True Positive (TP), True Negative (TN) ...
 
 ### Seaborn plot of a binary confusion matrix (ToDo)
 
+    from pandas_confusion import Backend
     binary_confusion_matrix.plot(backend=Backend.Seaborn)
 
 ### Confusion matrix and class statistics
@@ -178,6 +183,10 @@ You should get:
 
 
 ## ToDo list
+
+* Better documentation
+
+* Doctest
 
 * Matplotlib discrete colorbar (not for normalized plot)
 
