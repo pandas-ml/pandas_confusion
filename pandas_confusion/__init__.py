@@ -119,7 +119,7 @@ class ConfusionMatrix(object):
         """
         if df is None:
             df = self.to_dataframe()
-        idx_classes = df.columns | df.index
+        idx_classes = (df.columns | df.index).copy()
         idx_classes.name = CLASSES_NAME_DEFAULT
         return(idx_classes)        
 
