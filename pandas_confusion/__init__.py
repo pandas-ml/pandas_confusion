@@ -219,12 +219,12 @@ class ConfusionMatrix(object):
 
         if backend == Backend.Matplotlib:
             #if ax is None:
-            fig, ax = plt.subplots()
+            fig, ax = plt.subplots(figsize=(8, 8))
             ax = plt.imshow(df, cmap=cmap, interpolation='nearest') # imshow / matshow
             #plt.title(title)
             plt.colorbar()
             tick_marks = np.arange(len(df.columns))
-            plt.xticks(tick_marks, df.columns, rotation=45)
+            plt.xticks(tick_marks, df.columns, rotation=45, ha='right')
             plt.yticks(tick_marks, df.index)
             #plt.tight_layout()
             plt.ylabel(df.index.name)
