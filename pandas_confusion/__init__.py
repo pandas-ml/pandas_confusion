@@ -653,8 +653,8 @@ class BinaryConfusionMatrix(ConfusionMatrix):
              {\sqrt{ (TP+FP) ( TP + FN ) ( TN + FP ) ( TN + FN ) }
         """
         return((self.TP * self.TN - self.FP * self.FN) \
-            / math.sqrt((self.TP + self.FP) * ( self.TP + self.FN ) *\
-            ( self.TN + self.FP ) * ( self.TN + self.FN )))
+            / math.sqrt((self.TP + self.FP) * ( self.TP + self.FN ) \
+            * ( self.TN + self.FP ) * ( self.TN + self.FN )))
     
     @property
     def informedness(self):
