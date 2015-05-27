@@ -12,6 +12,7 @@ import math
 import numpy as np
 import pandas as pd
 from enum import Enum, IntEnum  # pip install enum34
+import matplotlib as mpl
 import matplotlib.pylab as plt
 import collections
 
@@ -34,7 +35,7 @@ DISPLAY_SUM_DEFAULT = True
 TRUE_NAME_DEFAULT = 'Actual'
 PRED_NAME_DEFAULT = 'Predicted'
 CLASSES_NAME_DEFAULT = 'Classes'
-
+COLORBAR_TRIG = 10
 
 class ConfusionMatrix(object):
     """
@@ -214,21 +215,44 @@ class ConfusionMatrix(object):
         except:
             cmap = plt.cm.gray_r
 
+        if self.is_binary:
+            title = "Binary confusion matrix"
+        else:
+            title = "Confusion matrix"
+
+        if normalized:
+            title += " (normalized)"
+
         if backend is None:
             backend = self.backend
 
         if backend == Backend.Matplotlib:
             #if ax is None:
-            fig, ax = plt.subplots(figsize=(8, 8))
-            ax = plt.imshow(df, cmap=cmap, interpolation='nearest') # imshow / matshow
-            #plt.title(title)
-            plt.colorbar()
-            tick_marks = np.arange(len(df.columns))
-            plt.xticks(tick_marks, df.columns, rotation=45, ha='right')
-            plt.yticks(tick_marks, df.index)
-            #plt.tight_layout()
-            plt.ylabel(df.index.name)
-            plt.xlabel(df.columns.name)
+            fig, ax = plt.subplots(figsize=(9, 8))
+            plt.imshow(df, cmap=cmap, interpolation='nearest') # imshow / matshow
+            ax.set_title(title)
+
+            tick_marks_col = np.arange(len(df.columns))
+            tick_marks_idx = tick_marks_col.copy()
+
+            ax.set_yticks(tick_marks_idx)
+            ax.set_xticks(tick_marks_col)
+            ax.set_xticklabels(df.columns, rotation=45, ha='right')
+            ax.set_yticklabels(df.index)
+            
+            ax.set_ylabel(df.index.name)
+            ax.set_xlabel(df.columns.name)
+
+            (N_min, N_max) = (0, self.max())
+            if N_max > COLORBAR_TRIG:
+                plt.colorbar() # Continuous colorbar
+            else:
+                # Discrete colorbar
+                ax2 = fig.add_axes([0.93, 0.1, 0.03, 0.8])
+                bounds = np.arange(N_min, N_max + 2, 1)
+                norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+                cb = mpl.colorbar.ColorbarBase(ax2, cmap=cmap, norm=norm, spacing='proportional', ticks=bounds, boundaries=bounds, format='%1i')
+
             return(ax)
 
 
@@ -448,6 +472,11 @@ class ConfusionMatrix(object):
         """
         return(self.to_dataframe().min().min())
 
+    @property
+    def is_binary(self):
+        """Return False"""
+        return(False)
+
 
 class BinaryConfusionMatrix(ConfusionMatrix):
     """
@@ -472,6 +501,11 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         df.index.name = TRUE_NAME_DEFAULT
         df.columns.name = PRED_NAME_DEFAULT
         return(df)
+
+    @property
+    def is_binary(self):
+        """Return True"""
+        return(True)
 
     @property
     def P(self):
