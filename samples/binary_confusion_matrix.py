@@ -11,33 +11,33 @@ from pandas_confusion import BinaryConfusionMatrix, Backend
 def main():
     basepath = os.path.dirname(__file__)
 
-    y_true = [ True,  True, False, False, False,  True, False,  True,  True,
-           False,  True, False, False, False, False, False,  True, False,
-            True,  True,  True,  True, False, False, False,  True, False,
-            True, False, False, False, False,  True,  True, False, False,
-           False,  True,  True,  True,  True, False, False, False, False,
+    y_true = [True, True, False, False, False, True, False, True, True,
+           False, True, False, False, False, False, False, True, False,
+            True, True, True, True, False, False, False, True, False,
+            True, False, False, False, False, True, True, False, False,
+           False, True, True, True, True, False, False, False, False,
             True, False, False, False, False, False, False, False, False,
-           False,  True,  True, False,  True, False,  True,  True,  True,
-           False, False,  True, False,  True, False, False,  True, False,
-           False, False, False, False, False, False, False,  True, False,
-            True,  True,  True,  True, False, False,  True, False,  True,
-            True, False,  True, False,  True, False, False,  True,  True,
-           False, False,  True,  True, False, False, False, False, False,
-           False,  True,  True, False]
+           False, True, True, False, True, False, True, True, True,
+           False, False, True, False, True, False, False, True, False,
+           False, False, False, False, False, False, False, True, False,
+            True, True, True, True, False, False, True, False, True,
+            True, False, True, False, True, False, False, True, True,
+           False, False, True, True, False, False, False, False, False,
+           False, True, True, False]
     
-    y_pred = [False, False, False, False, False,  True, False, False,  True,
-           False,  True, False, False, False, False, False, False, False,
-            True,  True,  True,  True, False, False, False, False, False,
-           False, False, False, False, False,  True, False, False, False,
-           False,  True, False, False, False, False, False, False, False,
+    y_pred = [False, False, False, False, False, True, False, False, True,
+           False, True, False, False, False, False, False, False, False,
+            True, True, True, True, False, False, False, False, False,
+           False, False, False, False, False, True, False, False, False,
+           False, True, False, False, False, False, False, False, False,
             True, False, False, False, False, False, False, False, False,
-           False,  True, False, False, False, False, False, False, False,
-           False, False,  True, False, False, False, False,  True, False,
-           False, False, False, False, False, False, False,  True, False,
-           False,  True, False, False, False, False,  True, False,  True,
-            True, False, False, False,  True, False, False,  True,  True,
-           False, False,  True,  True, False, False, False, False, False,
-           False,  True, False, False]
+           False, True, False, False, False, False, False, False, False,
+           False, False, True, False, False, False, False, True, False,
+           False, False, False, False, False, False, False, True, False,
+           False, True, False, False, False, False, True, False, True,
+            True, False, False, False, True, False, False, True, True,
+           False, False, True, True, False, False, False, False, False,
+           False, True, False, False]
 
     binary_cm = BinaryConfusionMatrix(y_true, y_pred)
     print("Binary confusion matrix:\n%s" % binary_cm)
