@@ -6,6 +6,7 @@ import matplotlib.pylab as plt
 import numpy as np
 import pandas as pd
 from pandas_confusion import BinaryConfusionMatrix, Backend
+#from sklearn.metrics import f1_score, classification_report, confusion_matrix
 
 def main():
     basepath = os.path.dirname(__file__)
@@ -50,6 +51,11 @@ def main():
     #stats = binary_cm.stats(attributes)
     #for key, val in stats.items():
     #    print("%s: %f" % (key, val))
+
+    #print(confusion_matrix(y_true, y_pred))
+    #print("f1_score: %f" % f1_score(y_true, y_pred))
+    #print(classification_report(y_true, y_pred))
+
 
     binary_cm.plot()
     filename = 'binary_cm.png'
