@@ -216,6 +216,9 @@ class ConfusionMatrixAbstract(object):
 
     @property
     def title(self):
+        """
+        Returns title
+        """
         if self.is_binary:
             return("Binary confusion matrix")
         else:
@@ -223,7 +226,7 @@ class ConfusionMatrixAbstract(object):
 
     def plot(self, normalized=False, backend=None, ax=None, **kwargs):
         """
-        plot confusion matrix
+        Plots confusion matrix
         """
         df = self.to_dataframe(normalized)
 

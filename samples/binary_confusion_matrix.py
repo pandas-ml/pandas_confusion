@@ -132,6 +132,8 @@ def main(save, show):
            "b", "a", "b", "b"])
     
     binary_cm = BinaryConfusionMatrix(y_true, y_pred)
+    #binary_cm = BinaryConfusionMatrix(y_true, y_pred, labels=["a", "b"])
+    #binary_cm = BinaryConfusionMatrix(y_true, y_pred, labels=["b", "a"])
     print(binary_cm)
     print("")
     binary_cm.print_stats()
