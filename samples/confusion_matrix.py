@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import click
+
 import os
 #import seaborn as sns
 import matplotlib.pylab as plt
@@ -8,7 +10,10 @@ import numpy as np
 import pandas as pd
 from pandas_confusion import ConfusionMatrix, Backend
 
-def main():
+@click.command()
+@click.option('--save/--no-save', default=True)
+@click.option('--show/--no-show', default=False)
+def main(save, show):
     basepath = os.path.dirname(__file__)
 
     #y_true = [2, 0, 2, 2, 0, 1, 1, 2, 2, 0, 1, 2]
@@ -40,13 +45,17 @@ def main():
 
     cm.plot()
     filename = 'cm.png'
-    plt.savefig(os.path.join(basepath, '..','screenshots', filename))
-    plt.show()
+    if save:
+        plt.savefig(os.path.join(basepath, '..','screenshots', filename))
+    if show:
+        plt.show()
 
     cm.plot(normalized=True)
     filename = 'cm_norm.png'
-    plt.savefig(os.path.join(basepath, '..','screenshots', filename))
-    plt.show()
+    if save:
+        plt.savefig(os.path.join(basepath, '..','screenshots', filename))
+    if show:
+        plt.show()
 
     #import seaborn as sns
     #cm.plot(normalized=True, backend=Backend.Seaborn)

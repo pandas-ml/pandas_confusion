@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
+import click
+
 import os
 import matplotlib.pylab as plt
 import numpy as np
@@ -8,7 +10,10 @@ import pandas as pd
 from pandas_confusion import BinaryConfusionMatrix, Backend
 #from sklearn.metrics import f1_score, classification_report, confusion_matrix
 
-def main():
+@click.command()
+@click.option('--save/--no-save', default=True)
+@click.option('--show/--no-show', default=False)
+def main(save, show):
     basepath = os.path.dirname(__file__)
 
     y_true = [True, True, False, False, False, True, False, True, True,
@@ -59,19 +64,28 @@ def main():
 
     binary_cm.plot()
     filename = 'binary_cm.png'
-    plt.savefig(os.path.join(basepath, '..','screenshots', filename))
-    plt.show()
+    if save:
+        plt.savefig(os.path.join(basepath, '..','screenshots', filename))
+    if show:
+        plt.show()
 
     binary_cm.plot(normalized=True)
     filename = 'binary_cm_norm.png'
-    plt.savefig(os.path.join(basepath, '..','screenshots', filename))
-    plt.show()
+    if save:
+        plt.savefig(os.path.join(basepath, '..','screenshots', filename))
+    if show:
+        plt.show()
 
     #import seaborn as sns
     #binary_cm.plot(normalized=True, backend=Backend.Seaborn)
     #sns.plt.show()
 
-    print binary_cm.FP + binary_cm.TP # Positive
+    print("FP+TP= %f" % (binary_cm.FP + binary_cm.TP)) # Positive
+
+    print("")
+    binary_cm_r = binary_cm.inverse(inplace=False)
+    print("Reversed binary confusion matrix:\n%s" % binary_cm_r)
+    binary_cm_r.print_stats()
 
 if __name__ == "__main__":
     main()

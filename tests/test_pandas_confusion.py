@@ -72,33 +72,33 @@ def test_pandas_confusion_cm_int():
     #cm.print_stats()
 
 def test_pandas_confusion_binary_cm():
-    y_true = [ True,  True, False, False, False,  True, False,  True,  True,
-           False,  True, False, False, False, False, False,  True, False,
-            True,  True,  True,  True, False, False, False,  True, False,
-            True, False, False, False, False,  True,  True, False, False,
-           False,  True,  True,  True,  True, False, False, False, False,
+    y_true = [True, True, False, False, False, True, False, True, True,
+           False, True, False, False, False, False, False, True, False,
+            True, True, True, True, False, False, False, True, False,
+            True, False, False, False, False, True, True, False, False,
+           False, True, True, True, True, False, False, False, False,
             True, False, False, False, False, False, False, False, False,
-           False,  True,  True, False,  True, False,  True,  True,  True,
-           False, False,  True, False,  True, False, False,  True, False,
-           False, False, False, False, False, False, False,  True, False,
-            True,  True,  True,  True, False, False,  True, False,  True,
-            True, False,  True, False,  True, False, False,  True,  True,
-           False, False,  True,  True, False, False, False, False, False,
-           False,  True,  True, False]
+           False, True, True, False, True, False, True, True, True,
+           False, False, True, False, True, False, False, True, False,
+           False, False, False, False, False, False, False, True, False,
+            True, True, True, True, False, False, True, False, True,
+            True, False, True, False, True, False, False, True, True,
+           False, False, True, True, False, False, False, False, False,
+           False, True, True, False]
     
-    y_pred = [False, False, False, False, False,  True, False, False,  True,
-           False,  True, False, False, False, False, False, False, False,
-            True,  True,  True,  True, False, False, False, False, False,
-           False, False, False, False, False,  True, False, False, False,
-           False,  True, False, False, False, False, False, False, False,
+    y_pred = [False, False, False, False, False, True, False, False, True,
+           False, True, False, False, False, False, False, False, False,
+            True, True, True, True, False, False, False, False, False,
+           False, False, False, False, False, True, False, False, False,
+           False, True, False, False, False, False, False, False, False,
             True, False, False, False, False, False, False, False, False,
-           False,  True, False, False, False, False, False, False, False,
-           False, False,  True, False, False, False, False,  True, False,
-           False, False, False, False, False, False, False,  True, False,
-           False,  True, False, False, False, False,  True, False,  True,
-            True, False, False, False,  True, False, False,  True,  True,
-           False, False,  True,  True, False, False, False, False, False,
-           False,  True, False, False]
+           False, True, False, False, False, False, False, False, False,
+           False, False, True, False, False, False, False, True, False,
+           False, False, False, False, False, False, False, True, False,
+           False, True, False, False, False, False, True, False, True,
+            True, False, False, False, True, False, False, True, True,
+           False, False, True, True, False, False, False, False, False,
+           False, True, False, False]
 
     binary_cm = BinaryConfusionMatrix(y_true, y_pred)
     print("Binary confusion matrix:\n%s" % binary_cm)
@@ -205,6 +205,46 @@ def test_pandas_confusion_max_min():
     cm = ConfusionMatrix(y_true, y_pred)
     assert cm.max() == 3
     assert cm.min() == 0
+
+def test_pandas_confusion_binary_cm_inverse():
+    y_true = [True, True, False, False, False, True, False, True, True,
+           False, True, False, False, False, False, False, True, False,
+            True, True, True, True, False, False, False, True, False,
+            True, False, False, False, False, True, True, False, False,
+           False, True, True, True, True, False, False, False, False,
+            True, False, False, False, False, False, False, False, False,
+           False, True, True, False, True, False, True, True, True,
+           False, False, True, False, True, False, False, True, False,
+           False, False, False, False, False, False, False, True, False,
+            True, True, True, True, False, False, True, False, True,
+            True, False, True, False, True, False, False, True, True,
+           False, False, True, True, False, False, False, False, False,
+           False, True, True, False]
+    
+    y_pred = [False, False, False, False, False, True, False, False, True,
+           False, True, False, False, False, False, False, False, False,
+            True, True, True, True, False, False, False, False, False,
+           False, False, False, False, False, True, False, False, False,
+           False, True, False, False, False, False, False, False, False,
+            True, False, False, False, False, False, False, False, False,
+           False, True, False, False, False, False, False, False, False,
+           False, False, True, False, False, False, False, True, False,
+           False, False, False, False, False, False, False, True, False,
+           False, True, False, False, False, False, True, False, True,
+            True, False, False, False, True, False, False, True, True,
+           False, False, True, True, False, False, False, False, False,
+           False, True, False, False]
+
+    binary_cm = BinaryConfusionMatrix(y_true, y_pred)
+    bcm_sum = binary_cm.sum()
+
+    # reverse not in place
+    binary_cm_r = binary_cm.inverse(inplace=False)
+    assert bcm_sum == binary_cm_r.sum()
+
+    # reverse inplace
+    binary_cm.inverse(inplace=True)
+    assert bcm_sum == binary_cm.sum()    
 
 #def test_enlarge_confusion_matrix():
 #    #cm.enlarge(300)

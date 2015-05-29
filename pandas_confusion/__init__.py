@@ -750,3 +750,17 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         """
         return(self._str_dict(self.stats(lst_stats),
             line_feed_key_val=' ', line_feed_stats='\n', d_name=None))
+
+    def inverse(self, inplace=False):
+        """
+        Inverses a binary confusion matrix
+        """
+        if inplace:
+            self._y_true = ~self._y_true
+            self._y_pred = ~self._y_pred
+            return
+        else:
+            y_true = (~self._y_true).copy()
+            y_pred = (~self._y_pred).copy()
+            bcm_r = BinaryConfusionMatrix(y_true, y_pred)
+            return(bcm_r)
