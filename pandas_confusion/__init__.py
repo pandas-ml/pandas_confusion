@@ -66,8 +66,16 @@ class ConfusionMatrixAbstract(object):
 
 
         if labels is not None:
-            self._y_true = self._y_true.map(lambda i: self._label(i, labels))
-            self._y_pred = self._y_pred.map(lambda i: self._label(i, labels))
+            if not self.is_binary:
+                self._y_true = self._y_true.map(lambda i: self._label(i, labels))
+                self._y_pred = self._y_pred.map(lambda i: self._label(i, labels))
+            else:
+                N = len(labels)
+                assert len(labels)==2, "labels be a list with length=2 - length=%d" % N
+                d = {labels[0]: False, labels[1]: True}
+                self._y_true = self._y_true.map(d)
+                self._y_pred = self._y_pred.map(d)
+                raise(NotImplementedError) # ToDo: see self.classes and BinaryConfusionMatrix.__class ...
         
         N_true = len(y_true)
         N_pred = len(y_pred)
