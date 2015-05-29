@@ -106,6 +106,7 @@ class ConfusionMatrix(object):
 
     def __str__(self):
         return(self.to_dataframe(calc_sum=self.display_sum).__str__())
+        #return("%s:\n%s" % (self.title, self.to_dataframe(calc_sum=self.display_sum).__str__()))
 
     @property
     def classes(self):
@@ -204,6 +205,13 @@ class ConfusionMatrix(object):
     def y_pred(self): # Not a property (because we will add parameter)
         return(self._y_pred)
 
+    @property
+    def title(self):
+        if self.is_binary:
+            return("Binary confusion matrix")
+        else:
+            return("Confusion matrix")
+
     def plot(self, normalized=False, backend=None, ax=None, **kwargs):
         """
         plot confusion matrix
@@ -215,10 +223,7 @@ class ConfusionMatrix(object):
         except:
             cmap = plt.cm.gray_r
 
-        if self.is_binary:
-            title = "Binary confusion matrix"
-        else:
-            title = "Confusion matrix"
+        title = self.title
 
         if normalized:
             title += " (normalized)"
@@ -486,6 +491,10 @@ class BinaryConfusionMatrix(ConfusionMatrix):
     def __init__(self, *args, **kwargs):
         #super(BinaryConfusionMatrix, self).__init__(y_true, y_pred)
         super(BinaryConfusionMatrix, self).__init__(*args, **kwargs)
+        assert self.len() == 2, \
+            "Binary confusion matrix must have len=2 but \
+len=%d because y_true.unique()=%s y_pred.unique()=%s" \
+% (self.len(), self.y_true().unique(), self.y_pred().unique())
 
     @classmethod
     def help(cls):
@@ -510,12 +519,14 @@ class BinaryConfusionMatrix(ConfusionMatrix):
     @property
     def P(self):
         """Condition positive"""
-        return(self._df_confusion.loc[True, :].sum())
+        #return(self._df_confusion.loc[True, :].sum())
+        return(self._df_confusion.iloc[1, :].sum())
     
     @property
     def N(self):
         """Condition negative"""
-        return(self._df_confusion.loc[False, :].sum())
+        #return(self._df_confusion.loc[False, :].sum())
+        return(self._df_confusion.iloc[1, :].sum())
     
     @property
     def TP(self):
@@ -523,7 +534,8 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         true positive (TP)
         eqv. with hit
         """
-        return(self._df_confusion.loc[True, True])
+        #return(self._df_confusion.loc[True, True])
+        return(self._df_confusion.iloc[1, 1])
     
     @property
     def TN(self):
@@ -531,7 +543,8 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         true negative (TN)
         eqv. with correct rejection
         """
-        return(self._df_confusion.loc[False, False])
+        #return(self._df_confusion.loc[False, False])
+        return(self._df_confusion.iloc[0, 0])
     
     @property
     def FN(self):
@@ -539,7 +552,8 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         false negative (FN)
         eqv. with miss, Type II error / Type 2 error
         """
-        return(self._df_confusion.loc[True, False])
+        #return(self._df_confusion.loc[True, False])
+        return(self._df_confusion.iloc[1, 0])
     
     @property
     def FP(self):
@@ -547,7 +561,8 @@ class BinaryConfusionMatrix(ConfusionMatrix):
         false positive (FP)
         eqv. with false alarm, Type I error / Type 1 error
         """
-        return(self._df_confusion.loc[False, True])
+        #return(self._df_confusion.loc[False, True])
+        return(self._df_confusion.iloc[0, 1])
 
     @property
     def PositiveTest(self):
