@@ -201,12 +201,18 @@ class ConfusionMatrixAbstract(object):
         return(self.sum())
 
     #@property
-    def y_true(self): # Not a property (because we will add parameter)
-        return(self._y_true)
+    def y_true(self, func=None): # Not a property (because we will add parameter)
+        if func is None:
+            return(self._y_true)
+        else:
+            return(self._y_true.map(func))
 
     #@property
-    def y_pred(self): # Not a property (because we will add parameter)
-        return(self._y_pred)
+    def y_pred(self, func=None): # Not a property (because we will add parameter)
+        if func is None:
+            return(self._y_pred)
+        else:
+            return(self._y_pred.map(func))
 
     @property
     def title(self):
@@ -579,6 +585,26 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
     @property
     def neg_class(self):
         return(self.classes[0])
+
+    def dict_class(self):
+        return({
+            self.classes[0]: False,
+            self.classes[1]: True,
+        })
+
+    #def y_true(self, to_bool=True):
+    #    if not to_bool:
+    #        return(self._y_true)
+    #    else:
+    #        d = self.dict_class()
+    #        return(self._y_true.map(d))
+
+    #def y_pred(self, to_bool=True):
+    #    if not to_bool:
+    #        return(self._y_pred)
+    #    else:
+    #        d = self.dict_class()
+    #        return(self._y_pred.map(d))
 
     @property
     def P(self):

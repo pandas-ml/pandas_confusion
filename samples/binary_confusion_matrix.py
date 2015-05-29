@@ -103,8 +103,7 @@ def main(save, show):
     print(classification_report(y_true, y_pred))
 
 
-    """
-    y_true = ["a", "a", "b", "b", "b", "a", "b", "a", "a",
+    y_true = np.array(["a", "a", "b", "b", "b", "a", "b", "a", "a",
            "b", "a", "b", "b", "b", "b", "b", "a", "b",
             "a", "a", "a", "a", "b", "b", "b", "a", "b",
             "a", "b", "b", "b", "b", "a", "a", "b", "b",
@@ -116,9 +115,9 @@ def main(save, show):
             "a", "a", "a", "a", "b", "b", "a", "b", "a",
             "a", "b", "a", "b", "a", "b", "b", "a", "a",
            "b", "b", "a", "a", "b", "b", "b", "b", "b",
-           "b", "a", "a", "b"]
+           "b", "a", "a", "b"])
     
-    y_pred = ["b", "b", "b", "b", "b", "a", "b", "b", "a",
+    y_pred = np.array(["b", "b", "b", "b", "b", "a", "b", "b", "a",
            "b", "a", "b", "b", "b", "b", "b", "b", "b",
             "a", "a", "a", "a", "b", "b", "b", "b", "b",
            "b", "b", "b", "b", "b", "a", "b", "b", "b",
@@ -130,26 +129,32 @@ def main(save, show):
            "b", "a", "b", "b", "b", "b", "a", "b", "a",
             "a", "b", "b", "b", "a", "b", "b", "a", "a",
            "b", "b", "a", "a", "b", "b", "b", "b", "b",
-           "b", "a", "b", "b"]
+           "b", "a", "b", "b"])
     
     binary_cm = BinaryConfusionMatrix(y_true, y_pred)
     print(binary_cm)
     print("")
     binary_cm.print_stats()
-    print(binary_cm.classification_report())
+    print(binary_cm.classification_report)
     print("sklearn confusion_matrix with string as input:\n%s" % confusion_matrix(y_true, y_pred))
     print(classification_report(y_true, y_pred))
     # ToFix
     # "b" is considered as True
     # "a" is considered as False
     # but it should be "a" as True and "b" as False
-    #f1score = f1_score(y_true, y_pred)
-    #np.testing.assert_almost_equal(binary_cm.F1_score, f1score_r)
+
+    d = binary_cm.dict_class()
+    print(d)
+    y_true_bool = binary_cm.y_true(d)
+    y_pred_bool = binary_cm.y_pred(d)
+
+    f1score = f1_score(y_true_bool, y_pred_bool)
+    np.testing.assert_almost_equal(binary_cm.F1_score, f1score)
+    print("F1_score: %f" % f1score)
 
     # ToFix: can't inverse
     #binary_cm_r = binary_cm.inverse()
     #print(binary_cm_r)
-    """
 
 if __name__ == "__main__":
     main()
