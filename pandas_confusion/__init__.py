@@ -364,9 +364,9 @@ class ConfusionMatrix(object):
             'TN': 'TN: True Negative',
             'FP': 'FP: False Positive',
             'FN': 'FN: False Negative',
-            'TPR': 'TPR: Sensivity',
-            'TNR': 'TNR=SPC: Specificity',
-            'PPV': 'PPV: Pos Pred Value = Precision',
+            'TPR': 'TPR: (Sensitivity, hit rate, recall)', # True Positive Rate 
+            'TNR': 'TNR=SPC: (Specificity)', # True Negative Rate 
+            'PPV': 'PPV: Pos Pred Value (Precision)',
             'NPV': 'NPV: Neg Pred Value',
             'prevalence': 'Prevalence',
             #'xxx': 'xxx: Detection Rate',
@@ -482,6 +482,16 @@ class ConfusionMatrix(object):
         """Return False"""
         return(False)
 
+    def classification_report(self):
+        """
+        Returns a DataFrame with classification report
+        """
+        columns = ['precision', 'recall', 'F1_score', 'support']
+        index = self.classes
+        df = pd.DataFrame(index=index, columns=columns)
+        df.loc['__avg / total__', :] = np.nan
+        # ToDo
+        return(df)
 
 class BinaryConfusionMatrix(ConfusionMatrix):
     """
@@ -518,9 +528,17 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
 
     @property
     def P(self):
-        """Condition positive"""
+        """Condition positive
+        eqv. with support"""
         #return(self._df_confusion.loc[True, :].sum())
         return(self._df_confusion.iloc[1, :].sum())
+
+    @property
+    def support(self):
+        """
+        same as P
+        """
+        return(self.P)
     
     @property
     def N(self):
@@ -536,6 +554,13 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         """
         #return(self._df_confusion.loc[True, True])
         return(self._df_confusion.iloc[1, 1])
+
+    @property
+    def hit(self):
+        """
+        same as TP
+        """
+        return(self.TP)
     
     @property
     def TN(self):
@@ -568,7 +593,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
     def PositiveTest(self):
         """
         test outcome positive
-        TP} + FP}
+        TP + FP
         """
         return(self.TP + self.FP)
 
@@ -583,7 +608,8 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
     @property
     def FPR(self):
         """
-        fall-out or false positive rate (FPR)
+        false positive rate (FPR)
+        eqv. with fall-out
         FPR = FP / N = FP / (FP + TN)
         """
         #return(np.float64(self.FP)/(self.FP + self.TN))
@@ -592,12 +618,20 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
     @property
     def TPR(self):
         """
-        sensitivity or true positive rate (TPR)
-        eqv. with hit rate, recall
+        true positive rate (TPR)
+        eqv. with hit rate, recall, sensitivity
         TPR = TP / P = TP / (TP+FN)
         """
         #return(np.float64(self.TP) / (self.TP + self.FN))
         return(np.float64(self.TP) / self.P)
+
+    @property
+    def recall(self):
+        """
+        same as TPR
+        """
+        return(self.TPR)
+
 
     @property
     def sensitivity(self):
@@ -632,7 +666,8 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
     @property
     def PPV(self):
         """
-        precision or positive predictive value (PPV)
+        positive predictive value (PPV)
+        eqv. with precision
         PPV = TP / (TP + FP) = TP / PositiveTest
         """
         return(np.float64(self.TP) / self.PositiveTest)
@@ -691,6 +726,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         """
         F1 score is the harmonic mean of precision and sensitivity
         F1 = 2 TP / (2 TP + FP + FN)
+        can be also F1 = 2 * (precision * recall) / (precision + recall)
         """
         return(2 * np.float64(self.TP)/(2 * self.TP + self.FP + self.FN))
     
@@ -779,3 +815,4 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
             y_pred = (~self._y_pred).copy()
             bcm_r = BinaryConfusionMatrix(y_true, y_pred)
             return(bcm_r)
+
