@@ -465,12 +465,14 @@ class ConfusionMatrix(object):
             predicted = actual
         return(self.to_dataframe().loc[actual, predicted])
 
+    #@property
     def max(self):
         """
         Returns max value of confusion matrix
         """
         return(self.to_dataframe().max().max())
 
+    #@property
     def min(self):
         """
         Returns min value of confusion matrix
@@ -482,15 +484,24 @@ class ConfusionMatrix(object):
         """Return False"""
         return(False)
 
+    @property
     def classification_report(self):
         """
         Returns a DataFrame with classification report
         """
-        columns = ['precision', 'recall', 'F1_score', 'support']
+        columns = np.array(['precision', 'recall', 'F1_score', 'support'])
         index = self.classes
         df = pd.DataFrame(index=index, columns=columns)
-        df.loc['__avg / total__', :] = np.nan
-        # ToDo
+
+        for cls in self.classes:
+            binary_cm = self.binarize(cls)
+            for stat in columns:
+                df.loc[cls, stat] = getattr(binary_cm, stat)
+
+        total_support = df.support.sum()
+        df.loc['__avg / total__', :] = (df[df.columns[:-1]].transpose() * df.support).sum(axis=1) / df.support.sum()
+        df.loc['__avg / total__', 'support'] = total_support
+        
         return(df)
 
 class BinaryConfusionMatrix(ConfusionMatrix):
@@ -526,12 +537,25 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         """Return True"""
         return(True)
 
+    def _class(self, direction):
+        if direction:
+            return(self.pos_class)
+        else:
+            return(self.neg_class)
+
+    @property
+    def pos_class(self):
+        return(self.classes[1])
+
+    @property
+    def neg_class(self):
+        return(self.classes[0])
+
     @property
     def P(self):
         """Condition positive
         eqv. with support"""
-        #return(self._df_confusion.loc[True, :].sum())
-        return(self._df_confusion.iloc[1, :].sum())
+        return(self._df_confusion.loc[self._class(True), :].sum())
 
     @property
     def support(self):
@@ -543,8 +567,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
     @property
     def N(self):
         """Condition negative"""
-        #return(self._df_confusion.loc[False, :].sum())
-        return(self._df_confusion.iloc[1, :].sum())
+        return(self._df_confusion.loc[self._class(False), :].sum())
     
     @property
     def TP(self):
@@ -552,8 +575,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         true positive (TP)
         eqv. with hit
         """
-        #return(self._df_confusion.loc[True, True])
-        return(self._df_confusion.iloc[1, 1])
+        return(self._df_confusion.loc[self._class(True), self._class(True)])
 
     @property
     def hit(self):
@@ -568,8 +590,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         true negative (TN)
         eqv. with correct rejection
         """
-        #return(self._df_confusion.loc[False, False])
-        return(self._df_confusion.iloc[0, 0])
+        return(self._df_confusion.loc[self._class(False), self._class(False)])
     
     @property
     def FN(self):
@@ -577,8 +598,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         false negative (FN)
         eqv. with miss, Type II error / Type 2 error
         """
-        #return(self._df_confusion.loc[True, False])
-        return(self._df_confusion.iloc[1, 0])
+        return(self._df_confusion.loc[self._class(True), self._class(False)])
     
     @property
     def FP(self):
@@ -586,8 +606,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         false positive (FP)
         eqv. with false alarm, Type I error / Type 1 error
         """
-        #return(self._df_confusion.loc[False, True])
-        return(self._df_confusion.iloc[0, 1])
+        return(self._df_confusion.loc[self._class(False), self._class(True)])
 
     @property
     def PositiveTest(self):
@@ -802,17 +821,11 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         return(self._str_dict(self.stats(lst_stats),
             line_feed_key_val=' ', line_feed_stats='\n', d_name=None))
 
-    def inverse(self, inplace=False):
+    def inverse(self):
         """
         Inverses a binary confusion matrix
+        False -> True
+        True -> False
         """
-        if inplace:
-            self._y_true = ~self._y_true
-            self._y_pred = ~self._y_pred
-            return
-        else:
-            y_true = (~self._y_true).copy()
-            y_pred = (~self._y_pred).copy()
-            bcm_r = BinaryConfusionMatrix(y_true, y_pred)
-            return(bcm_r)
-
+        negative_class = self.classes[0] # False
+        return(self.binarize(negative_class))

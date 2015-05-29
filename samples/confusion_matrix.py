@@ -9,6 +9,7 @@ import matplotlib.pylab as plt
 import numpy as np
 import pandas as pd
 from pandas_confusion import ConfusionMatrix, Backend
+from sklearn.metrics import f1_score, classification_report, confusion_matrix
 
 @click.command()
 @click.option('--save/--no-save', default=True)
@@ -57,11 +58,17 @@ def main(save, show):
     if show:
         plt.show()
 
+    cm.print_stats()
+    print(cm.classification_report)
+
+    print("sklearn confusion_matrix:\n%s" % confusion_matrix(y_true, y_pred))
+    print(classification_report(y_true, y_pred))
+
     #import seaborn as sns
     #cm.plot(normalized=True, backend=Backend.Seaborn)
     #sns.plt.show()
 
-    # Binarize a confusion matrix
+    print("Binarize a confusion matrix")
     y_true = ["cat", "ant", "cat", "cat", "ant", "bird"]
     y_pred = ["ant", "ant", "cat", "cat", "ant", "cat"]
     cm = ConfusionMatrix(y_true, y_pred)

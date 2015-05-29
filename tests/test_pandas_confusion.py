@@ -238,13 +238,8 @@ def test_pandas_confusion_binary_cm_inverse():
     binary_cm = BinaryConfusionMatrix(y_true, y_pred)
     bcm_sum = binary_cm.sum()
 
-    # reverse not in place
-    binary_cm_r = binary_cm.inverse(inplace=False)
+    binary_cm_r = binary_cm.inverse() # reverse not in place
     assert bcm_sum == binary_cm_r.sum()
-
-    # reverse inplace
-    binary_cm.inverse(inplace=True)
-    assert bcm_sum == binary_cm.sum()    
 
 #def test_enlarge_confusion_matrix():
 #    #cm.enlarge(300)

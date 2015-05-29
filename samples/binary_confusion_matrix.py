@@ -92,12 +92,16 @@ def main(save, show):
     print("FP+TP= %f" % (binary_cm.FP + binary_cm.TP)) # Positive
 
     print("")
-    binary_cm_r = binary_cm.inverse(inplace=False)
+    binary_cm_r = binary_cm.inverse()
     print("Reversed binary confusion matrix:\n%s" % binary_cm_r)
     binary_cm_r.print_stats()
     np.testing.assert_almost_equal(binary_cm_r.F1_score, f1score_r)
 
-    print(binary_cm.classification_report())
+    print(binary_cm.classification_report)
+
+    print("sklearn confusion_matrix:\n%s" % confusion_matrix(y_true, y_pred))
+    print(classification_report(y_true, y_pred))
+
 
     """
     y_true = ["a", "a", "b", "b", "b", "a", "b", "a", "a",
@@ -130,8 +134,11 @@ def main(save, show):
     
     binary_cm = BinaryConfusionMatrix(y_true, y_pred)
     print(binary_cm)
+    print("")
     binary_cm.print_stats()
+    print(binary_cm.classification_report())
     print("sklearn confusion_matrix with string as input:\n%s" % confusion_matrix(y_true, y_pred))
+    print(classification_report(y_true, y_pred))
     # ToFix
     # "b" is considered as True
     # "a" is considered as False
@@ -140,7 +147,7 @@ def main(save, show):
     #np.testing.assert_almost_equal(binary_cm.F1_score, f1score_r)
 
     # ToFix: can't inverse
-    #binary_cm_r = binary_cm.inverse(inplace=False)
+    #binary_cm_r = binary_cm.inverse()
     #print(binary_cm_r)
     """
 
