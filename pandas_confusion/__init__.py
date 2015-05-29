@@ -37,11 +37,14 @@ PRED_NAME_DEFAULT = 'Predicted'
 CLASSES_NAME_DEFAULT = 'Classes'
 COLORBAR_TRIG = 10
 
-class ConfusionMatrix(object):
+class ConfusionMatrixAbstract(object):
     """
-    Confusion matrix class
-    """
+    Abstract class for confusion matrix
     
+    You shouldn't instantiate this class.
+    You might instantiate ConfusionMatrix or BinaryConfusionMatrix classes
+    """
+
     def __init__(self, y_true, y_pred, labels=None,
             display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT,
             true_name = TRUE_NAME_DEFAULT, pred_name = PRED_NAME_DEFAULT):
@@ -504,7 +507,33 @@ class ConfusionMatrix(object):
         
         return(df)
 
-class BinaryConfusionMatrix(ConfusionMatrix):
+    def _avg_stat(self, stat):
+        """
+        Binarizes confusion matrix
+        and returns (weighted) average statistics
+        """
+        s_values = pd.Series(index = self.classes)
+        for cls in self.classes:
+            binary_cm = self.binarize(cls)
+            v = getattr(binary_cm, stat)
+            print(v)
+            s_values[cls] = v
+        value = (s_values * self.true).sum() / self.population
+        return(value)
+
+
+class ConfusionMatrix(ConfusionMatrixAbstract):
+    """
+    Confusion matrix class (not binary)
+    """
+
+    def __getattr__(self, attr):
+        """
+        Returns (weighted) average statistics
+        """
+        return(self._avg_stat(attr))
+
+class BinaryConfusionMatrix(ConfusionMatrixAbstract):
     """
     Binary confusion matrix class
     """

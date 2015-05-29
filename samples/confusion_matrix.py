@@ -64,6 +64,10 @@ def main(save, show):
     print("sklearn confusion_matrix:\n%s" % confusion_matrix(y_true, y_pred))
     print(classification_report(y_true, y_pred))
 
+    #stat = 'precision'
+    #print(cm._avg_stat(stat))
+    #print(cm.ACC)
+
     #import seaborn as sns
     #cm.plot(normalized=True, backend=Backend.Seaborn)
     #sns.plt.show()
