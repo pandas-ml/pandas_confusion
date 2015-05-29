@@ -143,10 +143,10 @@ def main(save, show):
     # "a" is considered as False
     # but it should be "a" as True and "b" as False
 
-    d = binary_cm.dict_class()
-    print(d)
-    y_true_bool = binary_cm.y_true(d)
-    y_pred_bool = binary_cm.y_pred(d)
+    #d = binary_cm.dict_class()
+    #print(d)
+    y_true_bool = binary_cm.y_true(to_bool=True)
+    y_pred_bool = binary_cm.y_pred(to_bool=True)
 
     f1score = f1_score(y_true_bool, y_pred_bool)
     np.testing.assert_almost_equal(binary_cm.F1_score, f1score)

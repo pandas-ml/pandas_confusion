@@ -573,6 +573,10 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         return(True)
 
     def _class(self, direction):
+        """Returns class for a given direction
+        direction being a boolean
+        True for positive class
+        False for negative class"""
         if direction:
             return(self.pos_class)
         else:
@@ -580,31 +584,46 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
 
     @property
     def pos_class(self):
+        """Returns positive class
+        If BinaryConfusionMatrix was instantiate using y_true and y_pred
+        as array of booleans, it should return True
+        Else it should return the name (string) of the positive class"""
         return(self.classes[1])
 
     @property
     def neg_class(self):
+        """Returns negative class
+        If BinaryConfusionMatrix was instantiate using y_true and y_pred
+        as array of booleans, it should return False
+        Else it should return the name (string) of the negative class"""
         return(self.classes[0])
 
-    def dict_class(self):
-        return({
-            self.classes[0]: False,
-            self.classes[1]: True,
-        })
+    def dict_class(self, reversed=False):
+        if not reversed:
+            d = {
+                self.classes[0]: False,
+                self.classes[1]: True,
+            }
+        else:
+            d = {
+                False: self.classes[0],
+                True: self.classes[1]
+            }
+        return(d)
 
-    #def y_true(self, to_bool=True):
-    #    if not to_bool:
-    #        return(self._y_true)
-    #    else:
-    #        d = self.dict_class()
-    #        return(self._y_true.map(d))
+    def y_true(self, to_bool=False):
+        if not to_bool:
+            return(self._y_true)
+        else:
+            d = self.dict_class()
+            return(self._y_true.map(d))
 
-    #def y_pred(self, to_bool=True):
-    #    if not to_bool:
-    #        return(self._y_pred)
-    #    else:
-    #        d = self.dict_class()
-    #        return(self._y_pred.map(d))
+    def y_pred(self, to_bool=False):
+        if not to_bool:
+            return(self._y_pred)
+        else:
+            d = self.dict_class()
+            return(self._y_pred.map(d))
 
     @property
     def P(self):
