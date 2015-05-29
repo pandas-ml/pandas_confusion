@@ -130,9 +130,10 @@ def main(save, show):
     print(binary_cm)
     binary_cm.print_stats()
     print("sklearn confusion_matrix with string as input:\n%s" % confusion_matrix(y_true, y_pred))
-    # "b" is considered as "True"
-    # "a" is considered as "False"
-
+    # ToFix
+    # "b" is considered as True
+    # "a" is considered as False
+    # but it should be "a" as True and "b" as False
     #f1score = f1_score(y_true, y_pred)
     np.testing.assert_almost_equal(binary_cm.F1_score, f1score_r)
 
