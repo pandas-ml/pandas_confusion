@@ -4,6 +4,7 @@
 [![License](https://img.shields.io/pypi/l/pandas_confusion.svg)](https://pypi.python.org/pypi/pandas_confusion/)
 [![Development Status](https://img.shields.io/pypi/status/pandas_confusion.svg)](https://pypi.python.org/pypi/pandas_confusion/)
 [![Downloads monthly](https://img.shields.io/pypi/dm/pandas_confusion.svg)](https://pypi.python.org/pypi/pandas_confusion/)
+[![Requirements Status](https://requires.io/github/scls19fr/pandas_confusion/requirements.svg?branch=master)](https://requires.io/github/scls19fr/pandas_confusion/requirements/?branch=master)
 [![Code Health](https://landscape.io/github/scls19fr/pandas_confusion/master/landscape.svg?style=flat)](https://landscape.io/github/scls19fr/pandas_confusion/master)
 [![Codacy Badge](https://www.codacy.com/project/badge/87be7082d9504db59d397b5738dbf133)](https://www.codacy.com/app/s-celles/pandas_confusion)
 [![Build Status](https://travis-ci.org/scls19fr/pandas_confusion.svg)](https://travis-ci.org/scls19fr/pandas_confusion)
