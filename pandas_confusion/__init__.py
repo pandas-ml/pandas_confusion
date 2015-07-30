@@ -141,7 +141,6 @@ class ConfusionMatrixAbstract(object):
         Returns a Pandas DataFrame
         """
         if normalized:
-            #df = self._df_confusion / self._df_confusion.astype(np.float64).sum(axis=1)
             a = self._df_confusion.values.astype('float')
             a = a.astype('float') / a.sum(axis=1)[:, np.newaxis]
             df = pd.DataFrame(a,
