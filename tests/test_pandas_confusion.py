@@ -3,8 +3,10 @@
 
 import pandas as pd
 import numpy as np
-from pandas_confusion import ConfusionMatrix, BinaryConfusionMatrix, Backend, \
+from pandas_confusion import (
+    ConfusionMatrix, BinaryConfusionMatrix, Backend, \
     TRUE_NAME_DEFAULT, PRED_NAME_DEFAULT
+)
 #from sklearn.metrics import confusion_matrix
 from collections import OrderedDict
 
@@ -262,6 +264,7 @@ def test_pandas_confusion_normalized():
 
 def test_pandas_confusion_normalized_issue1():
     # should insure issue 1 is fixed
+    # see http://stackoverflow.com/questions/19233771/sklearn-plot-confusion-matrix-with-labels/31720054#31720054
 
     y_true = ['business', 'business', 'business', 'business', 'business',
             'business', 'business', 'business', 'business', 'business',
