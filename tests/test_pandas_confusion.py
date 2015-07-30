@@ -251,3 +251,29 @@ def test_pandas_confusion_binary_cm_inverse():
 #    cm = ConfusionMatrix(y_true, y_pred)
 #    binary_cm_100 = cm.binarize(100)
 #    print("\n%s" % binary_cm_100)
+
+def test_pandas_confusion_normalized():
+    y_true = [2, 0, 2, 2, 0, 1, 1, 2, 2, 0, 1, 2]
+    y_pred = [0, 0, 2, 1, 0, 2, 1, 0, 2, 0, 2, 2]
+    cm = ConfusionMatrix(y_true, y_pred)
+    df = cm.to_dataframe()
+    df_norm = cm.to_dataframe(normalized=True)
+    assert(df_norm.sum(axis=1).sum() == len(df))
+
+def test_pandas_confusion_normalized_issue1():
+    # should insure issue 1 is fixed
+
+    y_true = ['business', 'business', 'business', 'business', 'business',
+            'business', 'business', 'business', 'business', 'business',
+            'business', 'business', 'business', 'business', 'business',
+            'business', 'business', 'business', 'business', 'business']
+
+    y_pred = ['health', 'business', 'business', 'business', 'business',
+           'business', 'health', 'health', 'business', 'business', 'business',
+           'business', 'business', 'business', 'business', 'business',
+           'health', 'health', 'business', 'health']
+
+    cm = ConfusionMatrix(y_true, y_pred)
+    df = cm.to_dataframe()
+    df_norm = cm.to_dataframe(normalized=True)
+    assert(df_norm.sum(axis=1, skipna=False).fillna(1).sum() == len(df))
