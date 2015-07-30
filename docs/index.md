@@ -330,6 +330,47 @@ R code
     $ conda install pandas scikit-learn scipy
 
     $ pip install pandas_confusion
+    
+## Development
+
+You can help to develop this library.
+
+### Issues
+
+You can submit issues using <https://github.com/scls19fr/pandas_confusion/issues>
+
+### Clone
+
+You can clone repository to try to fix issues yourself using:
+
+	$ git clone https://github.com/scls19fr/pandas_confusion.git
+
+### Run unit tests
+
+Run all unit tests
+
+	$ nosetests -s -v
+	
+Run a given test
+
+	$ nosetests -s -v tests/test_pandas_confusion.py:test_pandas_confusion_normalized
+
+### Install development version
+
+	$ python setup.py install
+	
+or
+
+	$ sudo pip install git+git://github.com/scls19fr/pandas_confusion.git
+
+### Collaborating
+
+- Fork repository
+- Create a branch which fix a given issue
+- Submit pull requests
+
+<https://help.github.com/categories/collaborating/>
+
 
 ## Done
 
