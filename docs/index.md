@@ -44,7 +44,18 @@ You can see it
 
 ### Matplotlib plot of a confusion matrix
 
+Inside a IPython notebook add this line as first cell
+
+	%matplotlib inline
+
+You can plot confusion matrix using:
+
+	import matplotlib.pyplot as plt
+
     confusion_matrix.plot()
+    
+If you are not using inline mode, you need to use to show confusion matrix plot.    
+    
     plt.show()
 
 ![confusion_matrix](screenshots/cm.png)
