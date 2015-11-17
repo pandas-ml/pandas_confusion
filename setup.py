@@ -6,12 +6,12 @@ from codecs import open  # To use a consistent encoding
 from os import path
 import io
 
+here = path.abspath(path.dirname(__file__))
+
 NAME = 'pandas_confusion'
-filename = os.path.join(NAME, "version.py")
+filename = path.join(here, NAME, "version.py")
 with open(filename) as f:
     exec(f.read())
-
-here = path.abspath(path.dirname(__file__))
 
 def readme():
     filename = path.join(here, 'README.rst')
