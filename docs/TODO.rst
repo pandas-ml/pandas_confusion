@@ -1,31 +1,36 @@
-# ToDo list
+ToDo list
+=========
 
-* Better documentation
+-  Better documentation
 
-* Doctest
+-  Doctest
 
-* Matplotlib discrete colorbar (not for normalized plot)
+-  Matplotlib discrete colorbar (not for normalized plot)
 
 see ColorbarBase
 
 http://stackoverflow.com/questions/14777066/matplotlib-discrete-colorbar
 
-* Display numbers inside cells like http://stackoverflow.com/questions/5821125/how-to-plot-confusion-matrix-with-string-axis-rather-than-integer-in-python
+-  Display numbers inside cells like
+   http://stackoverflow.com/questions/5821125/how-to-plot-confusion-matrix-with-string-axis-rather-than-integer-in-python
 
-* Compare with results from Sklearn
+-  Compare with results from Sklearn
 
 Example:
+
+::
 
     from sklearn.metrics import f1_score, classification_report
     f1_score(y_actu, y_pred)
     print classification_report(y_actu, y_pred)
 
-
-* Compare with R "caret" package
+-  Compare with R "caret" package
 
 http://stackoverflow.com/questions/26631814/create-a-confusion-matrix-from-a-dataframe
 
 R
+
+::
 
     Actual <- c(600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200)
     Predicted <- c(100, 200, 200, 100, 100, 200, 200, 200, 100, 200, 500, 100, 100, 100, 100, 100, 100, 100, 500, 200)
@@ -37,6 +42,8 @@ R
     #table(lapply(df, factor, levels=c(100, 200, 500, 600)))
 
 Python
+
+::
 
     >>> from pandas_confusion import ConfusionMatrix
     >>> y_true = [600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200]
@@ -51,39 +58,43 @@ Python
     600          1    0    0    0        1
     __all__     11    7    2    0       20
 
-`cm(i, j)` in Python is `conf_mat(j, i)` in R
+``cm(i, j)`` in Python is ``conf_mat(j, i)`` in R
 
-You can use `cm.to_dataframe().transpose()`
+You can use ``cm.to_dataframe().transpose()``
 
-  * Overall statistics: No Information Rate, Mcnemar's Test P-Value
+-  Overall statistics: No Information Rate, Mcnemar's Test P-Value
 
-    see confusionMatrix.R and print.confusionMatrix.R (caret) and e1071 package
+   see confusionMatrix.R and print.confusionMatrix.R (caret) and e1071
+   package
 
-  * Class statistics
+-  Class statistics
 
-    * see Caret code for Detection Rate, Detection Prevalence, Balanced Accuracy
+   -  see Caret code for Detection Rate, Detection Prevalence, Balanced
+      Accuracy
 
+-  Code metrics (landscape.io)
 
-* Code metrics (landscape.io)
+-  Create fake truth, prediction from confusion matrix (can be useful
+   for unit test)
 
-* Create fake truth, prediction from confusion matrix
-(can be useful for unit test)
+https://www.researchgate.net/post/Can\_someone\_help\_me\_to\_calculate\_accuracy\_sensitivity\_of\_a\_66\_confusion\_matrix
 
-https://www.researchgate.net/post/Can_someone_help_me_to_calculate_accuracy_sensitivity_of_a_66_confusion_matrix
+`see code (ToDo) <samples/fake_convol_mat.py>`__
 
-[see code (ToDo)](samples/fake_convol_mat.py)
+-  Order confusion matrix easily
 
-* Order confusion matrix easily
+-  Create empty class easily
 
-* Create empty class easily
-
-    cm = ConfusionMatrix(y_true, y_pred, labels=range(100, 600+1, 100))
+   cm = ConfusionMatrix(y\_true, y\_pred, labels=range(100, 600+1, 100))
 
 Class 300 and class 400 should be create
 
-R like method ? `conf_mat_tab <- table(lapply(df, factor, levels = seq(100, 600, 100)))`
+R like method ?
+``conf_mat_tab <- table(lapply(df, factor, levels = seq(100, 600, 100)))``
 
-http://pandas.pydata.org/pandas-docs/stable/comparison_with_r.html
+http://pandas.pydata.org/pandas-docs/stable/comparison\_with\_r.html
+
+::
 
     idx_new_cls = pd.Index([300, 400])
     new_idx = df.index | idx_new_cls
@@ -92,12 +103,13 @@ http://pandas.pydata.org/pandas-docs/stable/comparison_with_r.html
     new_col.name = 'Predicted'
     df = df.loc[new_idx, new_col].fillna(0)
 
+see ``cm.enlarge(...)``
 
-see `cm.enlarge(...)`
-
-* Calculate Mcnemar's Test P-Value with binary confusion matrix
+-  Calculate Mcnemar's Test P-Value with binary confusion matrix
 
 R code
+
+::
 
     Actual <- c(TRUE, TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE,
             FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE,

@@ -6,14 +6,17 @@ from codecs import open  # To use a consistent encoding
 from os import path
 import io
 
-here = path.abspath(path.dirname(__file__))
-
 NAME = 'pandas_confusion'
-with io.open(path.join(here, NAME, 'version.py'), 'rt', encoding='UTF-8') as f:
+filename = os.path.join(NAME, "version.py")
+with open(filename) as f:
     exec(f.read())
 
-#from version import __author__, __copyright__, __credits__, \
-#    __license__, __version__, __maintainer__, __email__, __status__, __url__
+here = path.abspath(path.dirname(__file__))
+
+def readme():
+    filename = path.join(here, 'README.rst')
+    with io.open(filename, 'rt', encoding='UTF-8') as f:
+        return f.read()
 
 setup(
     name=NAME,
@@ -26,7 +29,7 @@ setup(
 
     setup_requires=['setuptools-markdown'],
     description='Pandas matrix confusion with plot features (matplotlib, seaborn...)',
-    long_description_markdown_filename='README.md',
+    long_description=readme(),
 
     # The project's main homepage.
     url=__url__,

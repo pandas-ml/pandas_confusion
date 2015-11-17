@@ -1,39 +1,45 @@
-[![Latest Version](https://img.shields.io/pypi/v/pandas_confusion.svg)](https://pypi.python.org/pypi/pandas_confusion/)
-[![Supported Python versions](https://img.shields.io/pypi/pyversions/pandas_confusion.svg)](https://pypi.python.org/pypi/pandas_confusion/)
-[![Wheel format](https://img.shields.io/pypi/wheel/pandas_confusion.svg)](https://pypi.python.org/pypi/pandas_confusion/)
-[![License](https://img.shields.io/pypi/l/pandas_confusion.svg)](https://pypi.python.org/pypi/pandas_confusion/)
-[![Development Status](https://img.shields.io/pypi/status/pandas_confusion.svg)](https://pypi.python.org/pypi/pandas_confusion/)
-[![Downloads monthly](https://img.shields.io/pypi/dm/pandas_confusion.svg)](https://pypi.python.org/pypi/pandas_confusion/)
-[![Requirements Status](https://requires.io/github/scls19fr/pandas_confusion/requirements.svg?branch=master)](https://requires.io/github/scls19fr/pandas_confusion/requirements/?branch=master)
-[![Code Health](https://landscape.io/github/scls19fr/pandas_confusion/master/landscape.svg?style=flat)](https://landscape.io/github/scls19fr/pandas_confusion/master)
-[![Codacy Badge](https://www.codacy.com/project/badge/87be7082d9504db59d397b5738dbf133)](https://www.codacy.com/app/s-celles/pandas_confusion)
-[![Build Status](https://travis-ci.org/scls19fr/pandas_confusion.svg)](https://travis-ci.org/scls19fr/pandas_confusion)
+|Latest Version| |Supported Python versions| |Wheel format| |License|
+|Development Status| |Downloads monthly| |Requirements Status| |Code
+Health| |Codacy Badge| |Build Status|
 
-# pandas_confusion
- 
-A [Python](https://www.python.org/) [Pandas](http://pandas.pydata.org/) implementation of [confusion matrix](https://en.wikipedia.org/wiki/Confusion_matrix).
+pandas\_confusion
+=================
+
+A `Python <https://www.python.org/>`__
+`Pandas <http://pandas.pydata.org/>`__ implementation of `confusion
+matrix <https://en.wikipedia.org/wiki/Confusion_matrix>`__.
 
 WORK IN PROGRESS - Use it a your own risk
 
-## Usage
+Usage
+-----
 
-## Confusion matrix
+Confusion matrix
+----------------
 
-Import `ConfusionMatrix`
+Import ``ConfusionMatrix``
+
+::
 
     from pandas_confusion import ConfusionMatrix
 
-Define actual values (`y_actu`) and predicted values (`y_pred`)
+Define actual values (``y_actu``) and predicted values (``y_pred``)
+
+::
 
     y_actu = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
     y_pred = ['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit']
 
 Let's define a (non binary) confusion matrix
 
+::
+
     confusion_matrix = ConfusionMatrix(y_actu, y_pred)
     print("Confusion matrix:\n%s" % confusion_matrix)
 
 You can see it
+
+::
 
     Predicted  cat  dog  rabbit  __all__
     Actual
@@ -42,38 +48,60 @@ You can see it
     rabbit       2    1       3        6
     __all__      5    2       5       12
 
-### Matplotlib plot of a confusion matrix
+Matplotlib plot of a confusion matrix
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Inside a IPython notebook add this line as first cell
 
-	%matplotlib inline
+::
+
+    %matplotlib inline
 
 You can plot confusion matrix using:
 
-	import matplotlib.pyplot as plt
+::
+
+    import matplotlib.pyplot as plt
 
     confusion_matrix.plot()
-    
-If you are not using inline mode, you need to use to show confusion matrix plot.    
-    
+
+If you are not using inline mode, you need to use to show confusion
+matrix plot.
+
+::
+
     plt.show()
 
-![confusion_matrix](screenshots/cm.png)
+.. figure:: screenshots/cm.png
+   :alt: confusion\_matrix
 
-### Matplotlib plot of a normalized confusion matrix
+   confusion\_matrix
+
+Matplotlib plot of a normalized confusion matrix
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
 
     confusion_matrix.plot(normalized=True)
     plt.show()
 
-![confusion_matrix_norm](screenshots/cm_norm.png)
+.. figure:: screenshots/cm_norm.png
+   :alt: confusion\_matrix\_norm
 
-### Binary confusion matrix
+   confusion\_matrix\_norm
 
-Import `BinaryConfusionMatrix` and `Backend`
+Binary confusion matrix
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Import ``BinaryConfusionMatrix`` and ``Backend``
+
+::
 
     from pandas_confusion import BinaryConfusionMatrix, Backend
 
-Define actual values (`y_actu`) and predicted values (`y_pred`)
+Define actual values (``y_actu``) and predicted values (``y_pred``)
+
+::
 
     y_actu = [ True,  True, False, False, False,  True, False,  True,  True,
                False,  True, False, False, False, False, False,  True, False,
@@ -105,11 +133,14 @@ Define actual values (`y_actu`) and predicted values (`y_pred`)
 
 Let's define a binary confusion matrix
 
+::
+
     binary_confusion_matrix = BinaryConfusionMatrix(y_actu, y_pred)
     print("Binary confusion matrix:\n%s" % binary_confusion_matrix)
 
-
 It display as a nicely labeled Pandas DataFrame
+
+::
 
     Binary confusion matrix:
     Predicted  False  True  __all__
@@ -118,32 +149,54 @@ It display as a nicely labeled Pandas DataFrame
     True          21    24       45
     __all__       88    24      112
 
-You can get useful attributes such as True Positive (TP), True Negative (TN) ...
+You can get useful attributes such as True Positive (TP), True Negative
+(TN) ...
+
+::
 
     print binary_confusion_matrix.TP
 
-### Matplotlib plot of a binary confusion matrix
+Matplotlib plot of a binary confusion matrix
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
 
     binary_confusion_matrix.plot()
     plt.show()
 
-![binary_confusion_matrix](screenshots/binary_cm.png)
+.. figure:: screenshots/binary_cm.png
+   :alt: binary\_confusion\_matrix
 
-### Matplotlib plot of a normalized binary confusion matrix
+   binary\_confusion\_matrix
+
+Matplotlib plot of a normalized binary confusion matrix
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
 
     binary_confusion_matrix.plot(normalized=True)
     plt.show()
 
-![binary_confusion_matrix_norm](screenshots/binary_cm_norm.png)
+.. figure:: screenshots/binary_cm_norm.png
+   :alt: binary\_confusion\_matrix\_norm
 
-### Seaborn plot of a binary confusion matrix (ToDo)
+   binary\_confusion\_matrix\_norm
+
+Seaborn plot of a binary confusion matrix (ToDo)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
 
     from pandas_confusion import Backend
     binary_confusion_matrix.plot(backend=Backend.Seaborn)
 
-### Confusion matrix and class statistics
+Confusion matrix and class statistics
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Overall statistics and class statistics of confusion matrix can be easily displayed.
+Overall statistics and class statistics of confusion matrix can be
+easily displayed.
+
+::
 
     y_true = [600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200]
     y_pred = [100, 200, 200, 100, 100, 200, 200, 200, 100, 200, 500, 100, 100, 100, 100, 100, 100, 100, 500, 200]
@@ -151,6 +204,8 @@ Overall statistics and class statistics of confusion matrix can be easily displa
     cm.print_stats()
 
 You should get:
+
+::
 
     Confusion Matrix:
 
@@ -205,65 +260,108 @@ You should get:
 
 Statistics are also available as an OrderedDict using:
 
+::
+
     cm.stats()
 
-## Install
+Install
+-------
+
+::
 
     $ conda install pandas scikit-learn scipy
 
     $ pip install pandas_confusion
-    
-## Development
+
+Development
+-----------
 
 You can help to develop this library.
 
-### Issues
+Issues
+~~~~~~
 
-You can submit issues using <https://github.com/scls19fr/pandas_confusion/issues>
+You can submit issues using
+https://github.com/scls19fr/pandas_confusion/issues
 
-### Clone
+Clone
+~~~~~
 
 You can clone repository to try to fix issues yourself using:
 
-	$ git clone https://github.com/scls19fr/pandas_confusion.git
+::
 
-### Run unit tests
+    $ git clone https://github.com/scls19fr/pandas_confusion.git
+
+Run unit tests
+~~~~~~~~~~~~~~
 
 Run all unit tests
 
-	$ nosetests -s -v
-	
+::
+
+    $ nosetests -s -v
+
 Run a given test
 
-	$ nosetests -s -v tests/test_pandas_confusion.py:test_pandas_confusion_normalized
+::
 
-### Install development version
+    $ nosetests -s -v tests/test_pandas_confusion.py:test_pandas_confusion_normalized
 
-	$ python setup.py install
-	
+Install development version
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+
+    $ python setup.py install
+
 or
 
-	$ sudo pip install git+git://github.com/scls19fr/pandas_confusion.git
+::
 
-### Collaborating
+    $ sudo pip install git+git://github.com/scls19fr/pandas_confusion.git
 
-- Fork repository
-- Create a branch which fix a given issue
-- Submit pull requests
+Collaborating
+~~~~~~~~~~~~~
 
-<https://help.github.com/categories/collaborating/>
+-  Fork repository
+-  Create a branch which fix a given issue
+-  Submit pull requests
 
+https://help.github.com/categories/collaborating/
 
-## Done
+Done
+----
 
-* Continuous integration (Travis)
+-  Continuous integration (Travis)
 
-* Convert a confusion matrix to a binary confusion matrix
+-  Convert a confusion matrix to a binary confusion matrix
 
-* Python package
+-  Python package
 
-* Unit tests (nose)
+-  Unit tests (nose)
 
-* Fix missing column and missing row
+-  Fix missing column and missing row
 
-* Overall statistics: Accuracy, 95% CI, P-Value [Acc > NIR], Kappa
+-  Overall statistics: Accuracy, 95% CI, P-Value [Acc > NIR], Kappa
+
+.. |Latest Version| image:: https://img.shields.io/pypi/v/pandas_confusion.svg
+   :target: https://pypi.python.org/pypi/pandas_confusion/
+.. |Supported Python versions| image:: https://img.shields.io/pypi/pyversions/pandas_confusion.svg
+   :target: https://pypi.python.org/pypi/pandas_confusion/
+.. |Wheel format| image:: https://img.shields.io/pypi/wheel/pandas_confusion.svg
+   :target: https://pypi.python.org/pypi/pandas_confusion/
+.. |License| image:: https://img.shields.io/pypi/l/pandas_confusion.svg
+   :target: https://pypi.python.org/pypi/pandas_confusion/
+.. |Development Status| image:: https://img.shields.io/pypi/status/pandas_confusion.svg
+   :target: https://pypi.python.org/pypi/pandas_confusion/
+.. |Downloads monthly| image:: https://img.shields.io/pypi/dm/pandas_confusion.svg
+   :target: https://pypi.python.org/pypi/pandas_confusion/
+.. |Requirements Status| image:: https://requires.io/github/scls19fr/pandas_confusion/requirements.svg?branch=master
+   :target: https://requires.io/github/scls19fr/pandas_confusion/requirements/?branch=master
+.. |Code Health| image:: https://landscape.io/github/scls19fr/pandas_confusion/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/scls19fr/pandas_confusion/master
+.. |Codacy Badge| image:: https://www.codacy.com/project/badge/87be7082d9504db59d397b5738dbf133
+   :target: https://www.codacy.com/app/s-celles/pandas_confusion
+.. |Build Status| image:: https://travis-ci.org/scls19fr/pandas_confusion.svg
+   :target: https://travis-ci.org/scls19fr/pandas_confusion
