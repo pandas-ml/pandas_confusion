@@ -27,7 +27,6 @@ setup(
     #version='0.0.2',
     version=__version__,
 
-    setup_requires=['setuptools-markdown'],
     description='Pandas matrix confusion with plot features (matplotlib, seaborn...)',
     long_description=readme(),
 
