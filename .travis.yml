@@ -4,6 +4,9 @@ python:
   - "3.3"
   - "3.4"
 
+before-install:
+  - conda update --yes conda
+
 # command to install dependencies
 install:
   - sudo apt-get update
@@ -32,8 +35,8 @@ install:
 # command to run tests
 script: nosetests
 
-addons:
-  apt_packages:
-    - pandoc
+#addons:
+#  apt_packages:
+#    - pandoc
 #    - libblas-dev
 #    - python-dev
