@@ -4,7 +4,7 @@ python:
   - "3.3"
   - "3.4"
 
-before-install:
+before_install:
   - sudo apt-get update -qq
   # You may want to periodically update this, although the conda update
   # conda line below will keep everything up-to-date.  We do this
@@ -33,7 +33,14 @@ install:
   - python setup.py install
 
 # command to run tests
-script: nosetests
+script: 
+  - nosetests
+#  - nosetests --with-coverage --cover-package=jopy --logging-level=INFO
+
+# Calculate coverage
+#after_success:
+#  - coveralls
+#  - codecov
 
 #addons:
 #  apt_packages:
