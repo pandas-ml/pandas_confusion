@@ -15,10 +15,11 @@ before_install:
     else
       wget http://repo.continuum.io/miniconda/Miniconda3-3.4.2-Linux-x86_64.sh -O miniconda.sh;
     fi
+  - chmod +x miniconda.sh
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
   - hash -r
-  - conda config --set always_yes yes --set changeps1 no
+  - conda config --set always_yes yes --set changeps1 no --set show_channel_urls yes
   - conda update -q conda
   # Useful for debugging any issues with conda
   - conda info -a
@@ -35,7 +36,7 @@ install:
 # command to run tests
 script: 
   - nosetests
-#  - nosetests --with-coverage --cover-package=jopy --logging-level=INFO
+#  - nosetests --with-coverage --cover-package=pandas_confusion --logging-level=INFO
 
 # Calculate coverage
 #after_success:
