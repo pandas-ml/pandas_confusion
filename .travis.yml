@@ -1,50 +1,26 @@
+sudo: false
+
 language: python
-python:
-  - "2.7"
-  - "3.3"
-  - "3.4"
+
+env:
+    - CONDA="python=2.7"
+    - CONDA="python=3.4"
+    - CONDA="python=3.5"
 
 before_install:
-  - sudo apt-get update -qq
-  # You may want to periodically update this, although the conda update
-  # conda line below will keep everything up-to-date.  We do this
-  # conditionally because it saves us some downloading if the version is
-  # the same.
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-      wget http://repo.continuum.io/miniconda/Miniconda-3.4.2-Linux-x86_64.sh -O miniconda.sh;
-    else
-      wget http://repo.continuum.io/miniconda/Miniconda3-3.4.2-Linux-x86_64.sh -O miniconda.sh;
-    fi
-  - chmod +x miniconda.sh
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no --set show_channel_urls yes
-  - conda update -q conda
-  # Useful for debugging any issues with conda
-  - conda info -a
+    - wget http://bit.ly/miniconda -O miniconda.sh
+    - bash miniconda.sh -b -p $HOME/miniconda
+    - export PATH="$HOME/miniconda/bin:$PATH"
+    - conda update --all --yes
+    - conda config --add channels ioos -f
+    - travis_retry conda create --yes -n TEST $CONDA --file requirements.txt
+    - source activate TEST
+    - travis_retry conda install --yes  --file requirements-dev.txt
+    - travis_retry pip install check-manifest
+    # GUI
+    - "export DISPLAY=:99.0"
+    - "sh -e /etc/init.d/xvfb start"
 
-  # Replace dep1 dep2 ... with your dependencies
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION
-
-# command to install dependencies
-install:
-  - source activate test-environment
-  - conda install numpy pandas scipy scikit-learn click --yes
-  - python setup.py install
-
-# command to run tests
-script: 
-  - nosetests
-#  - nosetests --with-coverage --cover-package=pandas_confusion --logging-level=INFO
-
-# Calculate coverage
-#after_success:
-#  - coveralls
-#  - codecov
-
-#addons:
-#  apt_packages:
-#    - pandoc
-#    - libblas-dev
-#    - python-dev
+script:
+    - flake8 --ignore=E501 windrose samples
+    - nosetests tests --verbose
