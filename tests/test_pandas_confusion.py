@@ -69,9 +69,9 @@ def test_pandas_confusion_cm_int():
 
     assert cm.len() == len(labels)
 
-    #np.testing.assert_array_equal(confusion_matrix(y_true, y_pred), cm.toarray())
+    # np.testing.assert_array_equal(confusion_matrix(y_true, y_pred), cm.toarray())
 
-    #cm.print_stats()
+    # cm.print_stats()
 
 def test_pandas_confusion_binary_cm():
     y_true = [True, True, False, False, False, True, False, True, True,
@@ -107,6 +107,7 @@ def test_pandas_confusion_binary_cm():
 
     asserts(y_true, y_pred, binary_cm)
 
+
 def test_pandas_confusion_cm_empty_column():
     y_true = [2, 0, 2, 2, 0, 1]
     y_pred = [0, 0, 2, 2, 0, 2]
@@ -132,7 +133,7 @@ def test_pandas_confusion_cm_empty_row():
 
     asserts(y_true, y_pred, cm)
 
-    #cm.print_stats()
+    # cm.print_stats()
 
 
 def test_pandas_confusion_cm_binarize():
@@ -150,6 +151,7 @@ def test_pandas_confusion_cm_binarize():
     
     assert cm.sum() == binary_cm.sum()
 
+
 def test_value_counts():
     df = pd.DataFrame({
         'Height': [150, 150, 151, 151, 152, 155, 155, 157, 157, 157, 157, 158, 158, 159, 159, 159, 160, 160, 162, 162, 163, 164, 165, 168, 169, 169, 169, 170, 171, 171, 173, 173, 174, 176, 177, 177, 179, 179, 179, 179, 179, 181, 181, 182, 183, 184, 186, 190, 190],
@@ -162,6 +164,7 @@ def test_value_counts():
     assert (cm.pred - df.SizePred.value_counts()).sum() == 0
     cm.print_stats()
 
+
 def test_pandas_confusion_cm_stats_integers():
     y_true = [600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200]
     y_pred = [100, 200, 200, 100, 100, 200, 200, 200, 100, 200, 500, 100, 100, 100, 100, 100, 100, 100, 500, 200]
@@ -171,6 +174,7 @@ def test_pandas_confusion_cm_stats_integers():
     assert isinstance(cm.stats(), OrderedDict)
     cm.print_stats()
 
+
 def test_pandas_confusion_cm_stats_animals():
     y_true = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
     y_pred = ['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit']
@@ -178,14 +182,15 @@ def test_pandas_confusion_cm_stats_animals():
     print("y_pred: %s" % y_pred)
     cm = ConfusionMatrix(y_true, y_pred)
     assert isinstance(cm.stats(), OrderedDict)
-    assert cm.population == len(y_true) #12
+    assert cm.population == len(y_true)  # 12
     cm.print_stats()
-    cm_stats = cm.stats()
-    assert cm.binarize("cat").TP == cm.get("cat") # cm.get("cat", "cat")
+    cm_stats = cm.stats()  # noqa
+    assert cm.binarize("cat").TP == cm.get("cat")  # cm.get("cat", "cat")
     assert cm.binarize("cat").TP == 3
-    assert cm.binarize("dog").TP == cm.get("dog") # 1
+    assert cm.binarize("dog").TP == cm.get("dog")  # 1
     assert cm.binarize("rabbit").TP == cm.get("rabbit")  # 3
-    #print cm.TP
+    # print cm.TP
+
 
 def test_pandas_confusion_get():
     y_true = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
@@ -199,6 +204,7 @@ def test_pandas_confusion_get():
     assert cm.get("rabbit") == 3
     assert cm.get("dog", "rabbit") == 2
 
+
 def test_pandas_confusion_max_min():
     y_true = ['rabbit', 'cat', 'rabbit', 'rabbit', 'cat', 'dog', 'dog', 'rabbit', 'rabbit', 'cat', 'dog', 'rabbit']
     y_pred = ['cat', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'dog', 'cat', 'rabbit', 'cat', 'rabbit', 'rabbit']
@@ -208,51 +214,55 @@ def test_pandas_confusion_max_min():
     assert cm.max() == 3
     assert cm.min() == 0
 
+
 def test_pandas_confusion_binary_cm_inverse():
     y_true = [True, True, False, False, False, True, False, True, True,
-           False, True, False, False, False, False, False, True, False,
-            True, True, True, True, False, False, False, True, False,
-            True, False, False, False, False, True, True, False, False,
-           False, True, True, True, True, False, False, False, False,
-            True, False, False, False, False, False, False, False, False,
-           False, True, True, False, True, False, True, True, True,
-           False, False, True, False, True, False, False, True, False,
-           False, False, False, False, False, False, False, True, False,
-            True, True, True, True, False, False, True, False, True,
-            True, False, True, False, True, False, False, True, True,
-           False, False, True, True, False, False, False, False, False,
-           False, True, True, False]
-    
+              False, True, False, False, False, False, False, True, False,
+              True, True, True, True, False, False, False, True, False,
+              True, False, False, False, False, True, True, False, False,
+              False, True, True, True, True, False, False, False, False,
+              True, False, False, False, False, False, False, False, False,
+              False, True, True, False, True, False, True, True, True,
+              False, False, True, False, True, False, False, True, False,
+              False, False, False, False, False, False, False, True, False,
+              True, True, True, True, False, False, True, False, True,
+              True, False, True, False, True, False, False, True, True,
+              False, False, True, True, False, False, False, False, False,
+              False, True, True, False]
+
     y_pred = [False, False, False, False, False, True, False, False, True,
-           False, True, False, False, False, False, False, False, False,
-            True, True, True, True, False, False, False, False, False,
-           False, False, False, False, False, True, False, False, False,
-           False, True, False, False, False, False, False, False, False,
-            True, False, False, False, False, False, False, False, False,
-           False, True, False, False, False, False, False, False, False,
-           False, False, True, False, False, False, False, True, False,
-           False, False, False, False, False, False, False, True, False,
-           False, True, False, False, False, False, True, False, True,
-            True, False, False, False, True, False, False, True, True,
-           False, False, True, True, False, False, False, False, False,
-           False, True, False, False]
+              False, True, False, False, False, False, False, False, False,
+              True, True, True, True, False, False, False, False, False,
+              False, False, False, False, False, True, False, False, False,
+              False, True, False, False, False, False, False, False, False,
+              True, False, False, False, False, False, False, False, False,
+              False, True, False, False, False, False, False, False, False,
+              False, False, True, False, False, False, False, True, False,
+              False, False, False, False, False, False, False, True, False,
+              False, True, False, False, False, False, True, False, True,
+              True, False, False, False, True, False, False, True, True,
+              False, False, True, True, False, False, False, False, False,
+              False, True, False, False]
 
     binary_cm = BinaryConfusionMatrix(y_true, y_pred)
     bcm_sum = binary_cm.sum()
 
-    binary_cm_r = binary_cm.inverse() # reverse not in place
+    binary_cm_r = binary_cm.inverse()  # reverse not in place
     assert bcm_sum == binary_cm_r.sum()
 
-#def test_enlarge_confusion_matrix():
-#    #cm.enlarge(300)
-#    #cm.enlarge([300, 400])
+"""
+def test_enlarge_confusion_matrix():
+    #cm.enlarge(300)
+    #cm.enlarge([300, 400])
 
-#def test_pandas_confusion_binarize():
-#    y_true = [600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200]
-#    y_pred = [100, 200, 200, 100, 100, 200, 200, 200, 100, 200, 500, 100, 100, 100, 100, 100, 100, 100, 500, 200]
-#    cm = ConfusionMatrix(y_true, y_pred)
-#    binary_cm_100 = cm.binarize(100)
-#    print("\n%s" % binary_cm_100)
+def test_pandas_confusion_binarize():
+    y_true = [600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200]
+    y_pred = [100, 200, 200, 100, 100, 200, 200, 200, 100, 200, 500, 100, 100, 100, 100, 100, 100, 100, 500, 200]
+    cm = ConfusionMatrix(y_true, y_pred)
+    binary_cm_100 = cm.binarize(100)
+    print("\n%s" % binary_cm_100)
+"""
+
 
 def test_pandas_confusion_normalized():
     y_true = [2, 0, 2, 2, 0, 1, 1, 2, 2, 0, 1, 2]
@@ -262,19 +272,20 @@ def test_pandas_confusion_normalized():
     df_norm = cm.to_dataframe(normalized=True)
     assert(df_norm.sum(axis=1).sum() == len(df))
 
+
 def test_pandas_confusion_normalized_issue1():
     # should insure issue 1 is fixed
     # see http://stackoverflow.com/questions/19233771/sklearn-plot-confusion-matrix-with-labels/31720054#31720054
 
     y_true = ['business', 'business', 'business', 'business', 'business',
-            'business', 'business', 'business', 'business', 'business',
-            'business', 'business', 'business', 'business', 'business',
-            'business', 'business', 'business', 'business', 'business']
+              'business', 'business', 'business', 'business', 'business',
+              'business', 'business', 'business', 'business', 'business',
+              'business', 'business', 'business', 'business', 'business']
 
     y_pred = ['health', 'business', 'business', 'business', 'business',
-           'business', 'health', 'health', 'business', 'business', 'business',
-           'business', 'business', 'business', 'business', 'business',
-           'health', 'health', 'business', 'health']
+              'business', 'health', 'health', 'business', 'business', 'business',
+              'business', 'business', 'business', 'business', 'business',
+              'health', 'health', 'business', 'health']
 
     cm = ConfusionMatrix(y_true, y_pred)
     df = cm.to_dataframe()
