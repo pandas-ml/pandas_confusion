@@ -30,3 +30,4 @@ addons:
   apt:
     packages:
     - gfortran
+    - libgfortran3
