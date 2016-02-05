@@ -21,6 +21,7 @@ def binom_interval(success, total, confint=0.95):
     upper = beta.ppf(1 - quantile, success + 1, total - success)
     return (lower, upper)
 
+
 def choose(n, k):
     """
     A fast way to calculate binomial coefficients by Andrew Dalke (contrib).
@@ -36,6 +37,7 @@ def choose(n, k):
     else:
         return 0
 
+
 def class_agreement(df):
     """
     Inspired from R package e1071 matchClassed.R classAgreement
@@ -50,11 +52,11 @@ def class_agreement(df):
 
     n2 = choose(n, 2)
 
-    rand = np.float64(1) + ((df**2).sum().sum() - ((ni**2).sum() + (nj**2).sum())/2)/n2
-    nis2 = ni[ni>1].map(lambda x: choose(int(x), 2)).sum()
-    njs2 = nj[nj>1].map(lambda x: choose(int(x), 2)).sum()
+    rand = np.float64(1) + ((df**2).sum().sum() - ((ni**2).sum() + (nj**2).sum()) / 2) / n2
+    nis2 = ni[ni > 1].map(lambda x: choose(int(x), 2)).sum()
+    njs2 = nj[nj > 1].map(lambda x: choose(int(x), 2)).sum()
 
-    num = df[df>1].dropna(axis=[0,1], thresh=1).applymap(lambda n: choose(np.int64(n), 2)).sum().sum() - np.float64(nis2 * njs2) / n2
+    num = df[df > 1].dropna(axis=[0, 1], thresh=1).applymap(lambda n: choose(np.int64(n), 2)).sum().sum() - np.float64(nis2 * njs2) / n2
     den = (np.float64(nis2 + njs2) / 2 - np.float64(nis2 * njs2) / n2)
     crand = num / den
 
@@ -65,17 +67,18 @@ def class_agreement(df):
         "crand": crand
     })
 
+
 def prop_test(df):
     """
     Inspired from R package caret confusionMatrix.R
     """
     x = np.diag(df).sum()
     n = df.sum().sum()
-    p = (df.sum(axis=0)/df.sum().sum()).max()
+    p = (df.sum(axis=0) / df.sum().sum()).max()
     d = {
         "statistic": x,  # number of successes
         "parameter": n,  # number of trials
         "null.value": p,  # probability of success
-        "p.value": scipy.stats.binom.sf(x-1, n, p),  # see https://en.wikipedia.org/wiki/Binomial_test
+        "p.value": scipy.stats.binom.sf(x - 1, n, p),  # see https://en.wikipedia.org/wiki/Binomial_test
     }
     return(d)

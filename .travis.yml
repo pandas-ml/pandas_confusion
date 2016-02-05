@@ -23,5 +23,5 @@ before_install:
     - "sh -e /etc/init.d/xvfb start"
 
 script:
-    #- flake8 --ignore=E501 pandas_confusion samples tests
+    - flake8 --ignore=E501 pandas_confusion samples tests
     - nosetests tests --verbose

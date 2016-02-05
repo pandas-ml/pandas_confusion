@@ -4,11 +4,12 @@
 import click
 
 import os
-#import seaborn as sns
+# import seaborn as sns
 import matplotlib.pylab as plt
-import numpy as np
+# import numpy as np
 import pandas as pd
-from pandas_confusion import ConfusionMatrix, Backend
+from pandas_confusion import ConfusionMatrix
+
 
 def size_pred(save, show):
     df = pd.DataFrame({
@@ -25,36 +26,38 @@ def size_pred(save, show):
     cm.plot()
     filename = 'size.png'
     if save:
-        plt.savefig(os.path.join(basepath, '..','screenshots', filename))
+        plt.savefig(os.path.join(basepath, '..', 'screenshots', filename))
     if show:
         plt.show()
+
 
 def number_pred(save, show):
     y_true = [600, 200, 200, 200, 200, 200, 200, 200, 500, 500, 500, 200, 200, 200, 200, 200, 200, 200, 200, 200]
     y_pred = [100, 200, 200, 100, 100, 200, 200, 200, 100, 200, 500, 100, 100, 100, 100, 100, 100, 100, 500, 200]
     cm = ConfusionMatrix(y_true, y_pred)
 
-    #print(cm.binarize(100).P)
-    #cm.enlarge(300)
-    #cm.enlarge([300, 400])
+    # print(cm.binarize(100).P)
+    # cm.enlarge(300)
+    # cm.enlarge([300, 400])
 
     print(cm)
 
     cm.plot()
     filename = 'numbers.png'
     if save:
-        plt.savefig(os.path.join(basepath, '..','screenshots', filename))
+        plt.savefig(os.path.join(basepath, '..', 'screenshots', filename))
     if show:
         plt.show()
 
-    #print("")
+    # print("")
 
-    #print(cm.classes)
+    # print(cm.classes)
 
-    #print("")
+    # print("")
 
-    #cm.print_stats(None)
+    # cm.print_stats(None)
     cm.print_stats()
+
 
 @click.command()
 @click.option('--save/--no-save', default=True)
@@ -63,7 +66,7 @@ def number_pred(save, show):
 def main(save, show, example):
     if example == "number_pred":
         number_pred(save, show)
-    else: # "size_pred"
+    else:  # "size_pred"
         size_pred(save, show)
 
 if __name__ == "__main__":

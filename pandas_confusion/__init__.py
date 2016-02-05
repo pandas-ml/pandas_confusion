@@ -12,7 +12,7 @@ import math
 import numpy as np
 import pandas as pd
 from enum import Enum, IntEnum  # pip install enum34
-import matplotlib as mpl
+# import matplotlib as mpl
 import matplotlib.pylab as plt
 import collections
 
@@ -37,18 +37,17 @@ PRED_NAME_DEFAULT = 'Predicted'
 CLASSES_NAME_DEFAULT = 'Classes'
 COLORBAR_TRIG = 10
 
+
 class ConfusionMatrixAbstract(object):
     """
     Abstract class for confusion matrix
-    
+
     You shouldn't instantiate this class.
     You might instantiate ConfusionMatrix or BinaryConfusionMatrix classes
     """
-
     def __init__(self, y_true, y_pred, labels=None,
-            display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT,
-            true_name = TRUE_NAME_DEFAULT, pred_name = PRED_NAME_DEFAULT):
-
+                 display_sum=DISPLAY_SUM_DEFAULT, backend=BACKEND_DEFAULT,
+                 true_name=TRUE_NAME_DEFAULT, pred_name=PRED_NAME_DEFAULT):
         self.true_name = true_name
         self.pred_name = pred_name
 
@@ -57,13 +56,12 @@ class ConfusionMatrixAbstract(object):
             self._y_true.name = self.true_name
         else:
             self._y_true = pd.Series(y_true, name=self.true_name)
-        
+
         if isinstance(y_pred, pd.Series):
             self._y_pred = y_pred
             self._y_pred.name = self.pred_name
         else:
             self._y_pred = pd.Series(y_pred, name=self.pred_name)
-
 
         if labels is not None:
             if not self.is_binary:
@@ -71,31 +69,31 @@ class ConfusionMatrixAbstract(object):
                 self._y_pred = self._y_pred.map(lambda i: self._label(i, labels))
             else:
                 N = len(labels)
-                assert len(labels)==2, "labels be a list with length=2 - length=%d" % N
+                assert len(labels) == 2, "labels be a list with length=2 - length=%d" % N
                 d = {labels[0]: False, labels[1]: True}
                 self._y_true = self._y_true.map(d)
                 self._y_pred = self._y_pred.map(d)
-                raise(NotImplementedError) # ToDo: see self.classes and BinaryConfusionMatrix.__class ...
-        
+                raise(NotImplementedError)  # ToDo: see self.classes and BinaryConfusionMatrix.__class ...
+
         N_true = len(y_true)
         N_pred = len(y_pred)
         assert N_true == N_pred, \
             "y_true must have same size - %d != %d" % (N_true, N_pred)
 
-        #from sklearn.metrics import confusion_matrix
-        #a = confusion_matrix(y_true, y_pred, labels=labels)
-        #print(a)
-        #self._df_confusion = pd.DataFrame(a, index=labels, columns=labels)
-        #self._df_confusion.index.name = self.true_name
-        #self._df_confusion.columns.name = self.pred_name
+        # from sklearn.metrics import confusion_matrix
+        # a = confusion_matrix(y_true, y_pred, labels=labels)
+        # print(a)
+        # self._df_confusion = pd.DataFrame(a, index=labels, columns=labels)
+        # self._df_confusion.index.name = self.true_name
+        # self._df_confusion.columns.name = self.pred_name
 
-        #df = pd.crosstab(self._y_true, self._y_pred,
+        # df = pd.crosstab(self._y_true, self._y_pred,
         #   rownames=[self.true_name], colnames=[self.pred_name])
-        #df = pd.crosstab(self._y_true, self._y_pred,
+        # df = pd.crosstab(self._y_true, self._y_pred,
         #    rownames=self.true_name, colnames=self.pred_name)
         df = pd.crosstab(self._y_true, self._y_pred)
         idx = self._classes(df)
-        df = df.loc[idx, idx.copy()].fillna(0) # if some columns or rows are missing
+        df = df.loc[idx, idx.copy()].fillna(0)  # if some columns or rows are missing
         self._df_confusion = df
         self._df_confusion.index.name = self.true_name
         self._df_confusion.columns.name = self.pred_name
@@ -117,7 +115,7 @@ class ConfusionMatrixAbstract(object):
 
     def __str__(self):
         return(self.to_dataframe(calc_sum=self.display_sum).__str__())
-        #return("%s:\n%s" % (self.title, self.to_dataframe(calc_sum=self.display_sum).__str__()))
+        # return("%s:\n%s" % (self.title, self.to_dataframe(calc_sum=self.display_sum).__str__()))
 
     @property
     def classes(self):
@@ -134,7 +132,7 @@ class ConfusionMatrixAbstract(object):
             df = self.to_dataframe()
         idx_classes = (df.columns | df.index).copy()
         idx_classes.name = CLASSES_NAME_DEFAULT
-        return(idx_classes)        
+        return(idx_classes)
 
     def to_dataframe(self, normalized=False, calc_sum=False, sum_label=SUM_NAME_DEFAULT):
         """
@@ -144,19 +142,17 @@ class ConfusionMatrixAbstract(object):
             a = self._df_confusion.values.astype('float')
             a = a.astype('float') / a.sum(axis=1)[:, np.newaxis]
             df = pd.DataFrame(a,
-                index=self._df_confusion.index.copy(),
-                columns=self._df_confusion.columns.copy()
-            )
+                              index=self._df_confusion.index.copy(),
+                              columns=self._df_confusion.columns.copy())
         else:
             df = self._df_confusion
 
         if calc_sum:
             df = df.copy()
             df[sum_label] = df.sum(axis=1)
-            #df = pd.concat([df, pd.DataFrame(df.sum(axis=1), columns=[sum_label])], axis=1)
+            # df = pd.concat([df, pd.DataFrame(df.sum(axis=1), columns=[sum_label])], axis=1)
             df = pd.concat([df, pd.DataFrame(df.sum(axis=0), columns=[sum_label]).T])
             df.index.name = self.true_name
-        
         return(df)
 
     @property
@@ -189,7 +185,6 @@ class ConfusionMatrixAbstract(object):
         """
         return(self.to_array(*args, **kwargs))
 
-    #@property
     def len(self):
         """
         Returns len of a confusion matrix.
@@ -197,7 +192,6 @@ class ConfusionMatrixAbstract(object):
         """
         return(self._len)
 
-    #@property
     def sum(self):
         """
         Returns sum of a confusion matrix.
@@ -213,15 +207,13 @@ class ConfusionMatrixAbstract(object):
         """
         return(self.sum())
 
-    #@property
-    def y_true(self, func=None): # Not a property (because we will add parameter)
+    def y_true(self, func=None):
         if func is None:
             return(self._y_true)
         else:
             return(self._y_true.map(func))
 
-    #@property
-    def y_pred(self, func=None): # Not a property (because we will add parameter)
+    def y_pred(self, func=None):
         if func is None:
             return(self._y_pred)
         else:
@@ -257,9 +249,9 @@ class ConfusionMatrixAbstract(object):
             backend = self.backend
 
         if backend == Backend.Matplotlib:
-            #if ax is None:
+            # if ax is None:
             fig, ax = plt.subplots(figsize=(9, 8))
-            plt.imshow(df, cmap=cmap, interpolation='nearest') # imshow / matshow
+            plt.imshow(df, cmap=cmap, interpolation='nearest')  # imshow / matshow
             ax.set_title(title)
 
             tick_marks_col = np.arange(len(df.columns))
@@ -269,22 +261,24 @@ class ConfusionMatrixAbstract(object):
             ax.set_xticks(tick_marks_col)
             ax.set_xticklabels(df.columns, rotation=45, ha='right')
             ax.set_yticklabels(df.index)
-            
+
             ax.set_ylabel(df.index.name)
             ax.set_xlabel(df.columns.name)
 
-            (N_min, N_max) = (0, self.max())
+            # N_min = 0
+            N_max = self.max()
             if N_max > COLORBAR_TRIG:
-                plt.colorbar() # Continuous colorbar
+                # Continuous colorbar
+                plt.colorbar()
             else:
                 # Discrete colorbar
-                ax2 = fig.add_axes([0.93, 0.1, 0.03, 0.8])
-                bounds = np.arange(N_min, N_max + 2, 1)
-                norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
-                cb = mpl.colorbar.ColorbarBase(ax2, cmap=cmap, norm=norm, spacing='proportional', ticks=bounds, boundaries=bounds, format='%1i')
+                pass
+                # ax2 = fig.add_axes([0.93, 0.1, 0.03, 0.8])
+                # bounds = np.arange(N_min, N_max + 2, 1)
+                # norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+                # cb = mpl.colorbar.ColorbarBase(ax2, cmap=cmap, norm=norm, spacing='proportional', ticks=bounds, boundaries=bounds, format='%1i')
 
             return(ax)
-
 
         elif backend == Backend.Seaborn:
             import seaborn as sns
@@ -293,7 +287,7 @@ class ConfusionMatrixAbstract(object):
             # You should test this yourself
             # because I'm facing an issue with Seaborn under Mac OS X (2015-04-26)
             # RuntimeError: Cannot get window extent w/o renderer
-            #sns.plt.show()
+            # sns.plt.show()
 
         else:
             raise(NotImplementedError("backend=%r not allowed" % backend))
@@ -326,8 +320,8 @@ class ConfusionMatrixAbstract(object):
         new_col.name = self.pred_name
         print(new_col)
         self._df_confusion = self._df_confusion.loc[:, new_col]
-        #self._df_confusion = self._df_confusion.loc[new_idx, new_col].fillna(0)
-        #ToFix: KeyError: 'the label [True] is not in the [index]'
+        # self._df_confusion = self._df_confusion.loc[new_idx, new_col].fillna(0)
+        # ToFix: KeyError: 'the label [True] is not in the [index]'
 
     @property
     def stats_overall(self):
@@ -341,24 +335,21 @@ class ConfusionMatrixAbstract(object):
 
         key = 'Accuracy'
         try:
-            d_stats[key] = d_class_agreement['diag']  #0.35
+            d_stats[key] = d_class_agreement['diag']  # 0.35
         except:
             d_stats[key] = np.nan
 
         key = '95% CI'
         try:
-            d_stats[key] = binom_interval(np.sum(np.diag(df)), df.sum().sum())  #(0.1539, 0.5922)
+            d_stats[key] = binom_interval(np.sum(np.diag(df)), df.sum().sum())  # (0.1539, 0.5922)
         except:
             d_stats[key] = np.nan
-        
+
         d_prop_test = prop_test(df)
-        d_stats['No Information Rate'] = 'ToDo'  #0.8
-
-        d_stats['P-Value [Acc > NIR]'] = d_prop_test['p.value']  #1
-
-        d_stats['Kappa'] = d_class_agreement['kappa']  #0.078
-
-        d_stats['Mcnemar\'s Test P-Value'] = 'ToDo'  #np.nan
+        d_stats['No Information Rate'] = 'ToDo'  # 0.8
+        d_stats['P-Value [Acc > NIR]'] = d_prop_test['p.value']  # 1
+        d_stats['Kappa'] = d_class_agreement['kappa']  # 0.078
+        d_stats['Mcnemar\'s Test P-Value'] = 'ToDo'  # np.nan
 
         return(d_stats)
 
@@ -367,8 +358,8 @@ class ConfusionMatrixAbstract(object):
         """
         Returns a DataFrame with class statistics
         """
-        #stats = ['TN', 'FP', 'FN', 'TP']
-        #df = pd.DataFrame(columns=self.classes, index=stats)
+        # stats = ['TN', 'FP', 'FN', 'TP']
+        # df = pd.DataFrame(columns=self.classes, index=stats)
         df = pd.DataFrame(columns=self.classes)
 
         # ToDo Avoid these for loops
@@ -377,7 +368,7 @@ class ConfusionMatrixAbstract(object):
             binary_cm = self.binarize(cls)
             binary_cm_stats = binary_cm.stats()
             for key, value in binary_cm_stats.items():
-                df.loc[key, cls] = value #binary_cm_stats
+                df.loc[key, cls] = value  # binary_cm_stats
 
         d_name = {
             'population': 'Population',
@@ -389,14 +380,14 @@ class ConfusionMatrixAbstract(object):
             'TN': 'TN: True Negative',
             'FP': 'FP: False Positive',
             'FN': 'FN: False Negative',
-            'TPR': 'TPR: (Sensitivity, hit rate, recall)', # True Positive Rate 
-            'TNR': 'TNR=SPC: (Specificity)', # True Negative Rate 
+            'TPR': 'TPR: (Sensitivity, hit rate, recall)',  # True Positive Rate
+            'TNR': 'TNR=SPC: (Specificity)',  # True Negative Rate
             'PPV': 'PPV: Pos Pred Value (Precision)',
             'NPV': 'NPV: Neg Pred Value',
             'prevalence': 'Prevalence',
-            #'xxx': 'xxx: Detection Rate',
-            #'xxx': 'xxx: Detection Prevalence',
-            #'xxx': 'xxx: Balanced Accuracy',
+            # 'xxx': 'xxx: Detection Rate',
+            # 'xxx': 'xxx: Detection Prevalence',
+            # 'xxx': 'xxx: Balanced Accuracy',
             'FPR': 'FPR: False-out',
             'FDR': 'FDR: False Discovery Rate',
             'FNR': 'FNR: Miss Rate',
@@ -434,8 +425,8 @@ class ConfusionMatrixAbstract(object):
         except:
             return(key)
 
-    def _str_dict(self, d, line_feed_key_val='\n', 
-            line_feed_stats='\n\n', d_name=None):
+    def _str_dict(self, d, line_feed_key_val='\n',
+                  line_feed_stats='\n\n', d_name=None):
         """
         Return a string representation of a dictionary
         """
@@ -445,7 +436,7 @@ class ConfusionMatrixAbstract(object):
             if i != 0:
                 s = s + line_feed_stats
             s = s + "%s:%s%s" % (name, line_feed_key_val, val)
-        return(s)   
+        return(s)
 
     def _str_stats(self, lst_stats=None):
         """
@@ -461,12 +452,14 @@ class ConfusionMatrixAbstract(object):
 
         d_stats_str = collections.OrderedDict([
             ("cm", str(stats['cm'])),
-            ("overall", self._str_dict(stats['overall'],
+            ("overall", self._str_dict(
+                stats['overall'],
                 line_feed_key_val=' ', line_feed_stats='\n')),
             ("class", str(stats['class'])),
         ])
 
-        s = self._str_dict(d_stats_str, line_feed_key_val='\n\n',
+        s = self._str_dict(
+            d_stats_str, line_feed_key_val='\n\n',
             line_feed_stats='\n\n\n', d_name=d_stats_name)
         return(s)
 
@@ -490,14 +483,12 @@ class ConfusionMatrixAbstract(object):
             predicted = actual
         return(self.to_dataframe().loc[actual, predicted])
 
-    #@property
     def max(self):
         """
         Returns max value of confusion matrix
         """
         return(self.to_dataframe().max().max())
 
-    #@property
     def min(self):
         """
         Returns min value of confusion matrix
@@ -526,7 +517,7 @@ class ConfusionMatrixAbstract(object):
         total_support = df.support.sum()
         df.loc['__avg / total__', :] = (df[df.columns[:-1]].transpose() * df.support).sum(axis=1) / df.support.sum()
         df.loc['__avg / total__', 'support'] = total_support
-        
+
         return(df)
 
     def _avg_stat(self, stat):
@@ -534,7 +525,7 @@ class ConfusionMatrixAbstract(object):
         Binarizes confusion matrix
         and returns (weighted) average statistics
         """
-        s_values = pd.Series(index = self.classes)
+        s_values = pd.Series(index=self.classes)
         for cls in self.classes:
             binary_cm = self.binarize(cls)
             v = getattr(binary_cm, stat)
@@ -548,20 +539,19 @@ class ConfusionMatrix(ConfusionMatrixAbstract):
     """
     Confusion matrix class (not binary)
     """
-
     def __getattr__(self, attr):
         """
         Returns (weighted) average statistics
         """
         return(self._avg_stat(attr))
 
+
 class BinaryConfusionMatrix(ConfusionMatrixAbstract):
     """
     Binary confusion matrix class
     """
-    
     def __init__(self, *args, **kwargs):
-        #super(BinaryConfusionMatrix, self).__init__(y_true, y_pred)
+        # super(BinaryConfusionMatrix, self).__init__(y_true, y_pred)
         super(BinaryConfusionMatrix, self).__init__(*args, **kwargs)
         assert self.len() == 2, \
             "Binary confusion matrix must have len=2 but \
@@ -577,8 +567,9 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         * FN: False Negative
         * TP: True Positive
         """
-        df = pd.DataFrame([["TN", "FP"],["FN", "TP"]],
-                columns=[False, True], index=[False, True])
+        df = pd.DataFrame(
+            [["TN", "FP"], ["FN", "TP"]],
+            columns=[False, True], index=[False, True])
         df.index.name = TRUE_NAME_DEFAULT
         df.columns.name = PRED_NAME_DEFAULT
         return(df)
@@ -653,12 +644,12 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         same as P
         """
         return(self.P)
-    
+
     @property
     def N(self):
         """Condition negative"""
         return(self._df_confusion.loc[self._class(False), :].sum())
-    
+
     @property
     def TP(self):
         """
@@ -673,7 +664,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         same as TP
         """
         return(self.TP)
-    
+
     @property
     def TN(self):
         """
@@ -681,7 +672,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         eqv. with correct rejection
         """
         return(self._df_confusion.loc[self._class(False), self._class(False)])
-    
+
     @property
     def FN(self):
         """
@@ -689,7 +680,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         eqv. with miss, Type II error / Type 2 error
         """
         return(self._df_confusion.loc[self._class(True), self._class(False)])
-    
+
     @property
     def FP(self):
         """
@@ -713,7 +704,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         TN + FN
         """
         return(self.TN + self.FN)
-    
+
     @property
     def FPR(self):
         """
@@ -721,9 +712,9 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         eqv. with fall-out
         FPR = FP / N = FP / (FP + TN)
         """
-        #return(np.float64(self.FP)/(self.FP + self.TN))
+        # return(np.float64(self.FP)/(self.FP + self.TN))
         return(np.float64(self.FP) / self.N)
-    
+
     @property
     def TPR(self):
         """
@@ -731,7 +722,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         eqv. with hit rate, recall, sensitivity
         TPR = TP / P = TP / (TP+FN)
         """
-        #return(np.float64(self.TP) / (self.TP + self.FN))
+        # return(np.float64(self.TP) / (self.TP + self.FN))
         return(np.float64(self.TP) / self.P)
 
     @property
@@ -741,14 +732,12 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         """
         return(self.TPR)
 
-
     @property
     def sensitivity(self):
         """
         same as TPR
         """
         return(self.TPR)
-
 
     @property
     def TNR(self):
@@ -796,7 +785,6 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         """
         return(np.float64(self.FN) / self.NegativeTest)
 
-
     @property
     def NPV(self):
         """
@@ -804,7 +792,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         NPV = TN / (TN + FN)
         """
         return(np.float64(self.TN) / self.NegativeTest)
-    
+
     @property
     def FDR(self):
         """
@@ -812,8 +800,8 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         FDR = FP / (FP + TP) = 1 - PPV
         """
         return(np.float64(self.FP) / self.PositiveTest)
-        #return(1 - self.PPV)
-    
+        # return(1 - self.PPV)
+
     @property
     def FNR(self):
         """
@@ -821,15 +809,15 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         FNR = FN / P = FN / (FN + TP)
         """
         return(np.float64(self.FN) / self.P)
-    
+
     @property
     def ACC(self):
         """
         accuracy (ACC)
-        ACC} = (TP + TN) / (P + N) = (TP + TN) / TotalPopulation
+        ACC = (TP + TN) / (P + N) = (TP + TN) / TotalPopulation
         """
         return(np.float64(self.TP + self.TN) / self.population)
-    
+
     @property
     def F1_score(self):
         """
@@ -837,8 +825,8 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         F1 = 2 TP / (2 TP + FP + FN)
         can be also F1 = 2 * (precision * recall) / (precision + recall)
         """
-        return(2 * np.float64(self.TP)/(2 * self.TP + self.FP + self.FN))
-    
+        return(2 * np.float64(self.TP) / (2 * self.TP + self.FP + self.FN))
+
     @property
     def MCC(self):
         """
@@ -846,17 +834,17 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         \frac{ TP \times TN - FP \times FN }
              {\sqrt{ (TP+FP) ( TP + FN ) ( TN + FP ) ( TN + FN ) }
         """
-        return((self.TP * self.TN - self.FP * self.FN) \
-            / math.sqrt((self.TP + self.FP) * ( self.TP + self.FN ) \
-            * ( self.TN + self.FP ) * ( self.TN + self.FN )))
-    
+        return((self.TP * self.TN - self.FP * self.FN) /
+               math.sqrt((self.TP + self.FP) * (self.TP + self.FN) *
+               (self.TN + self.FP) * (self.TN + self.FN)))
+
     @property
     def informedness(self):
         """
         Informedness = Sensitivity + Specificity - 1
         """
         return(self.sensitivity + self.specificity - 1.0)
-    
+
     @property
     def markedness(self):
         """
@@ -897,9 +885,10 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         Returns an ordered dictionary of statistics
         """
         if lst_stats is None:
-            lst_stats = ['population', 'P', 'N', 'PositiveTest', 'NegativeTest',
+            lst_stats = [
+                'population', 'P', 'N', 'PositiveTest', 'NegativeTest',
                 'TP', 'TN', 'FP', 'FN', 'TPR', 'TNR', 'PPV', 'NPV', 'FPR', 'FDR',
-                'FNR', 'ACC', 'F1_score', 'MCC', 'informedness', 'markedness', 
+                'FNR', 'ACC', 'F1_score', 'MCC', 'informedness', 'markedness',
                 'prevalence', 'LRP', 'LRN', 'DOR', 'FOR']
         d = map(lambda stat: (stat, getattr(self, stat)), lst_stats)
         return(collections.OrderedDict(d))
@@ -909,7 +898,7 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         Returns a string representation of statistics
         """
         return(self._str_dict(self.stats(lst_stats),
-            line_feed_key_val=' ', line_feed_stats='\n', d_name=None))
+               line_feed_key_val=' ', line_feed_stats='\n', d_name=None))
 
     def inverse(self):
         """
@@ -917,5 +906,5 @@ len=%d because y_true.unique()=%s y_pred.unique()=%s" \
         False -> True
         True -> False
         """
-        negative_class = self.classes[0] # False
+        negative_class = self.classes[0]  # False
         return(self.binarize(negative_class))
