@@ -4,4 +4,3 @@ pandas
 scipy
 scikit-learn
 click
-libgfortran

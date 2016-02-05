@@ -25,3 +25,8 @@ before_install:
 script:
     - flake8 --ignore=E501 pandas_confusion samples tests
     - nosetests tests --verbose
+
+addons:
+  apt:
+    packages:
+    - gfortran
