@@ -11,6 +11,11 @@ matrix <https://en.wikipedia.org/wiki/Confusion_matrix>`__.
 
 WORK IN PROGRESS - Use it a your own risk
 
+
+This project is being merged with `pandas-ml <https://github.com/pandas-ml/pandas-ml>`__ - Please stay tuned!!!
+
+
+
 Usage
 -----
 
