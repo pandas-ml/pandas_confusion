@@ -368,5 +368,5 @@ Done
    :target: https://landscape.io/github/scls19fr/pandas_confusion/master
 .. |Codacy Badge| image:: https://www.codacy.com/project/badge/87be7082d9504db59d397b5738dbf133
    :target: https://www.codacy.com/app/s-celles/pandas_confusion
-.. |Build Status| image:: https://travis-ci.org/scls19fr/pandas_confusion.svg
-   :target: https://travis-ci.org/scls19fr/pandas_confusion
+.. |Build Status| image:: https://travis-ci.org/pandas-ml/pandas_confusion.svg?branch=master
+    :target: https://travis-ci.org/pandas-ml/pandas_confusion
