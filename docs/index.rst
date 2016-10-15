@@ -1,3 +1,5 @@
+This repository is not maintained anymore. ConfusionMatrix is now part of `pandas-ml <https://github.com/pandas-ml/pandas-ml>`__
+
 |Latest Version| |Supported Python versions| |Wheel format| |License|
 |Development Status| |Downloads monthly| |Requirements Status| |Code
 Health| |Codacy Badge| |Build Status|
