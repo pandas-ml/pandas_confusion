@@ -1,9 +1,0 @@
-__author__ = "Sebastien Celles"
-__copyright__ = "Copyright 2015, celles.net"
-__credits__ = ["Sebastien Celles"]
-__license__ = "BSD"
-__version__ = "0.0.6"
-__maintainer__ = "Sebastien Celles"
-__email__ = "s.celles@gmail.com"
-__status__ = "Development"
-__url__ = 'https://github.com/scls19fr/pandas_confusion'
